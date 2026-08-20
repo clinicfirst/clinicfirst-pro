@@ -1,0 +1,7 @@
+{
+  "name": "CLINICFIRST",
+  "description": "Multi-tenant SaaS platform and AI Receptionist system for clinics",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
