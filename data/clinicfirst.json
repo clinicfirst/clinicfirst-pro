@@ -9,8 +9,8 @@
       "website": "https://apexclinic.example.com",
       "city": "Seattle, WA",
       "timezone": "America/Los_Angeles",
-      "currency": "USD",
-      "currency_symbol": "$",
+      "currency": "INR",
+      "currency_symbol": "₹",
       "status": "ACTIVE",
       "created_at": "2026-08-19T14:29:15.848Z",
       "operating_hours": {
@@ -50,6 +50,57 @@
           "closed": true
         }
       }
+    },
+    {
+      "id": "clinic_1787923240249_cqgw",
+      "name": "Sanjeevani Multispeciality Clinic",
+      "address": "Address:  2nd Floor, Shree Ganesh Plaza Wardha Road Nagpur, Maharashtra 440015 India",
+      "phone": "9999988888",
+      "email": "abcxyx123@gmail.com",
+      "website": "google.com",
+      "city": "Nagpur",
+      "timezone": "America/Los_Angeles",
+      "currency": "INR",
+      "currency_symbol": "₹",
+      "operating_hours": {
+        "monday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "tuesday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "wednesday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "thursday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "friday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "saturday": {
+          "open": "09:00",
+          "close": "13:00",
+          "closed": false
+        },
+        "sunday": {
+          "open": "09:00",
+          "close": "13:00",
+          "closed": true
+        }
+      },
+      "status": "ACTIVE",
+      "created_at": "2026-08-28T13:20:40.249Z"
     }
   ],
   "users": [
@@ -63,7 +114,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-08-19T14:29:15.848Z",
-      "password_hash": "92127e8c6f2c81732b92dbd08a0802a1:e2cc2e1442887d26b748dac6ed4ae1d9da0acb2eceb73d0929ae77d6e3ee342a441de3db841448b339b9b2f8984bec12dc8555d50a3c75dc7753ab6b4e29129c"
+      "password_hash": "d3927d844571a1de05c83dfafe505c14:aac9c31fa5fe6404acc8ed01c761203ce72e2081284930a8cf2998d2b3e54a1901b6caebe7165d9de949f6214b37c42c407ec5a32cc20db3890f7e47fa59d4db"
     },
     {
       "id": "usr_platform_admin_2",
@@ -75,7 +126,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-08-19T14:29:15.848Z",
-      "password_hash": "e288d106203815bcb3c9d5229205f231:eea0e8a45f7c8a9cbb91b01023821c393edc1c8698f25e1db93172e261978a26c8733a9239673daf00ef1a9e75a215e9cd1bd8baf68c5eb417e9609559a8f86a"
+      "password_hash": "c9136557588fbeb27c6bc0d1e831bdc6:44058996827b149168686d1e4bba32bb67c568a73d32e15272417b792f6f191a96fbd1b79df10c4f8c956a2cdc1fb7dadbeb5e5a505eab4965c43fba123d0a91"
     },
     {
       "id": "usr_apex_admin_1",
@@ -87,7 +138,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-08-19T14:29:15.848Z",
-      "password_hash": "ec25cde6dcaec1184f0102a4f2d3b9e1:536cdc1e1e0d5a7e4a4aaf2fdcd2cd217147bc1dfe85248aec9cd7b07a9d9af724bde63d9afdef33ced1c1a11aab21e5a5f178bb02d9bcbc8af2b404adbd047f"
+      "password_hash": "cd73025e9851902467a0a75a5a9f0d79:fa5d9aab897b3f29aed90f19d3baac9463dddeee88809aa9d16d3f6f5b3aaad81c9127c70e0039c2b2e0fa3f9f5e3ce6e2c7e19114e27593e5cb574d2a6af63c"
     },
     {
       "id": "usr_apex_staff_1",
@@ -99,7 +150,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-08-19T14:29:15.848Z",
-      "password_hash": "e82c4e8b43954f78a12eb3b46ec9e295:e4cc6b10d1a343ce33f311091a1a7a14118a6bf7dd1da5f68e796b3222c5f53cb65c71ccddc64a542f16d5a892e6fd612583c7a8cb96df8cad2d11888381b897"
+      "password_hash": "8e1bdf7052f55cc7c4fbff3933b8dcbf:604ec9b4005bb0ef95717764339c4d7f4bcd20486629a75eaa24189c0ed9a7f1c2a0d758bd1935441970fcf6354c372b1ebba98cda28845bb537056d0f51849f"
     },
     {
       "id": "usr_apex_admin_legacy",
@@ -111,7 +162,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-08-19T14:29:16.062Z",
-      "password_hash": "edc816682c3d32f14fed1413cb4ca8c3:1a820859d5d8f8d62802e6a39ffd4cdb638591e9dffe3c84360eb5a5a7ead8784f4a9e8f0823c311577366267584831a255a56ef877c8137e6c7cf05f86de35c"
+      "password_hash": "c7a1d298841ed185c2af4284522c57a3:76ef7b393d5566231652961eb954545f60a25c672b65ca294ea2c3462578c0a2d8db461ad0243bbe4a3ce0476348d1eaf2837b36e8c7fba2bdcf74d75d0df4de"
     },
     {
       "id": "usr_apex_staff_legacy",
@@ -123,7 +174,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-08-19T14:29:16.062Z",
-      "password_hash": "92a309add4e4d93b0e42f0b9a222a801:86029392ddd38615d68f78f7a39349a7dcd942139091320f5658a232d3468b31a4265f956d2f1be637f0a6c45fbfae693430ff36dac44eefcb840248a5276876"
+      "password_hash": "eeac325f234c0fe9da58a52ebb4f83df:d30a4039fe190c5217b7a055a09a00fa9fc334e4a42cdbc552667e8dda3c74ded6deb84ba1a804f3e56dcc6d6bd9461cbc6b7b85099a639b13da4f5f1045c355"
     },
     {
       "id": "usr_doc_elena_1",
@@ -133,9 +184,9 @@
       "email": "elena.vance@apexclinic.com",
       "phone": "+1-555-019-2101",
       "status": "ACTIVE",
-      "must_change_password": true,
+      "must_change_password": false,
       "created_at": "2026-08-19T16:45:28.808Z",
-      "password_hash": "09502dc9af1c713c3e076472bb0fa6e6:aeb62e6e4015526c2f5cfaf3d30f4ee1b7529917a0cdcc517d736a5604f66ddb3d49548c50a33807d0e1d23c5aa869a1a8c6988a425a6c63e2dd2c8eddf85685",
+      "password_hash": "29fe93243e67d3576e57f5da0d0b6c1f:6fdaf0ae1e035aa06097d15c688ab8ec3dbb8c51dad0347177162b0f9e62156113c13a0763037fc519e09d6de24eca32e8e6e5a0516e4bf6e4b1657cf323e16d",
       "doctor_id": "doc_elena_1"
     },
     {
@@ -163,6 +214,40 @@
       "created_at": "2026-08-19T16:45:28.897Z",
       "password_hash": "f04d3fbfb2a6be3d884d66f00422587e:eec22a63c039a367771e3dcb4382c82cea4bc1c0587aca05244c2a1ce8de5f2873a543e22050167d4e50aab6c3e7ecbb23af826eac7f6bde4637ed5a9c286b0e",
       "doctor_id": "doc_priya_3"
+    },
+    {
+      "id": "usr_1787923240250_irur",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "role": "CLINIC_ADMIN",
+      "name": "Dr. Ujwala Maske",
+      "email": "admin@clinic.com",
+      "phone": "9999988888",
+      "status": "ACTIVE",
+      "must_change_password": false,
+      "created_at": "2026-08-28T13:20:40.249Z",
+      "password_hash": "d9c86c1b2b46ee49114523a729cf40c8:71a4cd492c06dee7c6db5eba272b1bf3576a1894de8fac6d9442e1f59fd60dfef7f0cc4381147a42fe7cc0e8112d4309ee61b63613a80e4df5e28a465e16809f"
+    },
+    {
+      "id": "usr_staff_1787923527385_8sqt",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "role": "CLINIC_STAFF",
+      "name": "Shital",
+      "email": "shital@clinic.com",
+      "phone": "433456536456",
+      "status": "ACTIVE",
+      "must_change_password": false,
+      "created_at": "2026-08-28T13:25:27.385Z",
+      "password_hash": "56d0d66bdd13ae2894295f2308187152:74fdc6b7162350172079e2bba2884c60a5b4f1274dc6424a2440fcdc0e1eb42236ebeced55e889c67a84386d6c721e3dcaf0122c3b567dbb0966136b9d37e6be",
+      "permissions": {
+        "appointments": "EDIT",
+        "patients": "EDIT",
+        "doctors": "READ",
+        "services": "NONE",
+        "schedules": "READ",
+        "calls": "READ",
+        "ai_receptionist": "READ",
+        "staff": "NONE"
+      }
     }
   ],
   "doctors": [
@@ -201,6 +286,30 @@
       "consultation_duration_minutes": 15,
       "status": "ACTIVE",
       "created_at": "2026-08-19T14:29:15.848Z"
+    },
+    {
+      "id": "doc_1787923357367_643s",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "name": "Dr. Raj Patel",
+      "specialization": "Pediatrician",
+      "qualification": "MBBS, MD Pediatrics",
+      "phone": "45345353525",
+      "email": "priya.sharma@apexclinic.com",
+      "consultation_duration_minutes": 30,
+      "status": "ACTIVE",
+      "created_at": "2026-08-28T13:22:37.367Z"
+    },
+    {
+      "id": "doc_1787923374362_zpfh",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "name": "Dr. Meera Joshi",
+      "specialization": "Cardiologist",
+      "qualification": "MD, DM Cardiology",
+      "phone": "9597386584",
+      "email": "elena.vance@apexclinic.com",
+      "consultation_duration_minutes": 30,
+      "status": "ACTIVE",
+      "created_at": "2026-08-28T13:22:54.362Z"
     }
   ],
   "doctor_schedules": [
@@ -368,9 +477,136 @@
       "break_start": "13:00",
       "break_end": "14:00",
       "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923357367_643s_day_1",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923357367_643s",
+      "day_of_week": 1,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923357367_643s_day_2",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923357367_643s",
+      "day_of_week": 2,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923357367_643s_day_3",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923357367_643s",
+      "day_of_week": 3,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923357367_643s_day_4",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923357367_643s",
+      "day_of_week": 4,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923357367_643s_day_5",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923357367_643s",
+      "day_of_week": 5,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923374362_zpfh_day_1",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923374362_zpfh",
+      "day_of_week": 1,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923374362_zpfh_day_2",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923374362_zpfh",
+      "day_of_week": 2,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923374362_zpfh_day_3",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923374362_zpfh",
+      "day_of_week": 3,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923374362_zpfh_day_4",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923374362_zpfh",
+      "day_of_week": 4,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
+    },
+    {
+      "id": "sched_doc_1787923374362_zpfh_day_5",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923374362_zpfh",
+      "day_of_week": 5,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "break_start": "13:00",
+      "break_end": "14:00",
+      "buffer_minutes": 5
     }
   ],
-  "doctor_leaves": [],
+  "doctor_leaves": [
+    {
+      "id": "leave_1787923454430_kzg0",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923357367_643s",
+      "start_date": "2026-08-31",
+      "end_date": "2026-08-28",
+      "reason": "Medical Conference / Scheduled Leave"
+    },
+    {
+      "id": "leave_1787923474885_gupz",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "doctor_id": "doc_1787923374362_zpfh",
+      "start_date": "2026-09-04",
+      "end_date": "2026-09-04",
+      "reason": "Medical Conference / Scheduled Leave"
+    }
+  ],
   "services": [
     {
       "id": "srv_cardiac_eval_1",
@@ -416,6 +652,40 @@
       "status": "ACTIVE",
       "assigned_doctor_ids": [
         "doc_priya_3"
+      ]
+    },
+    {
+      "id": "srv_1787923389642_o9t1",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "name": "General Consultation",
+      "duration_minutes": 30,
+      "fee": 400,
+      "status": "ACTIVE",
+      "assigned_doctor_ids": [
+        "doc_1787923357367_643s",
+        "doc_1787923374362_zpfh"
+      ]
+    },
+    {
+      "id": "srv_1787923400599_qce0",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "name": "Comprehensive Cardiac Evaluation",
+      "duration_minutes": 30,
+      "fee": 900,
+      "status": "ACTIVE",
+      "assigned_doctor_ids": [
+        "doc_1787923374362_zpfh"
+      ]
+    },
+    {
+      "id": "srv_1787923410532_a25x",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "name": "Pediatric Consultation",
+      "duration_minutes": 30,
+      "fee": 500,
+      "status": "ACTIVE",
+      "assigned_doctor_ids": [
+        "doc_1787923357367_643s"
       ]
     }
   ],
@@ -511,6 +781,20 @@
       "created_via": "staff",
       "created_at": "2026-08-19T14:29:15.848Z",
       "updated_at": "2026-08-19T15:50:38.933Z"
+    },
+    {
+      "id": "apt_1787922254504_be3h",
+      "clinic_id": "clinic_apex_101",
+      "patient_id": "pat_miller_1",
+      "doctor_id": "doc_elena_1",
+      "service_id": "srv_cardiac_eval_1",
+      "date": "2026-08-28",
+      "start_time": "09:35",
+      "end_time": "10:05",
+      "status": "COMPLETED",
+      "created_via": "staff",
+      "created_at": "2026-08-28T13:04:14.504Z",
+      "updated_at": "2026-08-28T13:04:19.335Z"
     }
   ],
   "ai_agents": [
@@ -518,23 +802,43 @@
       "id": "agent_apex_1",
       "clinic_id": "clinic_apex_101",
       "name": "Siya",
-      "greeting": "Hello..! Welcome to Apex Clinic. My name is Siya, the clinic receptionist. How may I assist you today?",
+      "greeting": "Hello from CLI",
       "voice_provider": "gemini_live",
       "voice_config": {
         "voice_name": "Zephyr",
         "temperature": 0.2
       },
       "languages": [
-        "English",
-        "Spanish"
+        "English"
       ],
       "status": "ACTIVE",
       "escalation_contact": {
-        "phone": "+1-555-019-2099",
-        "email": "urgent@apexclinic.com",
-        "name": "Urgent Care & Reception Triage"
+        "phone": "",
+        "email": "",
+        "name": ""
       },
-      "instructions_note": "Apex Cardiology is open Mon-Fri 8:30 AM to 5:30 PM. For chest pain or sudden shortness of breath, immediately advise dialing 911 or escalate. Do not prescribe medications."
+      "instructions_note": "CLI testing"
+    },
+    {
+      "id": "agent_clinic_1787923240249_cqgw",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "name": "Sanjeevani Multispeciality Clinic AI Receptionist",
+      "greeting": "KNOWLEDGE BASE\nClinic Policies\n\nClinic Name: Sanjeevani Multispeciality Clinic\n\nClinic Type: Private outpatient medical clinic.\n\nThe clinic provides outpatient consultation and general physician services under Dr. Ananya Deshpande, MBBS, MD (General Medicine).\n\nRegular clinic hours:\n\nMonday to Saturday: 9:00 AM to 1:00 PM\nMonday to Saturday: 5:00 PM to 8:30 PM\nSunday: Closed\n\nClinic timings may change on public holidays or due to unforeseen circumstances. The AI receptionist must verify the current schedule before confirming whether the clinic or doctor is available.\n\nAppointments are recommended to avoid waiting. Walk-in patients may be accepted depending on clinic capacity and doctor availability.\n\nThe AI receptionist must never guarantee that a walk-in patient will be seen immediately.\n\nThe consultation fee is:\n\nNew patient consultation: ₹700\nFollow-up consultation: ₹500\nVideo consultation: ₹600\n\nThe AI receptionist must not negotiate, waive, or change consultation fees unless an authorized clinic staff member has explicitly configured a discount or revised fee.\n\nThe clinic provides general outpatient consultation, internal medicine consultation, chronic disease follow-up, routine health consultations, and preventive healthcare.\n\nThe AI receptionist is an administrative assistant and is not a doctor. It must not diagnose medical conditions, prescribe medicines, recommend medication changes, interpret laboratory results as a diagnosis, or provide personalized medical treatment advice.\n\nFor medical questions requiring clinical judgment, the AI receptionist should recommend consultation with the doctor.\n\nFor potentially life-threatening symptoms or medical emergencies, the AI receptionist must advise the patient to seek immediate emergency medical care and call India's emergency number 112 when appropriate. The AI must not ask the patient to wait for a routine clinic appointment in an emergency.\n\nThe AI receptionist must protect patient privacy and must not disclose another patient's personal, appointment, medical, billing, or prescription information.\n\nLocation\n\nClinic Name: Sanjeevani Multispeciality Clinic\n\nAddress:\n\n2nd Floor, Shree Ganesh Plaza\nWardha Road\nNagpur, Maharashtra 440015\nIndia\n\nLandmark: Near Ajni Square, Wardha Road, Nagpur.\n\nCity: Nagpur\n\nState: Maharashtra\n\nCountry: India\n\nTime Zone: Indian Standard Time (IST), UTC+5:30.\n\nWhen providing directions, the AI receptionist should provide the clinic address and landmark clearly.\n\nThe AI receptionist must not invent nearby landmarks, road conditions, travel times, parking availability, or public transportation information if such information is not available in the knowledge base.\n\nParking: Limited parking may be available near the building. Parking availability is not guaranteed.\n\nIf a patient asks for detailed navigation or live traffic information, the AI receptionist should direct the patient to a maps/navigation service rather than inventing directions.\n\nPayment Methods\n\nThe clinic accepts the following payment methods:\n\nCash\nUPI\nDebit card\nCredit card\n\nUPI payment may be preferred where available.\n\nThe AI receptionist must never request or store:\n\nUPI PIN\nATM PIN\nDebit/credit card PIN\nCVV\nOTP\nInternet banking password\nAny other banking authentication credential\n\nThe AI receptionist should provide only the payment methods supported by the clinic.\n\nIf a patient asks about a discount, the AI receptionist should explain the standard consultation fee and state that it cannot independently authorize discounts.\n\nIf a patient disputes a payment or billing amount, the AI receptionist should escalate the issue to clinic staff.\n\nArrival Instructions\n\nPatients should arrive approximately 10 to 15 minutes before their scheduled appointment.\n\nNew patients should arrive early enough to complete registration and provide the required information.\n\nPatients should carry relevant documents when applicable, such as:\n\nPrevious prescriptions\nPrevious medical reports\nRecent laboratory reports\nCurrent medication list\nGovernment-issued identification if required for registration\nInsurance information, if applicable\n\nPatients should bring their existing patient ID or appointment details when available.\n\nArriving early does not guarantee that the doctor will see the patient immediately because consultation time may vary depending on earlier patients and medical emergencies.\n\nIf a patient expects to be late, they should inform the clinic as soon as possible.\n\nThe AI receptionist must not guarantee that the doctor will wait for a late patient.\n\nIf the patient arrives significantly late, the appointment may need to be adjusted, delayed, or rescheduled depending on clinic capacity.\n\nCancellation Policy\n\nPatients should inform the clinic as early as possible if they need to cancel an appointment.\n\nTo cancel an appointment, the AI receptionist should identify the correct appointment using appropriate patient information such as:\n\nPatient name\nRegistered mobile number\nAppointment date\nAppointment time\nPatient ID, if available\n\nThe AI receptionist must verify the appointment before cancelling it.\n\nThe AI receptionist should confirm the cancellation with the patient before performing the cancellation action.\n\nExample:\n\n\"I found your appointment for tomorrow at 6:30 PM. Would you like me to cancel this appointment?\"\n\nOnly after the patient confirms should the cancellation tool be executed.\n\nAn appointment is considered cancelled only after the clinic appointment system successfully confirms the cancellation.\n\nThe AI receptionist must never tell the patient that an appointment has been cancelled if the cancellation operation failed.\n\nIf the appointment system is unavailable or returns an error, the AI receptionist should explain that it could not complete the cancellation and escalate to clinic staff if necessary.\n\nRepeated missed appointments or no-shows may require confirmation from clinic staff before another appointment is scheduled.\n\nThe AI receptionist must not invent cancellation charges, refund policies, or penalties. If a patient asks about a refund or cancellation charge and the information is not available, escalate the question to clinic staff.\n\nGeneral Information\n\nClinic Name: Sanjeevani Multispeciality Clinic\n\nPrimary Doctor: Dr. Ananya Deshpande\n\nQualification: MBBS, MD (General Medicine)\n\nSpecialty: General Physician / Internal Medicine\n\nThe doctor commonly provides consultation for:\n\nFever\nCold and cough\nViral infections\nHeadache\nBody ache\nGastric problems\nAcidity\nIndigestion\nDiabetes management\nHypertension management\nThyroid-related follow-up\nCholesterol management\nGeneral weakness and fatigue\nMinor respiratory complaints\nRoutine health checkups\nPreventive healthcare\nChronic disease follow-up\n\nThe clinic provides outpatient consultation.\n\nDiagnostic testing may be available through clinic facilities or partner laboratories. Availability of a particular test must be confirmed before promising it to a patient.\n\nThe AI receptionist must not claim that a particular laboratory test, medicine, specialist, facility, or service is available unless that information is explicitly present in the current knowledge base or confirmed through an authorized clinic system.\n\nThe clinic operates in Nagpur, Maharashtra, India.\n\nRegular clinic hours are Monday to Saturday, 9:00 AM to 1:00 PM and 5:00 PM to 8:30 PM. Sunday is normally closed.\n\nAI Behavioural Instructions\n\nThe AI receptionist must behave as a professional clinic receptionist.\n\nThe AI should be:\n\nPolite\nCalm\nProfessional\nPatient\nHelpful\nConcise\nRespectful\nClear\n\nThe AI should use the same language as the patient whenever possible. Supported languages are English, Hindi, and Marathi.\n\nThe AI should ask one question at a time during voice conversations.\n\nThe AI should avoid unnecessarily long responses.\n\nThe AI should confirm important information before taking actions.\n\nThe AI must distinguish between static clinic information and real-time information.\n\nStatic information includes:\n\nClinic address\nNormal clinic timings\nDoctor profile\nConsultation fees\nGeneral clinic policies\nSupported payment methods\n\nReal-time information includes:\n\nCurrent doctor availability\nAppointment availability\nPatient appointments\nAppointment status\nCancellation status\nRescheduling availability\n\nReal-time information must be obtained from the appropriate clinic system or tool. The AI must never invent real-time availability.\n\nThe AI must never claim that an appointment has been booked, cancelled, or rescheduled until the relevant system confirms successful completion.\n\nFor actions that change patient or appointment data, the AI should follow this sequence:\n\nUnderstand → Confirm → Execute → Verify → Inform\n\nExample:\n\nPatient: \"Book me tomorrow at 6:30 PM.\"\n\nAI: \"I can check that for you. Let me check whether 6:30 PM is available tomorrow.\"\n\nAfter availability is confirmed:\n\nAI: \"6:30 PM is available tomorrow. Would you like me to book it?\"\n\nAfter patient confirmation, the AI may execute the booking.\n\nAfter successful booking:\n\nAI: \"Your appointment is confirmed for tomorrow at 6:30 PM with Dr. Ananya Deshpande.\"\n\nIf the booking fails:\n\nAI: \"I wasn't able to complete the booking because the appointment system is currently unavailable. I don't want to tell you that the appointment is confirmed when it isn't.\"\n\nThe AI must not hallucinate information.\n\nIf the answer is not available in the knowledge base or through an authorized clinic system, the AI should say:\n\n\"I don't have that information available right now. I can connect you with the clinic team or take a message for them.\"\n\nThe AI must not make medical diagnoses.\n\nThe AI must not prescribe medicines.\n\nThe AI must not recommend changing medication dosage.\n\nThe AI must not tell patients to stop prescribed medication.\n\nThe AI must not interpret medical reports or laboratory values as a diagnosis.\n\nThe AI must not provide emergency medical treatment instructions beyond directing the patient to seek immediate emergency care.\n\nIf the patient describes symptoms suggesting a medical emergency, the AI should prioritize emergency guidance over appointment booking.\n\nIf the patient asks to speak with a human receptionist, the AI should transfer the call or create a callback request when the appropriate capability is available.\n\nThe AI should escalate:\n\nMedical emergencies\nComplex medical questions\nPrescription-related decisions\nMedication changes\nBilling disputes\nInsurance disputes\nPrivacy concerns\nMedical-record requests requiring verification\nPatient complaints\nLegal matters\nQuestions not covered by the knowledge base\nSystem/tool failures\nRequests that require authorization beyond the AI's permissions\n\nThe AI should never argue with an upset patient.\n\nFor complaints, the AI should acknowledge the concern, collect the relevant information, and escalate to clinic staff.\n\nThe AI should never reveal confidential information about another patient.\n\nBefore providing sensitive patient-specific information, the AI must follow the clinic's identity-verification procedure.\n\nThe AI should collect only information necessary to complete the requested task.\n\nThe AI should not unnecessarily ask patients for detailed medical history when simply booking an appointment.\n\nThe AI should not promise outcomes such as:\n\nGuaranteed appointment times\nImmediate doctor availability\nGuaranteed diagnosis\nGuaranteed treatment results\nGuaranteed prescription/refill approval\nGuaranteed insurance coverage\nGuaranteed cashless treatment\nGuaranteed medical certificates\n\nWhen information is uncertain, the AI should clearly communicate the uncertainty and offer the appropriate next step.\n\nCore principle:\n\nThe AI receptionist should answer what it knows, verify what can change, ask before acting, never invent information, protect patient privacy, and escalate anything requiring medical or human judgment.",
+      "voice_provider": "gemini_live",
+      "voice_config": {
+        "voice_name": "Zephyr",
+        "temperature": 0.2
+      },
+      "languages": [
+        "English"
+      ],
+      "status": "ACTIVE",
+      "escalation_contact": {
+        "phone": "9999988888",
+        "email": "abcxyx123@gmail.com",
+        "name": "Dr. Ujwala Maske (Clinic Admin)"
+      },
+      "instructions_note": "Clinic Policies\n\nClinic Name: Sanjeevani Multispeciality Clinic\n\nClinic Type: Private outpatient medical clinic.\n\nThe clinic provides outpatient consultation and general physician services under Dr. Ananya Deshpande, MBBS, MD (General Medicine).\n\nRegular clinic hours:\n\nMonday to Saturday: 9:00 AM to 1:00 PM\nMonday to Saturday: 5:00 PM to 8:30 PM\nSunday: Closed\n\nClinic timings may change on public holidays or due to unforeseen circumstances. The AI receptionist must verify the current schedule before confirming whether the clinic or doctor is available.\n\nAppointments are recommended to avoid waiting. Walk-in patients may be accepted depending on clinic capacity and doctor availability.\n\nThe AI receptionist must never guarantee that a walk-in patient will be seen immediately.\n\nThe consultation fee is:\n\nNew patient consultation: ₹700\nFollow-up consultation: ₹500\nVideo consultation: ₹600\n\nThe AI receptionist must not negotiate, waive, or change consultation fees unless an authorized clinic staff member has explicitly configured a discount or revised fee.\n\nThe clinic provides general outpatient consultation, internal medicine consultation, chronic disease follow-up, routine health consultations, and preventive healthcare.\n\nThe AI receptionist is an administrative assistant and is not a doctor. It must not diagnose medical conditions, prescribe medicines, recommend medication changes, interpret laboratory results as a diagnosis, or provide personalized medical treatment advice.\n\nFor medical questions requiring clinical judgment, the AI receptionist should recommend consultation with the doctor.\n\nFor potentially life-threatening symptoms or medical emergencies, the AI receptionist must advise the patient to seek immediate emergency medical care and call India's emergency number 112 when appropriate. The AI must not ask the patient to wait for a routine clinic appointment in an emergency.\n\nThe AI receptionist must protect patient privacy and must not disclose another patient's personal, appointment, medical, billing, or prescription information.\n\nLocation\n\nClinic Name: Sanjeevani Multispeciality Clinic\n\nAddress:\n\n2nd Floor, Shree Ganesh Plaza\nWardha Road\nNagpur, Maharashtra 440015\nIndia\n\nLandmark: Near Ajni Square, Wardha Road, Nagpur.\n\nCity: Nagpur\n\nState: Maharashtra\n\nCountry: India\n\nTime Zone: Indian Standard Time (IST), UTC+5:30.\n\nWhen providing directions, the AI receptionist should provide the clinic address and landmark clearly.\n\nThe AI receptionist must not invent nearby landmarks, road conditions, travel times, parking availability, or public transportation information if such information is not available in the knowledge base.\n\nParking: Limited parking may be available near the building. Parking availability is not guaranteed.\n\nIf a patient asks for detailed navigation or live traffic information, the AI receptionist should direct the patient to a maps/navigation service rather than inventing directions.\n\nPayment Methods\n\nThe clinic accepts the following payment methods:\n\nCash\nUPI\nDebit card\nCredit card\n\nUPI payment may be preferred where available.\n\nThe AI receptionist must never request or store:\n\nUPI PIN\nATM PIN\nDebit/credit card PIN\nCVV\nOTP\nInternet banking password\nAny other banking authentication credential\n\nThe AI receptionist should provide only the payment methods supported by the clinic.\n\nIf a patient asks about a discount, the AI receptionist should explain the standard consultation fee and state that it cannot independently authorize discounts.\n\nIf a patient disputes a payment or billing amount, the AI receptionist should escalate the issue to clinic staff.\n\nArrival Instructions\n\nPatients should arrive approximately 10 to 15 minutes before their scheduled appointment.\n\nNew patients should arrive early enough to complete registration and provide the required information.\n\nPatients should carry relevant documents when applicable, such as:\n\nPrevious prescriptions\nPrevious medical reports\nRecent laboratory reports\nCurrent medication list\nGovernment-issued identification if required for registration\nInsurance information, if applicable\n\nPatients should bring their existing patient ID or appointment details when available.\n\nArriving early does not guarantee that the doctor will see the patient immediately because consultation time may vary depending on earlier patients and medical emergencies.\n\nIf a patient expects to be late, they should inform the clinic as soon as possible.\n\nThe AI receptionist must not guarantee that the doctor will wait for a late patient.\n\nIf the patient arrives significantly late, the appointment may need to be adjusted, delayed, or rescheduled depending on clinic capacity.\n\nCancellation Policy\n\nPatients should inform the clinic as early as possible if they need to cancel an appointment.\n\nTo cancel an appointment, the AI receptionist should identify the correct appointment using appropriate patient information such as:\n\nPatient name\nRegistered mobile number\nAppointment date\nAppointment time\nPatient ID, if available\n\nThe AI receptionist must verify the appointment before cancelling it.\n\nThe AI receptionist should confirm the cancellation with the patient before performing the cancellation action.\n\nExample:\n\n\"I found your appointment for tomorrow at 6:30 PM. Would you like me to cancel this appointment?\"\n\nOnly after the patient confirms should the cancellation tool be executed.\n\nAn appointment is considered cancelled only after the clinic appointment system successfully confirms the cancellation.\n\nThe AI receptionist must never tell the patient that an appointment has been cancelled if the cancellation operation failed.\n\nIf the appointment system is unavailable or returns an error, the AI receptionist should explain that it could not complete the cancellation and escalate to clinic staff if necessary.\n\nRepeated missed appointments or no-shows may require confirmation from clinic staff before another appointment is scheduled.\n\nThe AI receptionist must not invent cancellation charges, refund policies, or penalties. If a patient asks about a refund or cancellation charge and the information is not available, escalate the question to clinic staff.\n\nGeneral Information\n\nClinic Name: Sanjeevani Multispeciality Clinic\n\nPrimary Doctor: Dr. Ananya Deshpande\n\nQualification: MBBS, MD (General Medicine)\n\nSpecialty: General Physician / Internal Medicine\n\nThe doctor commonly provides consultation for:\n\nFever\nCold and cough\nViral infections\nHeadache\nBody ache\nGastric problems\nAcidity\nIndigestion\nDiabetes management\nHypertension management\nThyroid-related follow-up\nCholesterol management\nGeneral weakness and fatigue\nMinor respiratory complaints\nRoutine health checkups\nPreventive healthcare\nChronic disease follow-up\n\nThe clinic provides outpatient consultation.\n\nDiagnostic testing may be available through clinic facilities or partner laboratories. Availability of a particular test must be confirmed before promising it to a patient.\n\nThe AI receptionist must not claim that a particular laboratory test, medicine, specialist, facility, or service is available unless that information is explicitly present in the current knowledge base or confirmed through an authorized clinic system.\n\nThe clinic operates in Nagpur, Maharashtra, India.\n\nRegular clinic hours are Monday to Saturday, 9:00 AM to 1:00 PM and 5:00 PM to 8:30 PM. Sunday is normally closed.\n\nAI Behavioural Instructions\n\nThe AI receptionist must behave as a professional clinic receptionist.\n\nThe AI should be:\n\nPolite\nCalm\nProfessional\nPatient\nHelpful\nConcise\nRespectful\nClear\n\nThe AI should use the same language as the patient whenever possible. Supported languages are English, Hindi, and Marathi.\n\nThe AI should ask one question at a time during voice conversations.\n\nThe AI should avoid unnecessarily long responses.\n\nThe AI should confirm important information before taking actions.\n\nThe AI must distinguish between static clinic information and real-time information.\n\nStatic information includes:\n\nClinic address\nNormal clinic timings\nDoctor profile\nConsultation fees\nGeneral clinic policies\nSupported payment methods\n\nReal-time information includes:\n\nCurrent doctor availability\nAppointment availability\nPatient appointments\nAppointment status\nCancellation status\nRescheduling availability\n\nReal-time information must be obtained from the appropriate clinic system or tool. The AI must never invent real-time availability.\n\nThe AI must never claim that an appointment has been booked, cancelled, or rescheduled until the relevant system confirms successful completion.\n\nFor actions that change patient or appointment data, the AI should follow this sequence:\n\nUnderstand → Confirm → Execute → Verify → Inform\n\nExample:\n\nPatient: \"Book me tomorrow at 6:30 PM.\"\n\nAI: \"I can check that for you. Let me check whether 6:30 PM is available tomorrow.\"\n\nAfter availability is confirmed:\n\nAI: \"6:30 PM is available tomorrow. Would you like me to book it?\"\n\nAfter patient confirmation, the AI may execute the booking.\n\nAfter successful booking:\n\nAI: \"Your appointment is confirmed for tomorrow at 6:30 PM with Dr. Ananya Deshpande.\"\n\nIf the booking fails:\n\nAI: \"I wasn't able to complete the booking because the appointment system is currently unavailable. I don't want to tell you that the appointment is confirmed when it isn't.\"\n\nThe AI must not hallucinate information.\n\nIf the answer is not available in the knowledge base or through an authorized clinic system, the AI should say:\n\n\"I don't have that information available right now. I can connect you with the clinic team or take a message for them.\"\n\nThe AI must not make medical diagnoses.\n\nThe AI must not prescribe medicines.\n\nThe AI must not recommend changing medication dosage.\n\nThe AI must not tell patients to stop prescribed medication.\n\nThe AI must not interpret medical reports or laboratory values as a diagnosis.\n\nThe AI must not provide emergency medical treatment instructions beyond directing the patient to seek immediate emergency care.\n\nIf the patient describes symptoms suggesting a medical emergency, the AI should prioritize emergency guidance over appointment booking.\n\nIf the patient asks to speak with a human receptionist, the AI should transfer the call or create a callback request when the appropriate capability is available.\n\nThe AI should escalate:\n\nMedical emergencies\nComplex medical questions\nPrescription-related decisions\nMedication changes\nBilling disputes\nInsurance disputes\nPrivacy concerns\nMedical-record requests requiring verification\nPatient complaints\nLegal matters\nQuestions not covered by the knowledge base\nSystem/tool failures\nRequests that require authorization beyond the AI's permissions\n\nThe AI should never argue with an upset patient.\n\nFor complaints, the AI should acknowledge the concern, collect the relevant information, and escalate to clinic staff.\n\nThe AI should never reveal confidential information about another patient.\n\nBefore providing sensitive patient-specific information, the AI must follow the clinic's identity-verification procedure.\n\nThe AI should collect only information necessary to complete the requested task.\n\nThe AI should not unnecessarily ask patients for detailed medical history when simply booking an appointment.\n\nThe AI should not promise outcomes such as:\n\nGuaranteed appointment times\nImmediate doctor availability\nGuaranteed diagnosis\nGuaranteed treatment results\nGuaranteed prescription/refill approval\nGuaranteed insurance coverage\nGuaranteed cashless treatment\nGuaranteed medical certificates\n\nWhen information is uncertain, the AI should clearly communicate the uncertainty and offer the appropriate next step.\n\nCore principle:\n\nThe AI receptionist should answer what it knows, verify what can change, ask before acting, never invent information, protect patient privacy, and escalate anything requiring medical or human judgment."
     }
   ],
   "calls": [
@@ -591,10 +895,174 @@
       ],
       "language_detected": "English",
       "created_at": "2026-08-19T14:29:15.848Z"
+    },
+    {
+      "id": "call_1787918260447_ny8s",
+      "clinic_id": "clinic_apex_101",
+      "patient_id": "pat_rodriguez_2",
+      "agent_id": "agent_apex_1",
+      "direction": "inbound",
+      "start_time": "2026-08-28T11:57:40.447Z",
+      "duration_seconds": 11,
+      "status": "completed",
+      "outcome": "COMPLETED",
+      "active_ai_config_version": "2026-08-19T14:29:16.336Z",
+      "transcript": [
+        {
+          "speaker": "ai",
+          "text": "Hello..! Welcome to Apex Clinic. My name is Siya, the clinic receptionist. How may I assist you today?",
+          "timestamp": "00:00"
+        },
+        {
+          "speaker": "patient",
+          "text": "hello",
+          "timestamp": "00:11"
+        },
+        {
+          "speaker": "ai",
+          "text": "Hello! Welcome to Apex Cardiology & Family Medicine. My name is Siya. \n\nMay I please have your full name and phone number so I can assist you better today?",
+          "timestamp": "00:14"
+        }
+      ],
+      "language_detected": "English",
+      "created_at": "2026-08-28T11:57:40.447Z",
+      "end_time": "2026-08-28T11:58:17.661Z",
+      "summary": "Call completed (29s). Outcome: IN_PROGRESS. 1 messages exchanged."
     }
   ],
   "escalations": [],
   "audit_logs": [
+    {
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_AI_CONFIG_UPDATED",
+      "target_type": "AI_CONFIG",
+      "metadata": {
+        "apiKeyChanged": false
+      },
+      "id": "audit_1787923115657_z6rz0",
+      "created_at": "2026-08-28T13:18:35.657Z"
+    },
+    {
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "id": "audit_1787922984587_26epv",
+      "created_at": "2026-08-28T13:16:24.587Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1787922290299_c4jvp",
+      "created_at": "2026-08-28T13:04:50.299Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "APPOINTMENT_STATUS_COMPLETED",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1787922254504_be3h",
+      "metadata": {
+        "status": "COMPLETED"
+      },
+      "id": "audit_1787922259335_20bmx",
+      "created_at": "2026-08-28T13:04:19.335Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "APPOINTMENT_BOOKED_BY_STAFF",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1787922254504_be3h",
+      "metadata": {
+        "date": "2026-08-28",
+        "start_time": "09:35",
+        "doctor_id": "doc_elena_1",
+        "patient_id": "pat_miller_1"
+      },
+      "id": "audit_1787922254505_cjbty",
+      "created_at": "2026-08-28T13:04:14.505Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_staff_1",
+      "id": "audit_1787922216677_52xdg",
+      "created_at": "2026-08-28T13:03:36.677Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_staff_1",
+      "id": "audit_1787918181489_hiczo",
+      "created_at": "2026-08-28T11:56:21.489Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1787918177000_9jmsk",
+      "created_at": "2026-08-28T11:56:17.000Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_doc_elena_1",
+      "actor_name": "Dr. Elena Vance",
+      "action": "PASSWORD_CHANGED",
+      "target_type": "USER",
+      "target_id": "usr_doc_elena_1",
+      "id": "audit_1787918063409_uubtk",
+      "created_at": "2026-08-28T11:54:23.409Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_doc_elena_1",
+      "actor_name": "Dr. Elena Vance",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_doc_elena_1",
+      "id": "audit_1787918039936_0cvnn",
+      "created_at": "2026-08-28T11:53:59.936Z"
+    },
+    {
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "id": "audit_1787157045859_6er82",
+      "created_at": "2026-08-19T16:30:45.859Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1787156743753_mz7bq",
+      "created_at": "2026-08-19T16:25:43.753Z"
+    },
     {
       "clinic_id": null,
       "actor_user_id": "usr_platform_admin_2",
@@ -776,37 +1244,459 @@
     },
     {
       "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "id": "audit_1787156743753_mz7bq",
-      "created_at": "2026-08-19T16:25:43.753Z"
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "CLINIC_UPDATED_BY_PLATFORM_ADMIN",
+      "target_type": "CLINIC",
+      "target_id": "clinic_apex_101",
+      "metadata": {
+        "currency": "INR",
+        "currency_symbol": "₹"
+      },
+      "id": "audit_1787923144332_3mxvs",
+      "created_at": "2026-08-28T13:19:04.332Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "CLINIC_AND_ADMIN_CREATED",
+      "target_type": "CLINIC",
+      "target_id": "clinic_1787923240249_cqgw",
+      "metadata": {
+        "clinic_name": "Sanjeevani Multispeciality Clinic",
+        "admin_email": "admin@clinic.com"
+      },
+      "id": "audit_1787923240302_h5yim",
+      "created_at": "2026-08-28T13:20:40.302Z"
     },
     {
       "clinic_id": null,
       "actor_user_id": "usr_platform_admin_2",
       "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
+      "action": "PLATFORM_AI_CONFIG_UPDATED",
+      "target_type": "AI_CONFIG",
+      "metadata": {
+        "apiKeyChanged": false
+      },
+      "id": "audit_1787923258850_0od9t",
+      "created_at": "2026-08-28T13:20:58.850Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
       "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "id": "audit_1787157045859_6er82",
-      "created_at": "2026-08-19T16:30:45.859Z"
+      "target_id": "usr_1787923240250_irur",
+      "id": "audit_1787923280650_1wi07",
+      "created_at": "2026-08-28T13:21:20.650Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "PASSWORD_CHANGED",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "id": "audit_1787923290950_mu0wi",
+      "created_at": "2026-08-28T13:21:30.950Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_clinic_1787923240249_cqgw",
+      "metadata": {
+        "voice_provider": "gemini_live",
+        "status": "ACTIVE"
+      },
+      "id": "audit_1787923307819_b998z",
+      "created_at": "2026-08-28T13:21:47.819Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_CREATED",
+      "target_type": "DOCTOR",
+      "target_id": "doc_1787923357367_643s",
+      "metadata": {
+        "name": "Dr. Raj Patel",
+        "specialization": "Pediatrician"
+      },
+      "id": "audit_1787923357371_n4mkg",
+      "created_at": "2026-08-28T13:22:37.371Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_CREATED",
+      "target_type": "DOCTOR",
+      "target_id": "doc_1787923374362_zpfh",
+      "metadata": {
+        "name": "Dr. Meera Joshi",
+        "specialization": "Cardiologist"
+      },
+      "id": "audit_1787923374366_diaeo",
+      "created_at": "2026-08-28T13:22:54.366Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SERVICE_CREATED",
+      "target_type": "SERVICE",
+      "target_id": "srv_1787923389642_o9t1",
+      "metadata": {
+        "name": "General Consultation",
+        "fee": 400
+      },
+      "id": "audit_1787923389643_162cf",
+      "created_at": "2026-08-28T13:23:09.643Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SERVICE_CREATED",
+      "target_type": "SERVICE",
+      "target_id": "srv_1787923400599_qce0",
+      "metadata": {
+        "name": "Comprehensive Cardiac Evaluation",
+        "fee": 900
+      },
+      "id": "audit_1787923400600_0ba0m",
+      "created_at": "2026-08-28T13:23:20.600Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SERVICE_CREATED",
+      "target_type": "SERVICE",
+      "target_id": "srv_1787923410532_a25x",
+      "metadata": {
+        "name": "Pediatric Consultation",
+        "fee": 500
+      },
+      "id": "audit_1787923410533_bzrdq",
+      "created_at": "2026-08-28T13:23:30.533Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_LEAVE_LOGGED",
+      "target_type": "LEAVE",
+      "target_id": "leave_1787923443875_yekg",
+      "metadata": {
+        "id": "leave_1787923443875_yekg",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_date": "2026-08-28",
+        "end_date": "2026-08-28",
+        "reason": "Medical Conference / Scheduled Leave"
+      },
+      "id": "audit_1787923443876_k64v1",
+      "created_at": "2026-08-28T13:24:03.876Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_LEAVE_LOGGED",
+      "target_type": "LEAVE",
+      "target_id": "leave_1787923454430_kzg0",
+      "metadata": {
+        "id": "leave_1787923454430_kzg0",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_date": "2026-08-31",
+        "end_date": "2026-08-28",
+        "reason": "Medical Conference / Scheduled Leave"
+      },
+      "id": "audit_1787923454431_1supt",
+      "created_at": "2026-08-28T13:24:14.431Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_LEAVE_LOGGED",
+      "target_type": "LEAVE",
+      "target_id": "leave_1787923474885_gupz",
+      "metadata": {
+        "id": "leave_1787923474885_gupz",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "start_date": "2026-09-04",
+        "end_date": "2026-09-04",
+        "reason": "Medical Conference / Scheduled Leave"
+      },
+      "id": "audit_1787923474886_n11pe",
+      "created_at": "2026-08-28T13:24:34.886Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_1",
+      "metadata": {
+        "id": "sched_doc_1787923374362_zpfh_day_1",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "day_of_week": 1,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "break_start": "13:00",
+        "break_end": "14:00",
+        "buffer_minutes": 5
+      },
+      "id": "audit_1787923482925_kwhpl",
+      "created_at": "2026-08-28T13:24:42.925Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_2",
+      "metadata": {
+        "id": "sched_doc_1787923374362_zpfh_day_2",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "day_of_week": 2,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "break_start": "13:00",
+        "break_end": "14:00",
+        "buffer_minutes": 5
+      },
+      "id": "audit_1787923483034_bbhwq",
+      "created_at": "2026-08-28T13:24:43.034Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_3",
+      "metadata": {
+        "id": "sched_doc_1787923374362_zpfh_day_3",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "day_of_week": 3,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "break_start": "13:00",
+        "break_end": "14:00",
+        "buffer_minutes": 5
+      },
+      "id": "audit_1787923483143_ktxr2",
+      "created_at": "2026-08-28T13:24:43.143Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_4",
+      "metadata": {
+        "id": "sched_doc_1787923374362_zpfh_day_4",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "day_of_week": 4,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "break_start": "13:00",
+        "break_end": "14:00",
+        "buffer_minutes": 5
+      },
+      "id": "audit_1787923483248_bv49u",
+      "created_at": "2026-08-28T13:24:43.248Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_5",
+      "metadata": {
+        "id": "sched_doc_1787923374362_zpfh_day_5",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "day_of_week": 5,
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "break_start": "13:00",
+        "break_end": "14:00",
+        "buffer_minutes": 5
+      },
+      "id": "audit_1787923483369_df1pe",
+      "created_at": "2026-08-28T13:24:43.369Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_DELETED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_6",
+      "metadata": {
+        "doctor_id": "doc_1787923374362_zpfh",
+        "day_of_week": 6
+      },
+      "id": "audit_1787923483477_ankzy",
+      "created_at": "2026-08-28T13:24:43.477Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_DELETED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_0",
+      "metadata": {
+        "doctor_id": "doc_1787923374362_zpfh",
+        "day_of_week": 0
+      },
+      "id": "audit_1787923483593_hu29e",
+      "created_at": "2026-08-28T13:24:43.593Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "STAFF_CREATED",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "metadata": {
+        "name": "Shital",
+        "email": "shital@clinic.com"
+      },
+      "id": "audit_1787923527433_axqzr",
+      "created_at": "2026-08-28T13:25:27.433Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "STAFF_UPDATED",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "metadata": {
+        "permissions": {
+          "appointments": "EDIT",
+          "patients": "EDIT",
+          "doctors": "READ",
+          "services": "NONE",
+          "schedules": "READ",
+          "calls": "READ",
+          "ai_receptionist": "READ",
+          "staff": "NONE"
+        }
+      },
+      "id": "audit_1787923566084_l3nf6",
+      "created_at": "2026-08-28T13:26:06.084Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "id": "audit_1787923603467_9t89g",
+      "created_at": "2026-08-28T13:26:43.467Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "STAFF_PASSWORD_RESET",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "metadata": {
+        "target_email": "shital@clinic.com"
+      },
+      "id": "audit_1787923613191_jgsf1",
+      "created_at": "2026-08-28T13:26:53.191Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_staff_1787923527385_8sqt",
+      "actor_name": "Shital",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "id": "audit_1787923629240_me1c2",
+      "created_at": "2026-08-28T13:27:09.240Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_staff_1787923527385_8sqt",
+      "actor_name": "Shital",
+      "action": "PASSWORD_CHANGED",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "id": "audit_1787923637722_d8tpg",
+      "created_at": "2026-08-28T13:27:17.722Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "id": "audit_1787923861629_972mu",
+      "created_at": "2026-08-28T13:31:01.629Z"
+    },
+    {
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_clinic_1787923240249_cqgw",
+      "metadata": {
+        "voice_provider": "gemini_live",
+        "status": "ACTIVE"
+      },
+      "id": "audit_1787923891916_lzg5d",
+      "created_at": "2026-08-28T13:31:31.916Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_apex_1",
+      "metadata": {
+        "voice_provider": "gemini_live",
+        "status": "ACTIVE"
+      },
+      "id": "audit_1787924526620_41lwf",
+      "created_at": "2026-08-28T13:42:06.620Z"
     }
   ],
   "platform_ai_config": {
     "id": "platform_ai_default",
-    "provider": "gemini",
-    "model": "gemini-3.6-flash",
-    "voice_provider": "gemini_live",
-    "voice_name": "Zephyr",
-    "temperature": 0.2,
-    "status": "ACTIVE",
     "api_key_configured": true,
     "api_key_masked": "AIzaSy••••••••••••••••••••m2Lw",
     "greeting_template": "Thank you for calling {{clinic_name}}. My name is {{agent_name}}, your AI Receptionist. How may I assist you with your appointment or health inquiry today?",
-    "role_definition": "You are the verified AI Receptionist for this medical clinic. Your primary objective is to assist patients with scheduling, rescheduling, cancelling appointments, checking operating hours, and answering general clinic inquiries.",
+    "role_definition": "",
     "things_to_do": [
       "Be polite, warm, concise, and professional at all times.",
       "Identify returning patients by phone number; if new, collect full name and phone number to register them.",
@@ -828,12 +1718,7 @@
       "Caller asks clinical questions that require a doctor or licensed nurse.",
       "Technical validation failure or no available appointments for urgent requests."
     ],
-    "safety_guidelines": [
-      "Strict tenant isolation: Only access data belonging to the current caller's clinic.",
-      "Patient data privacy: Do not disclose appointment details to unrecognized callers without phone verification.",
-      "Deterministic validation: Availability and double-booking checks are calculated server-side."
-    ],
-    "updated_at": "2026-08-19T14:29:16.336Z"
+    "updated_at": "2026-08-28T13:20:58.849Z"
   },
   "platform_knowledge_base": [
     {

@@ -146,24 +146,24 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] text-[#172B3A] flex flex-col justify-between selection:bg-[#0F4C5C]/20 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#F7F9FC] text-[#172B3A] flex flex-col justify-between selection:bg-[#0A2540]/20 relative overflow-hidden font-sans">
       {/* Ambient background decoration */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#0F4C5C]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/3 -right-40 w-96 h-96 bg-[#083B4A]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 left-1/3 w-96 h-96 bg-[#083B4A]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#0A2540]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 -right-40 w-96 h-96 bg-[#06182C]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 left-1/3 w-96 h-96 bg-[#06182C]/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Top Header Bar */}
       <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0F4C5C] to-[#083B4A] flex items-center justify-center text-white font-black text-sm shadow-md shadow-[#0F4C5C]/20 border border-[#0F4C5C]/40">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0A2540] to-[#06182C] flex items-center justify-center text-white font-black text-sm shadow-md shadow-[#0A2540]/20 border border-[#0A2540]/40">
             CF
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-[#083B4A] tracking-tight text-base sm:text-lg">
+              <span className="font-extrabold text-[#06182C] tracking-tight text-base sm:text-lg">
                 CLINICFIRST
               </span>
-              <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-[#0F4C5C]/10 text-[#0F4C5C] border border-[#0F4C5C]/20">
+              <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-[#0A2540]/10 text-[#0A2540] border border-[#0A2540]/20">
                 HEALTHCARE OS
               </span>
             </div>
@@ -176,7 +176,7 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
         {/* Security & System Status Pill */}
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="hidden md:flex items-center gap-1.5 px-3 py-1 bg-white border border-[#E2E8F0] rounded-full text-xs text-[#475569] shadow-xs">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#0F4C5C]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#0A2540]" />
             <span className="font-semibold text-[11px]">HIPAA Compliant</span>
             <span className="w-1 h-1 rounded-full bg-[#CBD5E1]" />
             <span className="text-[11px] text-[#64748B]">AES-256</span>
@@ -196,13 +196,13 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
           {/* Left Column: Clinical Hero & Live AI Reception Visual Showcase */}
           <div className="hidden lg:flex lg:col-span-6 flex-col justify-center space-y-6 pr-4">
             <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E2E8F0] text-xs font-semibold text-[#0F4C5C] shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-[#0F4C5C]" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E2E8F0] text-xs font-semibold text-[#0A2540] shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#0A2540]" />
                 <span>Next-Generation Medical AI Voice Infrastructure</span>
               </div>
-              <h1 className="text-3xl xl:text-4xl font-extrabold text-[#083B4A] tracking-tight leading-tight">
+              <h1 className="text-3xl xl:text-4xl font-extrabold text-[#06182C] tracking-tight leading-tight">
                 Never miss a patient call.<br />
-                <span className="text-[#0F4C5C]">Automate scheduling with medical precision.</span>
+                <span className="text-[#0A2540]">Automate scheduling with medical precision.</span>
               </h1>
               <p className="text-sm text-[#475569] leading-relaxed max-w-lg">
                 CLINICFIRST empowers doctor practices and specialty clinics with autonomous 24/7 voice AI reception, real-time EHR calendar sync, and doctor triage.
@@ -210,20 +210,20 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
             </div>
 
             {/* Live AI Reception Simulation Widget Card */}
-            <div className="bg-gradient-to-b from-white to-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-5 shadow-lg shadow-[#083B4A]/5 relative overflow-hidden">
+            <div className="bg-gradient-to-b from-white to-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-5 shadow-lg shadow-[#06182C]/5 relative overflow-hidden">
               {/* Header inside card */}
               <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9]">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <div className="w-9 h-9 rounded-xl bg-[#0F4C5C] flex items-center justify-center text-white shadow-xs">
+                    <div className="w-9 h-9 rounded-xl bg-[#0A2540] flex items-center justify-center text-white shadow-xs">
                       <Bot className="w-5 h-5" />
                     </div>
-                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#0F4C5C] border-2 border-white ring-1 ring-[#0F4C5C]/30" />
+                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#0A2540] border-2 border-white ring-1 ring-[#0A2540]/30" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
                       <h4 className="text-xs font-bold text-[#172B3A]">Ava — Live Clinical AI Receptionist</h4>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#0F4C5C]/10 text-[#0F4C5C] rounded font-semibold">
+                      <span className="text-[10px] font-mono px-1.5 py-0.2 bg-[#0A2540]/10 text-[#0A2540] rounded font-semibold">
                         ACTIVE
                       </span>
                     </div>
@@ -231,8 +231,8 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 px-2 py-1 bg-white border border-[#E2E8F0] rounded-md text-[10px] font-mono text-[#0F4C5C] font-bold">
-                  <Activity className="w-3 h-3 text-[#0F4C5C]" />
+                <div className="flex items-center gap-1.5 px-2 py-1 bg-white border border-[#E2E8F0] rounded-md text-[10px] font-mono text-[#0A2540] font-bold">
+                  <Activity className="w-3 h-3 text-[#0A2540]" />
                   <span>2.1s Latency</span>
                 </div>
               </div>
@@ -255,7 +255,7 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                       className={`max-w-[85%] px-3.5 py-2 rounded-xl text-xs leading-relaxed shadow-2xs ${
                         item.speaker === 'Patient'
                           ? 'bg-white border border-[#E2E8F0] text-[#172B3A]'
-                          : 'bg-[#083B4A] text-white'
+                          : 'bg-[#06182C] text-white'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-3 text-[10px] font-semibold mb-0.5 opacity-80">
@@ -313,10 +313,10 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
             {/* Doctor Trust Footnote */}
             <div className="flex items-center gap-3 text-xs text-[#64748B]">
               <div className="flex -space-x-2 overflow-hidden">
-                <div className="w-7 h-7 rounded-full bg-[#0F4C5C] text-white flex items-center justify-center font-bold text-[10px] ring-2 ring-white">
+                <div className="w-7 h-7 rounded-full bg-[#0A2540] text-white flex items-center justify-center font-bold text-[10px] ring-2 ring-white">
                   DR
                 </div>
-                <div className="w-7 h-7 rounded-full bg-[#083B4A] text-white flex items-center justify-center font-bold text-[10px] ring-2 ring-white">
+                <div className="w-7 h-7 rounded-full bg-[#06182C] text-white flex items-center justify-center font-bold text-[10px] ring-2 ring-white">
                   RN
                 </div>
                 <div className="w-7 h-7 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold text-[10px] ring-2 ring-white">
@@ -329,12 +329,12 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
 
           {/* Right Column: Authentication Card Form */}
           <div className="w-full lg:col-span-6 max-w-md mx-auto">
-            <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 sm:p-8 shadow-xl shadow-[#083B4A]/6 relative">
+            <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 sm:p-8 shadow-xl shadow-[#06182C]/6 relative">
               
               {/* Card Header & Portal Toggle */}
               <div className="space-y-4 mb-6">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-black tracking-tight text-[#083B4A]">
+                  <h2 className="text-xl sm:text-2xl font-black tracking-tight text-[#06182C]">
                     Welcome to CLINICFIRST
                   </h2>
                   <p className="text-xs text-[#64748B] mt-1 font-medium">
@@ -353,11 +353,11 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                       onClick={() => handleRoleSelect('admin')}
                       className={`flex flex-col items-center justify-center py-2 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                         selectedRole === 'admin'
-                          ? 'bg-white text-[#083B4A] shadow-xs border border-[#E2E8F0]'
+                          ? 'bg-white text-[#06182C] shadow-xs border border-[#E2E8F0]'
                           : 'text-[#64748B] hover:text-[#172B3A]'
                       }`}
                     >
-                      <Building2 className="w-4 h-4 mb-1 text-[#0F4C5C]" />
+                      <Building2 className="w-4 h-4 mb-1 text-[#0A2540]" />
                       <span className="text-[11px]">Clinic Admin</span>
                     </button>
 
@@ -366,11 +366,11 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                       onClick={() => handleRoleSelect('staff')}
                       className={`flex flex-col items-center justify-center py-2 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                         selectedRole === 'staff'
-                          ? 'bg-white text-[#083B4A] shadow-xs border border-[#E2E8F0]'
+                          ? 'bg-white text-[#06182C] shadow-xs border border-[#E2E8F0]'
                           : 'text-[#64748B] hover:text-[#172B3A]'
                       }`}
                     >
-                      <UserCheck className="w-4 h-4 mb-1 text-[#0F4C5C]" />
+                      <UserCheck className="w-4 h-4 mb-1 text-[#0A2540]" />
                       <span className="text-[11px]">Front Desk</span>
                     </button>
 
@@ -379,11 +379,11 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                       onClick={() => handleRoleSelect('doctor')}
                       className={`flex flex-col items-center justify-center py-2 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                         selectedRole === 'doctor'
-                          ? 'bg-white text-[#083B4A] shadow-xs border border-[#E2E8F0]'
+                          ? 'bg-white text-[#06182C] shadow-xs border border-[#E2E8F0]'
                           : 'text-[#64748B] hover:text-[#172B3A]'
                       }`}
                     >
-                      <Stethoscope className="w-4 h-4 mb-1 text-[#0F4C5C]" />
+                      <Stethoscope className="w-4 h-4 mb-1 text-[#0A2540]" />
                       <span className="text-[11px]">Doctor</span>
                     </button>
                   </div>
@@ -414,7 +414,7 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="doctor@apexcardiology.com"
-                      className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-[#E2E8F0] rounded-xl focus:border-[#0F4C5C] focus:ring-2 focus:ring-[#0F4C5C]/15 text-[#172B3A] placeholder-[#94A3B8] outline-none transition-all"
+                      className="w-full pl-10 pr-3.5 py-2.5 text-sm bg-white border border-[#E2E8F0] rounded-xl focus:border-[#0A2540] focus:ring-2 focus:ring-[#0A2540]/15 text-[#172B3A] placeholder-[#94A3B8] outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -425,7 +425,7 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#475569]">
                       Password
                     </label>
-                    <span className="text-[11px] text-[#0F4C5C] font-semibold cursor-pointer hover:underline">
+                    <span className="text-[11px] text-[#0A2540] font-semibold cursor-pointer hover:underline">
                       Need help?
                     </span>
                   </div>
@@ -439,7 +439,7 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full pl-10 pr-10 py-2.5 text-sm bg-white border border-[#E2E8F0] rounded-xl focus:border-[#0F4C5C] focus:ring-2 focus:ring-[#0F4C5C]/15 text-[#172B3A] placeholder-[#94A3B8] outline-none transition-all font-mono"
+                      className="w-full pl-10 pr-10 py-2.5 text-sm bg-white border border-[#E2E8F0] rounded-xl focus:border-[#0A2540] focus:ring-2 focus:ring-[#0A2540]/15 text-[#172B3A] placeholder-[#94A3B8] outline-none transition-all font-mono"
                     />
                     <button
                       type="button"
@@ -459,7 +459,7 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="w-4 h-4 rounded border-[#CBD5E1] text-[#0F4C5C] focus:ring-[#0F4C5C]"
+                      className="w-4 h-4 rounded border-[#CBD5E1] text-[#0A2540] focus:ring-[#0A2540]"
                     />
                     <span className="font-medium">Remember clinical terminal</span>
                   </label>
@@ -473,7 +473,7 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                     type="submit"
                     variant="primary"
                     size="lg"
-                    className="w-full shadow-md shadow-[#0F4C5C]/20 hover:shadow-lg hover:shadow-[#0F4C5C]/30 transition-all font-bold text-sm py-3 cursor-pointer"
+                    className="w-full shadow-md shadow-[#0A2540]/20 hover:shadow-lg hover:shadow-[#0A2540]/30 transition-all font-bold text-sm py-3 cursor-pointer"
                     loading={loading}
                     icon={<ArrowRight className="w-4 h-4" />}
                   >
@@ -489,7 +489,7 @@ export const ClinicLogin: React.FC<ClinicLoginProps> = ({
                   type="button"
                   id="switch-to-platform-btn"
                   onClick={switchPortal}
-                  className="font-bold text-[#0F4C5C] hover:text-[#083B4A] hover:underline cursor-pointer flex items-center gap-1"
+                  className="font-bold text-[#0A2540] hover:text-[#06182C] hover:underline cursor-pointer flex items-center gap-1"
                 >
                   <span>Platform SuperAdmin View</span>
                   <ArrowRight className="w-3 h-3" />

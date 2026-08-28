@@ -309,7 +309,7 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#172B3A] bg-[#E2E8F0] px-2 py-1 rounded-sm">
                 Average Ticket Fee
               </span>
-              <div className="w-6 h-6 rounded-md bg-slate-100 text-[#0F4C5C] flex items-center justify-center font-bold text-xs">
+              <div className="w-6 h-6 rounded-md bg-slate-100 text-[#0A2540] flex items-center justify-center font-bold text-xs">
                 <TrendingUp className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -390,7 +390,7 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
         {/* 4. Main Body: Itemized Table or Doctor/Service Breakdown */}
         {loading ? (
           <div className="py-16 text-center text-xs text-[#64748B] font-mono flex flex-col items-center justify-center gap-3">
-            <div className="w-7 h-7 rounded-full border-2 border-[#E2E8F0] border-t-[#0F4C5C] animate-spin" />
+            <div className="w-7 h-7 rounded-full border-2 border-[#E2E8F0] border-t-[#0A2540] animate-spin" />
             <span>Fetching authoritative daily fee records...</span>
           </div>
         ) : activeViewTab === 'itemized' ? (
@@ -433,7 +433,7 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
                           {/* Patient */}
                           <td className="py-3.5 px-4">
                             <div className="font-semibold text-[#172B3A] flex items-center gap-1.5">
-                              <User className="w-3.5 h-3.5 text-[#0F4C5C] shrink-0" />
+                              <User className="w-3.5 h-3.5 text-[#0A2540] shrink-0" />
                               <span className="truncate">{item.patient_name}</span>
                             </div>
                             <div className="text-[11px] text-[#64748B] flex items-center gap-1 mt-0.5 font-mono">
@@ -445,7 +445,7 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
                           {/* Doctor */}
                           <td className="py-3.5 px-4">
                             <div className="font-semibold text-[#172B3A] flex items-center gap-1.5">
-                              <Stethoscope className="w-3.5 h-3.5 text-[#0F4C5C] shrink-0" />
+                              <Stethoscope className="w-3.5 h-3.5 text-[#0A2540] shrink-0" />
                               <span className="truncate">{item.doctor_name}</span>
                             </div>
                             <div className="text-[11px] text-[#64748B] truncate mt-0.5">
@@ -489,7 +489,7 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
                           <td className="py-3.5 px-4 text-right font-mono">
                             <div
                               className={`text-sm font-bold ${
-                                isCancelled ? 'text-rose-600 line-through' : 'text-[#0F4C5C]'
+                                isCancelled ? 'text-rose-600 line-through' : 'text-[#0A2540]'
                               }`}
                             >
                               {symbol}
@@ -509,7 +509,7 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
                       <td colSpan={5} className="py-3.5 px-4 text-right uppercase tracking-wider text-[11px] text-[#64748B]">
                         Filtered Realized Collection Total ({filteredItems.filter((i) => i.status === 'COMPLETED').length} completed services):
                       </td>
-                      <td className="py-3.5 px-4 text-right font-mono text-base text-[#0F4C5C]">
+                      <td className="py-3.5 px-4 text-right font-mono text-base text-[#0A2540]">
                         {symbol}
                         {filteredTotal.toLocaleString('en-US', {
                           minimumFractionDigits: 2,
@@ -528,7 +528,7 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
             {/* By Doctor */}
             <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl shadow-xs">
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[#E2E8F0]">
-                <Stethoscope className="w-4 h-4 text-[#0F4C5C]" />
+                <Stethoscope className="w-4 h-4 text-[#0A2540]" />
                 <h4 className="text-xs font-bold uppercase tracking-wider text-[#172B3A]">
                   Collection by Doctor
                 </h4>
@@ -540,12 +540,12 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
                       <div>
                         <div className="font-bold text-[#172B3A]">{d.doctor_name}</div>
                         <div className="text-[11px] text-[#64748B]">{d.specialization}</div>
-                        <div className="text-[11px] text-[#0F4C5C] font-semibold mt-0.5">
+                        <div className="text-[11px] text-[#0A2540] font-semibold mt-0.5">
                           {d.count} patient{d.count === 1 ? '' : 's'} scheduled
                         </div>
                       </div>
                       <div className="text-right font-mono">
-                        <div className="text-sm font-bold text-[#0F4C5C]">
+                        <div className="text-sm font-bold text-[#0A2540]">
                           {symbol}
                           {d.total_fees.toFixed(2)}
                         </div>
@@ -566,7 +566,7 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
             {/* By Service */}
             <div className="p-4 bg-white border border-[#E2E8F0] rounded-xl shadow-xs">
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[#E2E8F0]">
-                <Layers className="w-4 h-4 text-[#0F4C5C]" />
+                <Layers className="w-4 h-4 text-[#0A2540]" />
                 <h4 className="text-xs font-bold uppercase tracking-wider text-[#172B3A]">
                   Collection by Clinical Service
                 </h4>
@@ -581,12 +581,12 @@ export const DailyCollectionModal: React.FC<DailyCollectionModalProps> = ({
                           Unit price: {symbol}
                           {s.fee.toFixed(2)}
                         </div>
-                        <div className="text-[11px] text-[#0F4C5C] font-semibold mt-0.5">
+                        <div className="text-[11px] text-[#0A2540] font-semibold mt-0.5">
                           {s.count} consultation{s.count === 1 ? '' : 's'}
                         </div>
                       </div>
                       <div className="text-right font-mono">
-                        <div className="text-sm font-bold text-[#0F4C5C]">
+                        <div className="text-sm font-bold text-[#0A2540]">
                           {symbol}
                           {s.total_fees.toFixed(2)}
                         </div>

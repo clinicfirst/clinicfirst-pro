@@ -30,7 +30,7 @@ export const Input: React.FC<InputProps> = ({
         <input
           id={inputId}
           className={`w-full rounded-lg border ${
-            error ? 'border-rose-400 font-medium ring-1 ring-rose-400 bg-rose-50/20' : 'border-[#E2E8F0] focus:border-[#0F4C5C] focus:ring-2 focus:ring-[#0F4C5C]/15'
+            error ? 'border-rose-400 font-medium ring-1 ring-rose-400 bg-rose-50/20' : 'border-[#E2E8F0] focus:border-[#0A2540] focus:ring-2 focus:ring-[#0A2540]/15'
           } bg-white px-3.5 py-2 text-sm text-[#172B3A] placeholder-[#94A3B8] focus:outline-none transition-all ${
             icon ? 'pl-9' : ''
           } ${className}`}
@@ -69,7 +69,7 @@ export const Select: React.FC<SelectProps> = ({
       <select
         id={selectId}
         className={`w-full rounded-lg border ${
-          error ? 'border-rose-400 font-medium ring-1 ring-rose-400 bg-rose-50/20' : 'border-[#E2E8F0] focus:border-[#0F4C5C] focus:ring-2 focus:ring-[#0F4C5C]/15'
+          error ? 'border-rose-400 font-medium ring-1 ring-rose-400 bg-rose-50/20' : 'border-[#E2E8F0] focus:border-[#0A2540] focus:ring-2 focus:ring-[#0A2540]/15'
         } bg-white px-3.5 py-2 text-sm text-[#172B3A] focus:outline-none transition-all ${className}`}
         {...props}
       >

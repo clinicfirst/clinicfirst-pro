@@ -614,7 +614,7 @@ clinicRouter.put(
 // -------------------------------------------------------------
 clinicRouter.get(
   '/staff',
-  requireClinicPermission('manage_staff'),
+  requireClinicPermission('view_staff'),
   (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const staff = db.getUsers(clinicId).filter((u) => u.role === 'CLINIC_STAFF' || u.role === 'CLINIC_ADMIN');
@@ -953,7 +953,7 @@ clinicRouter.delete(
 // -------------------------------------------------------------
 clinicRouter.get(
   '/patients',
-  requireClinicPermission('manage_patients'),
+  requireClinicPermission('view_patients'),
   (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const search = req.query.search as string | undefined;
@@ -969,7 +969,7 @@ clinicRouter.get(
 
 clinicRouter.get(
   '/patients/:id',
-  requireClinicPermission('manage_patients'),
+  requireClinicPermission('view_patients'),
   (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const patientId = req.params.id;
@@ -1048,7 +1048,7 @@ clinicRouter.put(
 // -------------------------------------------------------------
 clinicRouter.get(
   '/appointments',
-  requireClinicPermission('manage_appointments'),
+  requireClinicPermission('view_appointments'),
   (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const { date, doctor_id, status } = req.query as {
@@ -1064,7 +1064,7 @@ clinicRouter.get(
 
 clinicRouter.get(
   '/available-slots',
-  requireClinicPermission('manage_appointments'),
+  requireClinicPermission('view_appointments'),
   async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const { date, doctorId, serviceId } = req.query as {
@@ -1257,13 +1257,13 @@ clinicRouter.put(
       id: current?.id || `agent_${clinicId}`,
       clinic_id: clinicId,
       name: name?.trim() || current?.name || 'AI Receptionist',
-      greeting: greeting?.trim() || current?.greeting || 'Thank you for calling.',
+      greeting: greeting !== undefined ? greeting.trim() : (current?.greeting || 'Thank you for calling.'),
       voice_provider: voice_provider || current?.voice_provider || 'gemini_live',
       voice_config: voice_config || current?.voice_config || {},
       languages: languages || current?.languages || ['English'],
       status: status || current?.status || 'ACTIVE',
       escalation_contact: escalation_contact || current?.escalation_contact || {},
-      instructions_note: instructions_note !== undefined ? instructions_note : current?.instructions_note,
+      instructions_note: instructions_note !== undefined ? (typeof instructions_note === 'string' ? instructions_note.trim() : instructions_note) : current?.instructions_note,
     };
 
     const saved = db.saveAiAgent(updatedAgent);

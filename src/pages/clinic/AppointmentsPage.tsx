@@ -111,13 +111,7 @@ export const AppointmentsPage: React.FC = () => {
       setServices(srvsRes.services);
       setPatients(patsRes.patients);
 
-      // Auto set defaults for booking form
-      if (docsRes.doctors.length > 0 && !bookDoctorId) {
-        setBookDoctorId(docsRes.doctors[0].id);
-      }
-      if (srvsRes.services.length > 0 && !bookServiceId) {
-        setBookServiceId(srvsRes.services[0].id);
-      }
+      // Removed auto-set defaults to prevent invalid empty state when first item is inactive
       if (patsRes.patients.length > 0 && !bookPatientId) {
         setBookPatientId(patsRes.patients[0].id);
       }
@@ -397,7 +391,7 @@ export const AppointmentsPage: React.FC = () => {
             <select
               value={selectedDoctorId}
               onChange={(e) => setSelectedDoctorId(e.target.value)}
-              className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:border-[#0A2540]"
+              className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:border-[#0A2540] bg-white"
             >
               <option value="all">All Doctors</option>
               {doctors.map((d) => (
@@ -412,7 +406,7 @@ export const AppointmentsPage: React.FC = () => {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:border-[#0A2540]"
+              className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:border-[#0A2540] bg-white"
             >
               <option value="all">All Statuses</option>
               <option value="CONFIRMED">Confirmed</option>
@@ -597,7 +591,7 @@ export const AppointmentsPage: React.FC = () => {
                 value={bookPatientId}
                 onChange={(e) => setBookPatientId(e.target.value)}
                 required={!isNewPatient}
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:border-[#0A2540] text-xs"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:border-[#0A2540] text-xs bg-white"
               >
                 <option value="" disabled>Select a patient...</option>
                 {patients.map((p) => (
@@ -619,8 +613,9 @@ export const AppointmentsPage: React.FC = () => {
                 value={bookDoctorId}
                 onChange={(e) => setBookDoctorId(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:border-[#0A2540] text-xs"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:border-[#0A2540] text-xs bg-white"
               >
+                <option value="" disabled>Select Doctor...</option>
                 {doctors
                   .filter((d) => d.status === 'ACTIVE')
                   .map((d) => (
@@ -639,8 +634,9 @@ export const AppointmentsPage: React.FC = () => {
                 value={bookServiceId}
                 onChange={(e) => setBookServiceId(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:border-[#0A2540] text-xs"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:border-[#0A2540] text-xs bg-white"
               >
+                <option value="" disabled>Select Service...</option>
                 {services
                   .filter((s) => s.status === 'ACTIVE')
                   .map((s) => (

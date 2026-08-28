@@ -56,11 +56,11 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
               className="flex items-center gap-2.5 cursor-pointer group"
               onClick={() => handleSelect('dashboard')}
             >
-              <div className="w-8 h-8 rounded-lg bg-[#083B4A] flex items-center justify-center text-white font-bold text-xs shadow-xs group-hover:bg-[#0F4C5C] transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-[#06182C] flex items-center justify-center text-white font-bold text-xs shadow-xs group-hover:bg-[#0A2540] transition-colors">
                 CF
               </div>
               <div>
-                <span className="font-extrabold text-[#083B4A] tracking-tight text-sm uppercase group-hover:text-[#0F4C5C] transition-colors">
+                <span className="font-extrabold text-[#06182C] tracking-tight text-sm uppercase group-hover:text-[#0A2540] transition-colors">
                   CLINICFIRST
                 </span>
                 <span className="block text-[10px] text-[#64748B] font-mono">
@@ -79,8 +79,8 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
                     onClick={() => handleSelect(item.id)}
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 ease-out cursor-pointer active:scale-[0.98] ${
                       isActive
-                        ? 'bg-[#083B4A] text-white shadow-xs'
-                        : 'text-[#172B3A] hover:text-[#083B4A] hover:bg-[#083B4A]/8'
+                        ? 'bg-[#06182C] text-white shadow-xs'
+                        : 'text-[#172B3A] hover:text-[#06182C] hover:bg-[#06182C]/8'
                     }`}
                   >
                     {item.icon}
@@ -130,7 +130,7 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
               onClick={() => handleSelect(item.id)}
               className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-lg text-left ${
                 selected === item.id
-                  ? 'bg-[#083B4A] text-white font-semibold'
+                  ? 'bg-[#06182C] text-white font-semibold'
                   : 'text-[#172B3A] hover:bg-slate-100'
               }`}
             >

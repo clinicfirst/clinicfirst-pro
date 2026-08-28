@@ -142,7 +142,7 @@ export class GeminiLiveVoiceProvider implements IVoiceProvider {
       let audioBase64: string | undefined = undefined;
       try {
         const ttsResponse = await ai.models.generateContent({
-          model: 'gemini-3.1-flash-tts-preview',
+          model: 'gemini-3.6-flash',
           contents: [{ parts: [{ text: replyText }] }],
           config: {
             responseModalities: ['AUDIO' as any],

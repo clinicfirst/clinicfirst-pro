@@ -143,7 +143,7 @@ export const StaffPage: React.FC = () => {
   if (!canManageStaff) {
     return (
       <div className="max-w-2xl mx-auto mt-8 p-6 bg-white border border-[#E2E8F0] rounded-xl shadow-xs text-center space-y-4">
-        <div className="w-12 h-12 bg-[#0F4C5C]/10 text-[#0F4C5C] rounded-full flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 bg-[#0A2540]/10 text-[#0A2540] rounded-full flex items-center justify-center mx-auto">
           <ShieldAlert className="w-6 h-6" />
         </div>
         <div>
@@ -230,7 +230,7 @@ export const StaffPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-[#0A0A0A] tracking-tight">Clinic Staff & Access Control</h1>
-            <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-[#0F4C5C]/10 text-[#0F4C5C] rounded">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-[#0A2540]/10 text-[#0A2540] rounded">
               Clinic Admin Access Only
             </span>
           </div>
@@ -277,7 +277,7 @@ export const StaffPage: React.FC = () => {
 
                   <td className="px-6 py-4 text-xs font-mono">
                     {s.must_change_password ? (
-                      <span className="text-[#0F4C5C] font-semibold flex items-center gap-1">
+                      <span className="text-[#0A2540] font-semibold flex items-center gap-1">
                         <Key className="w-3.5 h-3.5" /> Must Reset on Login
                       </span>
                     ) : (
@@ -326,7 +326,7 @@ export const StaffPage: React.FC = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => toggleStatus(s)}
-                        className={s.status === 'ACTIVE' ? 'text-gray-600' : 'text-[#0F4C5C] font-semibold'}
+                        className={s.status === 'ACTIVE' ? 'text-gray-600' : 'text-[#0A2540] font-semibold'}
                       >
                         {s.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
                       </Button>
@@ -454,7 +454,7 @@ export const StaffPage: React.FC = () => {
 
                   <div className="shrink-0">
                     <select
-                      className="px-3 py-1.5 border border-gray-300 rounded text-xs font-semibold focus:outline-none focus:border-[#0F4C5C] bg-white text-[#172B3A] min-w-[180px]"
+                      className="px-3 py-1.5 border border-gray-300 rounded text-xs font-semibold focus:outline-none focus:border-[#0A2540] bg-white text-[#172B3A] min-w-[180px]"
                       value={editingPermissions[mod.key] || 'NONE'}
                       onChange={(e) =>
                         setEditingPermissions({

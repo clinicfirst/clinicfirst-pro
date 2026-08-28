@@ -47,7 +47,7 @@ const MainApp: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F9FC] flex flex-col items-center justify-center font-mono text-xs text-[#64748B]">
-        <div className="w-9 h-9 rounded-full border-2 border-[#E2E8F0] border-t-[#0F4C5C] animate-spin mb-3" />
+        <div className="w-9 h-9 rounded-full border-2 border-[#E2E8F0] border-t-[#0A2540] animate-spin mb-3" />
         <span>Initializing CLINICFIRST Clinical Platform...</span>
       </div>
     );

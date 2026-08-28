@@ -128,17 +128,6 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
             Voice provider routing, clinical tool bindings, greeting script, and human triage escalation.
           </p>
         </div>
-
-        <div className="flex items-center gap-3">
-          <Button
-            variant="primary"
-            size="md"
-            icon={<Phone className="w-4 h-4" />}
-            onClick={onOpenSimulator}
-          >
-            Simulate Inbound Call
-          </Button>
-        </div>
       </div>
 
       {/* Voice Architecture Status & Tool Guarantees */}

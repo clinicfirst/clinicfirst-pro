@@ -194,7 +194,7 @@ class VoiceEngineManager {
       if (apiKey) {
         const ai = new GoogleGenAI({ apiKey });
         const ttsResponse = await ai.models.generateContent({
-          model: 'gemini-3.1-flash-tts-preview',
+          model: 'gemini-3.6-flash',
           contents: [{ parts: [{ text: agent.greeting }] }],
           config: {
             responseModalities: ['AUDIO'],

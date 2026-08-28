@@ -142,11 +142,11 @@ export const ClinicNavbar: React.FC<ClinicNavbarProps> = ({
             className="flex items-center gap-2 sm:gap-3 shrink-0 cursor-pointer group"
             onClick={() => onSelectTab('dashboard')}
           >
-            <div className="w-8 h-8 rounded-lg bg-[#0F4C5C] flex items-center justify-center text-white font-bold tracking-wider text-xs shrink-0 shadow-xs group-hover:bg-[#083B4A] transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-[#0A2540] flex items-center justify-center text-white font-bold tracking-wider text-xs shrink-0 shadow-xs group-hover:bg-[#06182C] transition-colors">
               CF
             </div>
             <div className="min-w-0">
-              <span className="font-extrabold text-[#0F4C5C] tracking-tight text-xs sm:text-sm uppercase block truncate group-hover:text-[#083B4A] transition-colors">
+              <span className="font-extrabold text-[#0A2540] tracking-tight text-xs sm:text-sm uppercase block truncate group-hover:text-[#06182C] transition-colors">
                 CLINICFIRST
               </span>
               {clinic && (
@@ -167,8 +167,8 @@ export const ClinicNavbar: React.FC<ClinicNavbarProps> = ({
                   onClick={() => onSelectTab(item.id)}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 ease-out cursor-pointer shrink-0 whitespace-nowrap active:scale-[0.98] ${
                     isActive
-                      ? 'bg-[#0F4C5C] text-white shadow-xs'
-                      : 'text-[#172B3A] hover:text-[#0F4C5C] hover:bg-[#0F4C5C]/8'
+                      ? 'bg-[#0A2540] text-white shadow-xs'
+                      : 'text-[#172B3A] hover:text-[#0A2540] hover:bg-[#0A2540]/8'
                   }`}
                 >
                   {item.icon}
@@ -184,8 +184,8 @@ export const ClinicNavbar: React.FC<ClinicNavbarProps> = ({
                   onClick={() => setManageMenuOpen(!manageMenuOpen)}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 ease-out cursor-pointer whitespace-nowrap active:scale-[0.98] ${
                     isSecondaryActive || manageMenuOpen
-                      ? 'bg-[#0F4C5C] text-white shadow-xs'
-                      : 'text-[#172B3A] hover:text-[#0F4C5C] hover:bg-[#0F4C5C]/8'
+                      ? 'bg-[#0A2540] text-white shadow-xs'
+                      : 'text-[#172B3A] hover:text-[#0A2540] hover:bg-[#0A2540]/8'
                   }`}
                 >
                   {isSecondaryActive && activeSecondaryItem ? activeSecondaryItem.icon : <Settings className="w-4 h-4" />}
@@ -208,8 +208,8 @@ export const ClinicNavbar: React.FC<ClinicNavbarProps> = ({
                           }}
                           className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-left transition-colors duration-150 cursor-pointer ${
                             isActive
-                              ? 'bg-[#F8FAFC] text-[#0F4C5C] font-semibold'
-                              : 'text-[#172B3A] hover:bg-[#0F4C5C]/8 hover:text-[#0F4C5C]'
+                              ? 'bg-[#F8FAFC] text-[#0A2540] font-semibold'
+                              : 'text-[#172B3A] hover:bg-[#0A2540]/8 hover:text-[#0A2540]'
                           }`}
                         >
                           {item.icon}
@@ -272,7 +272,7 @@ export const ClinicNavbar: React.FC<ClinicNavbarProps> = ({
               }}
               className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg text-left transition-colors ${
                 activeTab === item.id
-                  ? 'bg-[#0F4C5C] text-white font-semibold'
+                  ? 'bg-[#0A2540] text-white font-semibold'
                   : 'text-[#172B3A] hover:bg-slate-100'
               }`}
             >

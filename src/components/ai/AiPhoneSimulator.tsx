@@ -347,13 +347,13 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
         {/* Phone Header Bar */}
         <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-[#F1F5F9] mb-3 sm:mb-4">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#0F4C5C] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-xs">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#0A2540] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-xs">
               <Bot className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <h4 className="text-xs sm:text-sm font-bold text-[#172B3A] truncate">{agentName}</h4>
-                <span className="text-[10px] sm:text-xs text-[#0F4C5C] font-semibold bg-[#0F4C5C]/10 px-1.5 py-0.5 rounded shrink-0">AI Receptionist</span>
+                <span className="text-[10px] sm:text-xs text-[#0A2540] font-semibold bg-[#0A2540]/10 px-1.5 py-0.5 rounded shrink-0">AI Receptionist</span>
               </div>
               <p className="text-[11px] sm:text-xs text-[#64748B] truncate">{clinicName}</p>
             </div>
@@ -361,8 +361,8 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
 
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {callState === 'connected' && (
-              <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md text-[11px] sm:text-xs font-mono font-bold text-[#0F4C5C]">
-                <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#0F4C5C]" />
+              <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md text-[11px] sm:text-xs font-mono font-bold text-[#0A2540]">
+                <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#0A2540]" />
                 <span>{formatTimer(durationSeconds)}</span>
               </div>
             )}
@@ -388,7 +388,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
                   value={callerPhone}
                   onChange={(e) => setCallerPhone(e.target.value)}
                   placeholder="+1-555-019-2834"
-                  className="w-full px-3 py-2 text-xs sm:text-sm border border-[#E2E8F0] rounded-lg focus:border-[#0F4C5C] focus:ring-2 focus:ring-[#0F4C5C]/15 font-mono text-[#172B3A] bg-white outline-none"
+                  className="w-full px-3 py-2 text-xs sm:text-sm border border-[#E2E8F0] rounded-lg focus:border-[#0A2540] focus:ring-2 focus:ring-[#0A2540]/15 font-mono text-[#172B3A] bg-white outline-none"
                 />
               </div>
 
@@ -403,7 +403,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
                       setCallerPhone('+1-555-019-2834');
                       setCallerName('Jonathan Miller');
                     }}
-                    className="px-2.5 py-1 text-[11px] sm:text-xs bg-white border border-[#E2E8F0] hover:border-[#0F4C5C] rounded-md font-medium text-[#172B3A] transition-colors cursor-pointer hover:bg-[#0F4C5C]/5"
+                    className="px-2.5 py-1 text-[11px] sm:text-xs bg-white border border-[#E2E8F0] hover:border-[#0A2540] rounded-md font-medium text-[#172B3A] transition-colors cursor-pointer hover:bg-[#0A2540]/5"
                   >
                     Jonathan Miller (Returning)
                   </button>
@@ -412,7 +412,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
                       setCallerPhone('+1-555-014-9982');
                       setCallerName('Maria Rodriguez');
                     }}
-                    className="px-2.5 py-1 text-[11px] sm:text-xs bg-white border border-[#E2E8F0] hover:border-[#0F4C5C] rounded-md font-medium text-[#172B3A] transition-colors cursor-pointer hover:bg-[#0F4C5C]/5"
+                    className="px-2.5 py-1 text-[11px] sm:text-xs bg-white border border-[#E2E8F0] hover:border-[#0A2540] rounded-md font-medium text-[#172B3A] transition-colors cursor-pointer hover:bg-[#0A2540]/5"
                   >
                     Maria Rodriguez (General)
                   </button>
@@ -422,7 +422,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
                       setCallerPhone(randPhone);
                       setCallerName('New Caller');
                     }}
-                    className="px-2.5 py-1 text-[11px] sm:text-xs bg-white border border-[#E2E8F0] hover:border-[#0F4C5C] rounded-md font-medium text-[#172B3A] transition-colors cursor-pointer hover:bg-[#0F4C5C]/5"
+                    className="px-2.5 py-1 text-[11px] sm:text-xs bg-white border border-[#E2E8F0] hover:border-[#0A2540] rounded-md font-medium text-[#172B3A] transition-colors cursor-pointer hover:bg-[#0A2540]/5"
                   >
                     + New Patient Caller
                   </button>
@@ -445,7 +445,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
         {/* State: Dialing */}
         {callState === 'dialing' && (
           <div className="py-12 sm:py-16 text-center space-y-3">
-            <div className="w-12 h-12 mx-auto rounded-full bg-[#0F4C5C] flex items-center justify-center text-white animate-pulse">
+            <div className="w-12 h-12 mx-auto rounded-full bg-[#0A2540] flex items-center justify-center text-white animate-pulse">
               <Phone className="w-6 h-6" />
             </div>
             <p className="text-sm font-bold text-[#172B3A]">Connecting to {agentName}...</p>
@@ -466,7 +466,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
                   }`}
                 >
                   {msg.speaker === 'ai' && (
-                    <div className="w-7 h-7 rounded-lg bg-[#0F4C5C] flex items-center justify-center text-white shrink-0 mt-0.5 shadow-xs">
+                    <div className="w-7 h-7 rounded-lg bg-[#0A2540] flex items-center justify-center text-white shrink-0 mt-0.5 shadow-xs">
                       <Bot className="w-4 h-4" />
                     </div>
                   )}
@@ -474,7 +474,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
                   <div
                     className={`max-w-[85%] sm:max-w-[82%] px-3.5 py-2.5 rounded-xl text-xs leading-relaxed break-words shadow-xs ${
                       msg.speaker === 'patient'
-                        ? 'bg-[#083B4A] text-white'
+                        ? 'bg-[#06182C] text-white'
                         : 'bg-white border border-[#E2E8F0] text-[#172B3A]'
                     }`}
                   >
@@ -495,7 +495,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
 
               {loading && (
                 <div className="flex items-center gap-2 text-xs text-[#64748B] italic p-2">
-                  <span className="inline-block animate-spin h-3.5 w-3.5 border-2 border-[#0F4C5C] border-t-transparent rounded-full" />
+                  <span className="inline-block animate-spin h-3.5 w-3.5 border-2 border-[#0A2540] border-t-transparent rounded-full" />
                   <span>{agentName} is checking real-time clinic tools...</span>
                 </div>
               )}
@@ -507,19 +507,19 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
               <span className="text-[10px] sm:text-[11px] text-[#64748B] font-semibold self-center mr-1">Say:</span>
               <button
                 onClick={() => sendTurn('Hi, I need to book a cardiac checkup appointment today.')}
-                className="px-2.5 py-1 text-[10px] sm:text-[11px] bg-white border border-[#E2E8F0] hover:border-[#0F4C5C] rounded-md text-[#172B3A] cursor-pointer hover:bg-[#0F4C5C]/5 transition-colors"
+                className="px-2.5 py-1 text-[10px] sm:text-[11px] bg-white border border-[#E2E8F0] hover:border-[#0A2540] rounded-md text-[#172B3A] cursor-pointer hover:bg-[#0A2540]/5 transition-colors"
               >
                 "Book cardiac checkup"
               </button>
               <button
                 onClick={() => sendTurn('What are your clinic operating hours?')}
-                className="px-2.5 py-1 text-[10px] sm:text-[11px] bg-white border border-[#E2E8F0] hover:border-[#0F4C5C] rounded-md text-[#172B3A] cursor-pointer hover:bg-[#0F4C5C]/5 transition-colors"
+                className="px-2.5 py-1 text-[10px] sm:text-[11px] bg-white border border-[#E2E8F0] hover:border-[#0A2540] rounded-md text-[#172B3A] cursor-pointer hover:bg-[#0A2540]/5 transition-colors"
               >
                 "Ask clinic hours"
               </button>
               <button
                 onClick={() => sendTurn('Can you reschedule my appointment to tomorrow at 2:00 PM?')}
-                className="px-2.5 py-1 text-[10px] sm:text-[11px] bg-white border border-[#E2E8F0] hover:border-[#0F4C5C] rounded-md text-[#172B3A] cursor-pointer hover:bg-[#0F4C5C]/5 transition-colors"
+                className="px-2.5 py-1 text-[10px] sm:text-[11px] bg-white border border-[#E2E8F0] hover:border-[#0A2540] rounded-md text-[#172B3A] cursor-pointer hover:bg-[#0A2540]/5 transition-colors"
               >
                 "Reschedule visit"
               </button>
@@ -538,7 +538,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
                 onClick={toggleMic}
                 className={`p-2 sm:p-2.5 rounded-lg border transition-colors cursor-pointer shrink-0 ${
                   isListening
-                    ? 'bg-[#0F4C5C] text-white border-[#0F4C5C] shadow-xs'
+                    ? 'bg-[#0A2540] text-white border-[#0A2540] shadow-xs'
                     : 'bg-white text-[#64748B] border-[#E2E8F0] hover:bg-[#F8FAFC]'
                 }`}
                 title={isListening ? 'Listening... click to stop' : 'Click to speak via Microphone'}
@@ -554,7 +554,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
                   if (e.key === 'Enter') sendTurn(inputMessage);
                 }}
                 placeholder="Speak or type caller response..."
-                className="min-w-0 flex-1 px-3.5 py-2 text-xs border border-[#E2E8F0] rounded-lg focus:border-[#0F4C5C] focus:ring-2 focus:ring-[#0F4C5C]/15 text-[#172B3A] bg-white outline-none"
+                className="min-w-0 flex-1 px-3.5 py-2 text-xs border border-[#E2E8F0] rounded-lg focus:border-[#0A2540] focus:ring-2 focus:ring-[#0A2540]/15 text-[#172B3A] bg-white outline-none"
                 disabled={loading}
               />
 
@@ -609,7 +609,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
       <div className="w-full lg:col-span-5 min-w-0 flex flex-col border border-[#E2E8F0] rounded-xl p-3.5 sm:p-5 bg-[#F8FAFC]">
         <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b border-[#E2E8F0] mb-2.5 sm:mb-3">
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <Wrench className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0F4C5C]" />
+            <Wrench className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A2540]" />
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#172B3A]">
               Live Tool Inspector
             </h4>
@@ -632,7 +632,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
             toolLogs.map((tl, i) => (
               <div key={i} className="p-3 bg-white border border-[#E2E8F0] rounded-lg text-xs space-y-1.5 overflow-hidden shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-[#0F4C5C] truncate">{tl.name}()</span>
+                  <span className="font-mono font-bold text-[#0A2540] truncate">{tl.name}()</span>
                   <span className="text-[10px] px-2 py-0.5 bg-[#F1F5F9] rounded text-[#64748B] font-mono shrink-0">
                     Step #{i + 1}
                   </span>
@@ -673,7 +673,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
     return (
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div
-          className="fixed inset-0 bg-[#083B4A]/50 backdrop-blur-xs transition-opacity"
+          className="fixed inset-0 bg-[#06182C]/50 backdrop-blur-xs transition-opacity"
           onClick={onClose}
         />
         <div className="flex min-h-full items-center justify-center p-3 sm:p-4 text-center">
