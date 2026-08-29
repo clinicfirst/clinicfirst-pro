@@ -229,6 +229,35 @@ export interface PlatformKnowledgeItem {
   updated_at: string;
 }
 
+export interface AiUsageEvent {
+  id: string;
+  clinic_id: string;
+  agent_id: string;
+  session_id: string;
+  call_id?: string;
+  provider: 'gemini' | 'sarvam' | string;
+  model: string;
+  operation: 'LLM' | 'STT' | 'TTS';
+  request_id?: string;
+  timestamp: string;
+  status: 'success' | 'failed';
+  latency_ms?: number;
+  
+  // LLM metrics
+  prompt_tokens?: number;
+  completion_tokens?: number;
+  total_tokens?: number;
+  
+  // STT metrics
+  audio_duration_seconds?: number;
+  
+  // TTS metrics
+  characters_count?: number;
+  
+  language?: string;
+  estimated_cost_usd?: number;
+}
+
 export interface PlatformAiConfig {
   id: string;
   provider: 'gemini' | 'sarvam';

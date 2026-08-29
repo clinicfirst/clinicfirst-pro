@@ -29,13 +29,25 @@ import { ClinicAuditLogsPage } from './pages/clinic/ClinicAuditLogsPage';
 import { AiPhoneSimulator } from './components/ai/AiPhoneSimulator';
 import { Phone } from 'lucide-react';
 
-import { ToastContainer } from './components/common/Toast';
+import { ToastContainer, showToast } from './components/common/Toast';
 
 const MainApp: React.FC = () => {
   const { user, clinic, loading } = useAuth();
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [loginMode, setLoginMode] = useState<'clinic' | 'platform'>('clinic');
   const [simulatorOpen, setSimulatorOpen] = useState(false);
+
+  useEffect(() => {
+    const handleRealtimeUpdate = (e: any) => {
+      const payload = e.detail;
+      console.log('Realtime update:', payload);
+      if (payload.table !== 'audit_logs' && payload.table !== 'calls') {
+         showToast('Data synced with Supabase in real-time!', 'success');
+      }
+    };
+    window.addEventListener('supabase-realtime-update', handleRealtimeUpdate);
+    return () => window.removeEventListener('supabase-realtime-update', handleRealtimeUpdate);
+  }, []);
 
   // Reset to dashboard whenever user logs in or switches
   useEffect(() => {

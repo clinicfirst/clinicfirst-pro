@@ -41,6 +41,7 @@ export class GeminiLiveVoiceProvider implements IVoiceProvider {
     replyText: string;
     toolCallsExecuted: Array<{ name: string; args: any; result: any }>;
     audioBase64?: string;
+    usage?: { promptTokens?: number; completionTokens?: number; totalTokens?: number };
   }> {
     const session = this.sessions.get(sessionId);
     const ai = getGenAI();
@@ -162,6 +163,11 @@ export class GeminiLiveVoiceProvider implements IVoiceProvider {
         replyText,
         toolCallsExecuted,
         audioBase64,
+        usage: {
+          promptTokens: response.usageMetadata?.promptTokenCount,
+          completionTokens: response.usageMetadata?.candidatesTokenCount,
+          totalTokens: response.usageMetadata?.totalTokenCount,
+        }
       };
     } catch (err: any) {
       console.warn('Gemini API call failed, using intelligent fallback simulation:', err?.message);

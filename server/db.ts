@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { syncToSupabase } from './supabaseDiff';
 import {
   Clinic,
   User,
@@ -12,6 +13,7 @@ import {
   Patient,
   Appointment,
   AiAgent,
+  AiUsageEvent,
   Call,
   Escalation,
   AuditLog,
@@ -30,6 +32,7 @@ interface DatabaseSchema {
   patients: Patient[];
   appointments: Appointment[];
   ai_agents: AiAgent[];
+  ai_usage_events: AiUsageEvent[];
   calls: Call[];
   escalations: Escalation[];
   audit_logs: AuditLog[];
@@ -83,6 +86,7 @@ class DatabaseEngine {
   constructor() {
     this.ensureDirectory();
     this.data = this.loadDatabase();
+    syncToSupabase(this.data);
   }
 
   private ensureDirectory() {
@@ -267,6 +271,11 @@ class DatabaseEngine {
     if (!dbData.platform_knowledge_base || dbData.platform_knowledge_base.length === 0) {
       dbData.platform_knowledge_base = this.getDefaultKnowledgeBase();
     }
+    
+    // Ensure AI Usage Events
+    if (!dbData.ai_usage_events) {
+      dbData.ai_usage_events = [];
+    }
 
     return dbData;
   }
@@ -416,6 +425,7 @@ class DatabaseEngine {
 
   private saveDatabase(dataToSave?: DatabaseSchema) {
     const payload = dataToSave || this.data;
+    syncToSupabase(payload);
     try {
       this.ensureDirectory();
       fs.writeFileSync(DB_FILE, JSON.stringify(payload, null, 2), 'utf-8');
@@ -765,6 +775,7 @@ class DatabaseEngine {
       patients,
       appointments,
       ai_agents: [aiAgent],
+      ai_usage_events: [],
       calls: [call1],
       escalations: [],
       audit_logs: auditLogs,
@@ -1146,6 +1157,19 @@ class DatabaseEngine {
     }
     this.flush();
     return agent;
+  }
+
+  // AI Usage
+  public logAiUsage(event: AiUsageEvent) {
+    this.data.ai_usage_events.push(event);
+    this.flush();
+  }
+
+  public getAiUsageEvents(clinic_id?: string) {
+    if (clinic_id) {
+      return this.data.ai_usage_events.filter(e => e.clinic_id === clinic_id);
+    }
+    return this.data.ai_usage_events;
   }
 
   // Calls

@@ -428,30 +428,53 @@ platformRouter.post('/ai-config/test-connection', async (req: AuthenticatedReque
   }
 
   try {
-    const { GoogleGenAI } = await import('@google/genai');
-    const ai = new GoogleGenAI({
-      apiKey,
-      httpOptions: { headers: { 'User-Agent': 'aistudio-build' } },
-    });
-
+    let latencyMs = 0;
     let modelToUse = config.model || 'gemini-3.6-flash';
-    if (modelToUse.includes('gemini-2.5')) {
-      modelToUse = modelToUse.replace('gemini-2.5', 'gemini-3.6');
+    let rawOutput = 'OK';
+
+    if (config.provider === 'sarvam') {
+      const response = await fetch('https://api.sarvam.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-subscription-key': apiKey,
+        },
+        body: JSON.stringify({
+          model: 'sarvam-105b',
+          messages: [{ role: 'user', content: 'Respond with exactly "HEALTH_CHECK_OK"' }]
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Sarvam API Error: ${response.status} ${response.statusText}`);
+      }
+      latencyMs = Date.now() - startTime;
+    } else {
+      const { GoogleGenAI } = await import('@google/genai');
+      const ai = new GoogleGenAI({
+        apiKey,
+        httpOptions: { headers: { 'User-Agent': 'aistudio-build' } },
+      });
+
+      if (modelToUse.includes('gemini-2.5')) {
+        modelToUse = modelToUse.replace('gemini-2.5', 'gemini-3.6');
+      }
+
+      const testResponse = await ai.models.generateContent({
+        model: modelToUse,
+        contents: 'Respond with exactly "HEALTH_CHECK_OK" to verify connection.',
+      });
+      latencyMs = Date.now() - startTime;
+      rawOutput = testResponse.text?.trim() || 'OK';
     }
 
-    const testResponse = await ai.models.generateContent({
-      model: modelToUse,
-      contents: 'Respond with exactly "HEALTH_CHECK_OK" to verify connection.',
-    });
-
-    const latencyMs = Date.now() - startTime;
     return res.json({
       success: true,
       provider: config.provider,
-      model: modelToUse,
+      model: config.provider === 'sarvam' ? 'sarvam-105b' : modelToUse,
       latencyMs,
-      message: `Connection successful. Model '${modelToUse}' responded in ${latencyMs}ms.`,
-      rawOutput: testResponse.text?.trim() || 'OK',
+      message: `Connection successful. Model '${config.provider === 'sarvam' ? 'sarvam-105b' : modelToUse}' responded in ${latencyMs}ms.`,
+      rawOutput,
     });
   } catch (err: any) {
     const latencyMs = Date.now() - startTime;
@@ -578,3 +601,11 @@ platformRouter.delete('/knowledge-base/:id', (req: AuthenticatedRequest, res: Re
 });
 
 
+
+// AI Usage Events
+platformRouter.get('/ai-usage', (req: AuthenticatedRequest, res: Response) => {
+  const events = db.getAiUsageEvents();
+  // We can sort them by timestamp descending
+  events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  res.json({ events });
+});

@@ -34,6 +34,11 @@ export interface IVoiceProvider {
     replyText: string;
     toolCallsExecuted: Array<{ name: string; args: any; result: any }>;
     audioBase64?: string;
+    usage?: {
+      promptTokens?: number;
+      completionTokens?: number;
+      totalTokens?: number;
+    };
   }>;
   endSession(sessionId: string): Promise<void>;
 }

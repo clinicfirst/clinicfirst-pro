@@ -237,7 +237,8 @@ class VoiceEngineManager {
     durationSeconds: number = 0
   ) {
     const agent = db.getAiAgent(clinicId);
-    const provider = this.getProvider(agent?.voice_provider || 'gemini_live');
+    const platformConfig = db.getPlatformAiConfig();
+    const provider = this.getProvider(platformConfig.provider || 'gemini_live');
 
     const formattedHistory = history.map((h) => ({
       role: (h.speaker === 'patient' ? 'user' : 'assistant') as 'user' | 'assistant',
@@ -305,6 +306,24 @@ class VoiceEngineManager {
         appointment_id: appointmentId,
         escalation_id: escalationId,
         patient_id: patientId,
+      });
+    }
+
+    if (result.usage && agent) {
+      db.logAiUsage({
+        id: `usage_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+        clinic_id: clinicId,
+        agent_id: agent.id,
+        session_id: sessionId,
+        call_id: callId,
+        provider: provider.providerId,
+        model: 'gemini-3.6-flash',
+        operation: 'LLM',
+        timestamp: new Date().toISOString(),
+        status: 'success',
+        prompt_tokens: result.usage.promptTokens,
+        completion_tokens: result.usage.completionTokens,
+        total_tokens: result.usage.totalTokens,
       });
     }
 
