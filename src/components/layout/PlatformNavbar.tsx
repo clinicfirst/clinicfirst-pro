@@ -12,6 +12,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
+import { ConfirmModal } from '../common/ConfirmModal';
 
 export type PlatformTab = 'dashboard' | 'clinics' | 'users' | 'settings' | 'audit_trail';
 
@@ -30,6 +31,7 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
 }) => {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [confirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
 
   const selected = (activeTab || currentTab || 'dashboard') as PlatformTab;
   const handleSelect = (tab: PlatformTab) => {
@@ -47,7 +49,8 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
   ];
 
   return (
-    <header className="bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] sticky top-0 z-30 shadow-xs">
+    <>
+      <header className="bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] sticky top-0 z-30 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Brand */}
@@ -92,23 +95,29 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
           </div>
 
           {/* User info & Logout */}
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex flex-col items-end border-l border-[#E2E8F0] pl-3">
-              <span className="text-xs font-semibold text-[#172B3A]">{user?.name}</span>
-              <div className="flex items-center gap-1 mt-0.5">
-                <Badge status="PLATFORM_ADMIN" />
+          <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+            <div className="hidden sm:flex flex-col items-end shrink-0">
+              <span className="text-sm font-bold text-[#172B3A] tracking-tight">{user?.name}</span>
+              <div className="mt-1">
+                <Badge status="PLATFORM_ADMIN" className="!rounded-lg !px-2.5 !py-1 text-[11px]" />
               </div>
             </div>
 
-            <Button
-              variant="ghost"
-              size="sm"
-              icon={<LogOut className="w-4 h-4" />}
-              onClick={logout}
-              title="Log out"
+            <button
+              onClick={() => setConfirmLogoutOpen(true)}
+              className="hidden sm:flex items-center gap-2.5 text-[15px] font-semibold text-[#172B3A] hover:text-black transition-colors"
             >
-              <span className="hidden sm:inline">Log out</span>
-            </Button>
+              <LogOut className="w-[18px] h-[18px] stroke-[2.5]" />
+              Log out
+            </button>
+
+            {/* Mobile Log out (Icon only) */}
+            <button
+              onClick={() => setConfirmLogoutOpen(true)}
+              className="sm:hidden p-2 text-[#172B3A] hover:text-black hover:bg-slate-100 rounded-md"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
 
             {/* Mobile menu toggle */}
             <button
@@ -140,7 +149,21 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
           ))}
         </div>
       )}
-    </header>
+      </header>
+      {/* Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmLogoutOpen}
+        onClose={() => setConfirmLogoutOpen(false)}
+        onConfirm={() => {
+          setConfirmLogoutOpen(false);
+          logout();
+        }}
+        title="Confirm Logout"
+        message="Are you sure you want to log out?"
+        confirmText="Yes, Log out"
+        destructive={true}
+      />
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input, Select } from '../../components/common/Input';
 import { apiRequest } from '../../api';
 import { Doctor } from '../../types';
@@ -19,6 +20,7 @@ export const DoctorsPage: React.FC = () => {
   // Add / Edit Modal
   const [modalOpen, setModalOpen] = useState(false);
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
+  const [confirmStatusDoc, setConfirmStatusDoc] = useState<Doctor | null>(null);
   const [form, setForm] = useState({
     name: '',
     specialization: '',
@@ -191,7 +193,7 @@ export const DoctorsPage: React.FC = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => toggleStatus(d)}
+                        onClick={() => setConfirmStatusDoc(d)}
                         className={d.status === 'ACTIVE' ? 'text-gray-600' : 'text-[#0A2540] font-semibold'}
                       >
                         {d.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
@@ -285,6 +287,22 @@ export const DoctorsPage: React.FC = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Confirmation Modals */}
+      <ConfirmModal
+        isOpen={!!confirmStatusDoc}
+        onClose={() => setConfirmStatusDoc(null)}
+        onConfirm={() => {
+          if (confirmStatusDoc) {
+            toggleStatus(confirmStatusDoc);
+            setConfirmStatusDoc(null);
+          }
+        }}
+        title={`Confirm ${confirmStatusDoc?.status === 'ACTIVE' ? 'Deactivation' : 'Activation'}`}
+        message={`Are you sure you want to ${confirmStatusDoc?.status === 'ACTIVE' ? 'deactivate' : 'activate'} Dr. ${confirmStatusDoc?.name}?`}
+        confirmText={`Yes, ${confirmStatusDoc?.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}`}
+        destructive={confirmStatusDoc?.status === 'ACTIVE'}
+      />
     </div>
   );
 };

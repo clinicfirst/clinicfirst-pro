@@ -15,6 +15,7 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input } from '../../components/common/Input';
 import { apiRequest } from '../../api';
 import { User, Clinic } from '../../types';
@@ -30,6 +31,8 @@ export const PlatformUsers: React.FC = () => {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('ALL');
   const [clinicFilter, setClinicFilter] = useState<string>('ALL');
+  
+  const [confirmStatusUser, setConfirmStatusUser] = useState<EnrichedUser | null>(null);
 
   // Create User Modal State
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -238,7 +241,7 @@ export const PlatformUsers: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleUserStatus(u)}
+                      onClick={() => setConfirmStatusUser(u)}
                       className={u.status === 'ACTIVE' ? 'text-gray-600' : 'text-[#0A2540] font-semibold'}
                     >
                       {u.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
@@ -354,6 +357,22 @@ export const PlatformUsers: React.FC = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Confirmation Modals */}
+      <ConfirmModal
+        isOpen={!!confirmStatusUser}
+        onClose={() => setConfirmStatusUser(null)}
+        onConfirm={() => {
+          if (confirmStatusUser) {
+            toggleUserStatus(confirmStatusUser);
+            setConfirmStatusUser(null);
+          }
+        }}
+        title={`Confirm ${confirmStatusUser?.status === 'ACTIVE' ? 'Deactivation' : 'Activation'}`}
+        message={`Are you sure you want to ${confirmStatusUser?.status === 'ACTIVE' ? 'deactivate' : 'activate'} user ${confirmStatusUser?.name}?`}
+        confirmText={`Yes, ${confirmStatusUser?.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}`}
+        destructive={confirmStatusUser?.status === 'ACTIVE'}
+      />
     </div>
   );
 };

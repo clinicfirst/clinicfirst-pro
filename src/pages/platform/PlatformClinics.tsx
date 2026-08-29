@@ -21,6 +21,7 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input } from '../../components/common/Input';
 import { apiRequest } from '../../api';
 import { Clinic, Doctor, User, Service, AiAgent } from '../../types';
@@ -65,6 +66,7 @@ export const PlatformClinics: React.FC<PlatformClinicsProps> = ({
   const [clinics, setClinics] = useState<ClinicWithCounts[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [confirmStatusClinic, setConfirmStatusClinic] = useState<ClinicWithCounts | null>(null);
   const [selectedClinic, setSelectedClinic] = useState<any | null>(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
 
@@ -321,7 +323,7 @@ export const PlatformClinics: React.FC<PlatformClinicsProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleClinicStatus(clinic)}
+                      onClick={() => setConfirmStatusClinic(clinic)}
                       className={clinic.status === 'ACTIVE' ? 'text-gray-600' : 'text-[#0A2540] font-semibold'}
                     >
                       {clinic.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
@@ -623,6 +625,22 @@ export const PlatformClinics: React.FC<PlatformClinicsProps> = ({
           </div>
         </Modal>
       )}
+
+      {/* Confirmation Modals */}
+      <ConfirmModal
+        isOpen={!!confirmStatusClinic}
+        onClose={() => setConfirmStatusClinic(null)}
+        onConfirm={() => {
+          if (confirmStatusClinic) {
+            toggleClinicStatus(confirmStatusClinic);
+            setConfirmStatusClinic(null);
+          }
+        }}
+        title={`Confirm ${confirmStatusClinic?.status === 'ACTIVE' ? 'Deactivation' : 'Activation'}`}
+        message={`Are you sure you want to ${confirmStatusClinic?.status === 'ACTIVE' ? 'deactivate' : 'activate'} clinic "${confirmStatusClinic?.name}"?`}
+        confirmText={`Yes, ${confirmStatusClinic?.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}`}
+        destructive={confirmStatusClinic?.status === 'ACTIVE'}
+      />
     </div>
   );
 };

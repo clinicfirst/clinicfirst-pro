@@ -5,6 +5,7 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input } from '../../components/common/Input';
 import { apiRequest } from '../../api';
 import { Service, Doctor } from '../../types';
@@ -21,6 +22,7 @@ export const ServicesPage: React.FC = () => {
   // Add/Edit Modal
   const [modalOpen, setModalOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
+  const [confirmStatusService, setConfirmStatusService] = useState<Service | null>(null);
   const [form, setForm] = useState({
     name: '',
     duration_minutes: 30,
@@ -202,7 +204,7 @@ export const ServicesPage: React.FC = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => toggleStatus(srv)}
+                        onClick={() => setConfirmStatusService(srv)}
                         className={srv.status === 'ACTIVE' ? 'text-gray-600' : 'text-[#0A2540] font-semibold'}
                       >
                         {srv.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
@@ -298,6 +300,22 @@ export const ServicesPage: React.FC = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Confirmation Modals */}
+      <ConfirmModal
+        isOpen={!!confirmStatusService}
+        onClose={() => setConfirmStatusService(null)}
+        onConfirm={() => {
+          if (confirmStatusService) {
+            toggleStatus(confirmStatusService);
+            setConfirmStatusService(null);
+          }
+        }}
+        title={`Confirm ${confirmStatusService?.status === 'ACTIVE' ? 'Deactivation' : 'Activation'}`}
+        message={`Are you sure you want to ${confirmStatusService?.status === 'ACTIVE' ? 'deactivate' : 'activate'} the service "${confirmStatusService?.name}"?`}
+        confirmText={`Yes, ${confirmStatusService?.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}`}
+        destructive={confirmStatusService?.status === 'ACTIVE'}
+      />
     </div>
   );
 };

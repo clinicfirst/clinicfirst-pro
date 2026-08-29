@@ -20,6 +20,7 @@ import {
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { apiRequest } from '../../api';
 import { Appointment, Escalation, Doctor, WeeklyAnalytics } from '../../types';
 import { ClinicWeeklyAnalytics } from '../../components/clinic/ClinicWeeklyAnalytics';
@@ -79,6 +80,8 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
   const [resolvingId, setResolvingId] = useState<string | null>(null);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
+  const [confirmCompleteId, setConfirmCompleteId] = useState<string | null>(null);
+  const [confirmResolveId, setConfirmResolveId] = useState<string | null>(null);
 
   const fetchDashboard = async () => {
     try {
@@ -502,7 +505,7 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
                     <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                       {apt.status === 'CONFIRMED' && (
                         <button
-                          onClick={() => updateAppointmentStatus(apt.id, 'COMPLETED')}
+                          onClick={() => setConfirmCompleteId(apt.id)}
                           className="px-2.5 py-1 text-[11px] bg-white border border-[#0A2540] hover:bg-[#0A2540] hover:text-white text-[#0A2540] font-semibold rounded-md transition-all cursor-pointer shadow-xs active:scale-95"
                         >
                           Mark Done
@@ -578,7 +581,7 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
                       variant="primary"
                       size="sm"
                       loading={resolvingId === esc.id}
-                      onClick={() => handleResolveEscalation(esc.id)}
+                      onClick={() => setConfirmResolveId(esc.id)}
                     >
                       Mark Handled
                     </Button>
@@ -630,6 +633,35 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
           currencySymbol={currencySymbol}
         />
       )}
+
+      {/* Confirmation Modals */}
+      <ConfirmModal
+        isOpen={!!confirmCompleteId}
+        onClose={() => setConfirmCompleteId(null)}
+        onConfirm={() => {
+          if (confirmCompleteId) {
+            updateAppointmentStatus(confirmCompleteId, 'COMPLETED');
+            setConfirmCompleteId(null);
+          }
+        }}
+        title="Confirm Mark Done"
+        message="Are you sure you want to mark this appointment as completed? This will update the patient's record."
+        confirmText="Yes, Mark Done"
+      />
+
+      <ConfirmModal
+        isOpen={!!confirmResolveId}
+        onClose={() => setConfirmResolveId(null)}
+        onConfirm={() => {
+          if (confirmResolveId) {
+            handleResolveEscalation(confirmResolveId);
+            setConfirmResolveId(null);
+          }
+        }}
+        title="Confirm Escalation Resolution"
+        message="Are you sure you want to mark this escalation as handled? This indicates that staff has taken necessary action."
+        confirmText="Yes, Mark Handled"
+      />
     </div>
   );
 };

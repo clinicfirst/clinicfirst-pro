@@ -5,6 +5,7 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input } from '../../components/common/Input';
 import { apiRequest } from '../../api';
 import { User, StaffPermissions } from '../../types';
@@ -118,6 +119,7 @@ export const StaffPage: React.FC = () => {
   const [editingPermissions, setEditingPermissions] = useState<StaffPermissions>(DEFAULT_STAFF_PERMISSIONS);
   const [permStaff, setPermStaff] = useState<User | null>(null);
   const [permLoading, setPermLoading] = useState(false);
+  const [confirmStatusStaff, setConfirmStatusStaff] = useState<User | null>(null);
 
   const fetchStaff = async () => {
     if (!canManageStaff) {
@@ -325,7 +327,7 @@ export const StaffPage: React.FC = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => toggleStatus(s)}
+                        onClick={() => setConfirmStatusStaff(s)}
                         className={s.status === 'ACTIVE' ? 'text-gray-600' : 'text-[#0A2540] font-semibold'}
                       >
                         {s.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
@@ -509,6 +511,22 @@ export const StaffPage: React.FC = () => {
           </div>
         </Modal>
       )}
+
+      {/* Confirmation Modals */}
+      <ConfirmModal
+        isOpen={!!confirmStatusStaff}
+        onClose={() => setConfirmStatusStaff(null)}
+        onConfirm={() => {
+          if (confirmStatusStaff) {
+            toggleStatus(confirmStatusStaff);
+            setConfirmStatusStaff(null);
+          }
+        }}
+        title={`Confirm ${confirmStatusStaff?.status === 'ACTIVE' ? 'Deactivation' : 'Activation'}`}
+        message={`Are you sure you want to ${confirmStatusStaff?.status === 'ACTIVE' ? 'deactivate' : 'activate'} staff member ${confirmStatusStaff?.name}?`}
+        confirmText={`Yes, ${confirmStatusStaff?.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}`}
+        destructive={confirmStatusStaff?.status === 'ACTIVE'}
+      />
     </div>
   );
 };

@@ -20,6 +20,7 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
+import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { Input, Select } from '../../components/common/Input';
 import { apiRequest } from '../../api';
 import { Appointment, Doctor, Service, Patient } from '../../types';
@@ -47,6 +48,7 @@ export const AppointmentsPage: React.FC = () => {
   const [bookModalOpen, setBookModalOpen] = useState(false);
   const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [confirmCompleteId, setConfirmCompleteId] = useState<string | null>(null);
   const [activeAppointment, setActiveAppointment] = useState<Appointment | null>(null);
 
   // Booking Form State
@@ -488,7 +490,7 @@ export const AppointmentsPage: React.FC = () => {
                       {apt.status === 'CONFIRMED' && canManage && (
                         <>
                           <button
-                            onClick={() => handleStatusChange(apt.id, 'COMPLETED')}
+                            onClick={() => setConfirmCompleteId(apt.id)}
                             className="px-2 py-1 text-xs bg-white border border-[#0A2540] group hover:bg-[#F8FAFC] transition-colors duration-200 text-[#0A2540] font-semibold rounded cursor-pointer"
                           >
                             Complete
@@ -874,6 +876,21 @@ export const AppointmentsPage: React.FC = () => {
           </form>
         </Modal>
       )}
+
+      {/* Confirmation Modals */}
+      <ConfirmModal
+        isOpen={!!confirmCompleteId}
+        onClose={() => setConfirmCompleteId(null)}
+        onConfirm={() => {
+          if (confirmCompleteId) {
+            handleStatusChange(confirmCompleteId, 'COMPLETED');
+            setConfirmCompleteId(null);
+          }
+        }}
+        title="Confirm Mark Done"
+        message="Are you sure you want to mark this appointment as completed? This will update the patient's record."
+        confirmText="Yes, Mark Done"
+      />
     </div>
   );
 };
