@@ -76,12 +76,12 @@ const MainApp: React.FC = () => {
   // Platform Admin Workflow
   if (user.role === 'PLATFORM_ADMIN') {
     return (
-      <div className="min-h-screen bg-[#F7F9FC] flex flex-col text-[#172B3A]">
+      <div className="min-h-screen bg-[#F7F9FC] flex flex-col text-[#172B3A] overflow-x-hidden w-full">
         {user.must_change_password && <ChangePasswordModal />}
 
         <PlatformNavbar activeTab={activeTab} onSelectTab={setActiveTab} />
 
-        <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <main className="flex-1 max-w-7xl 2xl:max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 min-w-0">
           {activeTab === 'dashboard' && <PlatformDashboard onNavigateToTab={setActiveTab} />}
           {activeTab === 'clinics' && <PlatformClinics />}
           {activeTab === 'users' && <PlatformUsers />}
@@ -94,7 +94,7 @@ const MainApp: React.FC = () => {
 
   // Clinic Workflow (CLINIC_ADMIN and CLINIC_STAFF)
   return (
-    <div className="min-h-screen bg-[#F7F9FC] flex flex-col text-[#172B3A]">
+    <div className="min-h-screen bg-[#F7F9FC] flex flex-col text-[#172B3A] overflow-x-hidden w-full">
       {user.must_change_password && <ChangePasswordModal />}
 
       <ClinicNavbar
@@ -103,7 +103,7 @@ const MainApp: React.FC = () => {
         onOpenSimulator={() => setSimulatorOpen(true)}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <main className="flex-1 max-w-7xl 2xl:max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 min-w-0">
         {activeTab === 'dashboard' && (
           <ClinicDashboard
             onNavigateToTab={setActiveTab}
@@ -144,4 +144,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-

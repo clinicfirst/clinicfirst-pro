@@ -43,33 +43,33 @@ export const Badge: React.FC<BadgeProps> = ({ status, label, className = '' }) =
     switch (normalized) {
       case 'CONFIRMED':
         return {
-          icon: <CheckCircle2 className="w-3.5 h-3.5 text-[#0A2540]" />,
-          border: 'border-[#0A2540]/30 bg-[#0A2540]/10 text-[#0A2540] font-semibold',
+          icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />,
+          border: 'border-emerald-200 bg-emerald-50 text-emerald-700 font-semibold',
           text: label || 'Confirmed',
         };
       case 'COMPLETED':
         return {
-          icon: <CheckCircle2 className="w-3.5 h-3.5 text-slate-700" />,
-          border: 'border-slate-300 bg-slate-100 text-slate-800 font-medium',
+          icon: <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />,
+          border: 'border-blue-200 bg-blue-50 text-blue-700 font-medium',
           text: label || 'Completed',
         };
       case 'ACTIVE':
         return {
-          icon: <CheckCircle2 className="w-3.5 h-3.5 text-[#0A2540]" />,
-          border: 'border-[#0A2540]/30 bg-[#0A2540]/10 text-[#0A2540] font-semibold',
+          icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />,
+          border: 'border-emerald-200 bg-emerald-50 text-emerald-700 font-semibold',
           text: label || 'Active',
         };
       case 'REQUESTED':
       case 'PENDING':
         return {
-          icon: <Clock className="w-3.5 h-3.5 text-amber-700" />,
+          icon: <Clock className="w-3.5 h-3.5 text-amber-600" />,
           border: 'border-amber-200 bg-amber-50 text-amber-800 font-medium',
           text: label || 'Requested',
         };
       case 'RESCHEDULED':
         return {
-          icon: <RefreshCw className="w-3.5 h-3.5 text-slate-700" />,
-          border: 'border-slate-300 bg-slate-100 text-slate-800 font-medium',
+          icon: <RefreshCw className="w-3.5 h-3.5 text-cyan-700" />,
+          border: 'border-cyan-200 bg-cyan-50 text-cyan-800 font-medium',
           text: label || 'Rescheduled',
         };
       case 'CANCELLED':
@@ -93,14 +93,14 @@ export const Badge: React.FC<BadgeProps> = ({ status, label, className = '' }) =
         };
       case 'IN_PROGRESS':
         return {
-          icon: <PhoneCall className="w-3.5 h-3.5 text-[#0A2540] animate-pulse" />,
-          border: 'border-[#0A2540]/30 bg-[#0A2540]/10 text-[#0A2540] font-medium',
+          icon: <PhoneCall className="w-3.5 h-3.5 text-[#0052FF] animate-pulse" />,
+          border: 'border-blue-200 bg-blue-50 text-[#0052FF] font-medium',
           text: label || 'In Progress',
         };
       case 'AI_RECEPTIONIST':
         return {
           icon: <Bot className="w-3.5 h-3.5 text-white" />,
-          border: 'bg-[#0A2540] text-white border border-[#0A2540] font-medium shadow-xs',
+          border: 'bg-[#0052FF] text-white border border-[#0052FF] font-semibold shadow-xs',
           text: label || 'AI Receptionist',
         };
       case 'STAFF':
@@ -112,13 +112,13 @@ export const Badge: React.FC<BadgeProps> = ({ status, label, className = '' }) =
       case 'PLATFORM_ADMIN':
         return {
           icon: <Shield className="w-3.5 h-3.5 text-white" />,
-          border: 'bg-[#06182C] text-white border border-[#06182C] font-semibold shadow-xs',
+          border: 'bg-[#0B2240] text-white border border-[#0B2240] font-semibold shadow-xs',
           text: label || 'Platform Admin',
         };
       case 'CLINIC_ADMIN':
         return {
           icon: <UserCheck className="w-3.5 h-3.5 text-white" />,
-          border: 'bg-[#0A2540] text-white border border-[#0A2540] font-semibold shadow-xs',
+          border: 'bg-[#0052FF] text-white border border-[#0052FF] font-semibold shadow-xs',
           text: label || 'Clinic Admin',
         };
       case 'CLINIC_STAFF':

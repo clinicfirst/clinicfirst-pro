@@ -28,15 +28,15 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles = {
     primary:
-      'bg-[#0A2540] text-white hover:bg-[#06182C] border border-[#0A2540] hover:border-[#06182C] motion-safe:hover:-translate-y-[1px] hover:shadow-sm shadow-xs',
+      'bg-[#0052FF] text-white hover:bg-[#0045D8] border border-[#0052FF] hover:border-[#0045D8] motion-safe:hover:-translate-y-[1px] hover:shadow-sm shadow-xs font-semibold',
     secondary:
-      'bg-white text-[#172B3A] hover:bg-[#F8FAFC] hover:border-[#CBD5E1] border border-[#E2E8F0] shadow-xs motion-safe:hover:-translate-y-[1px]',
+      'bg-white text-[#0F172A] hover:bg-[#F8FAFC] hover:border-[#CBD5E1] border border-[#E2E8F0] shadow-xs motion-safe:hover:-translate-y-[1px] font-medium',
     outline:
-      'bg-transparent text-[#0A2540] hover:bg-[#0A2540]/5 border border-[#0A2540] motion-safe:hover:-translate-y-[1px]',
+      'bg-transparent text-[#0052FF] hover:bg-[#0052FF]/5 border border-[#0052FF] motion-safe:hover:-translate-y-[1px] font-medium',
     ghost:
-      'bg-transparent text-[#172B3A] hover:bg-slate-100/80 border border-transparent hover:text-[#0A2540]',
+      'bg-transparent text-[#64748B] hover:bg-slate-100 hover:text-[#0F172A]',
     teal:
-      'bg-[#0A2540] text-white hover:bg-[#06182C] border border-[#0A2540] hover:border-[#06182C] motion-safe:hover:-translate-y-[1px] hover:shadow-sm shadow-xs',
+      'bg-[#00C2CB] text-white hover:bg-[#00A8B0] border border-[#00C2CB] motion-safe:hover:-translate-y-[1px] hover:shadow-sm shadow-xs font-semibold',
     'danger-outline':
       'bg-white text-rose-700 hover:bg-rose-50 border border-rose-200 font-semibold motion-safe:hover:-translate-y-[1px]',
   };
