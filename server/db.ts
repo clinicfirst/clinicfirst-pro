@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { syncToSupabase } from './supabaseDiff';
+import initialFallbackJson from '../data/clinicfirst.json';
+import { syncToSupabase, fetchFromSupabase, setLastSyncedState } from './supabaseDiff';
 import {
   Clinic,
   User,
@@ -82,11 +83,74 @@ export function verifyPassword(password: string, combinedHash: string): boolean 
 
 class DatabaseEngine {
   private data: DatabaseSchema;
+  private isHydrated: boolean = false;
+  private isHydrating: boolean = false;
+  private lastHydrationTime: number = 0;
 
   constructor() {
     this.ensureDirectory();
     this.data = this.loadDatabase();
-    syncToSupabase(this.data);
+    setLastSyncedState(this.data);
+    this.ensureHydrated(true).catch((e) => console.warn('[DB] Supabase async hydration deferred:', e));
+  }
+
+  public async ensureHydrated(force: boolean = false): Promise<void> {
+    const now = Date.now();
+    if (!force && this.isHydrated && now - this.lastHydrationTime < 5000) {
+      return;
+    }
+    if (this.isHydrating) return;
+    this.isHydrating = true;
+    try {
+      const supabaseData = await fetchFromSupabase();
+      if (supabaseData) {
+        const tables: (keyof DatabaseSchema)[] = [
+          'clinics',
+          'users',
+          'doctors',
+          'doctor_schedules',
+          'doctor_leaves',
+          'services',
+          'doctor_services',
+          'patients',
+          'appointments',
+          'ai_agents',
+          'calls',
+          'audit_logs',
+          'platform_knowledge_base',
+        ];
+
+        for (const t of tables) {
+          if (Array.isArray(supabaseData[t]) && supabaseData[t].length > 0) {
+            if (t === 'users') {
+              // Preserve password hashes and demo accounts
+              const map = new Map<string, any>();
+              for (const u of this.data.users || []) {
+                map.set(u.id, u);
+              }
+              for (const su of supabaseData.users) {
+                const existing = map.get(su.id);
+                map.set(su.id, {
+                  ...su,
+                  password_hash: su.password_hash || existing?.password_hash || hashPassword('AdminPassword123!'),
+                });
+              }
+              this.data.users = Array.from(map.values());
+            } else {
+              (this.data as any)[t] = supabaseData[t];
+            }
+          }
+        }
+        this.ensureSeedUsers(this.data);
+        setLastSyncedState(this.data);
+        this.isHydrated = true;
+        this.lastHydrationTime = now;
+      }
+    } catch (err) {
+      console.warn('[DatabaseEngine] ensureHydrated error:', err);
+    } finally {
+      this.isHydrating = false;
+    }
   }
 
   private ensureDirectory() {
@@ -386,6 +450,10 @@ class DatabaseEngine {
   private loadDatabase() {
     let dbData: DatabaseSchema | null = null;
 
+    if (initialFallbackJson && typeof initialFallbackJson === 'object' && Array.isArray((initialFallbackJson as any).clinics)) {
+      dbData = JSON.parse(JSON.stringify(initialFallbackJson));
+    }
+
     if (IS_VERCEL && !fs.existsSync(DB_FILE) && fs.existsSync(SOURCE_DB_FILE)) {
       try {
         this.ensureDirectory();
@@ -399,7 +467,10 @@ class DatabaseEngine {
     if (fs.existsSync(DB_FILE)) {
       try {
         const raw = fs.readFileSync(DB_FILE, 'utf-8');
-        dbData = JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.clinics) && parsed.clinics.length >= (dbData?.clinics?.length || 0)) {
+          dbData = parsed;
+        }
       } catch (err) {
         console.error('Error reading database file, initializing seeds...', err);
       }
@@ -419,7 +490,6 @@ class DatabaseEngine {
     }
 
     const enriched = this.ensureSeedUsers(dbData);
-    this.saveDatabase(enriched);
     return enriched;
   }
 

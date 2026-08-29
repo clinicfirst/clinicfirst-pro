@@ -107,6 +107,11 @@ export const PlatformClinics: React.FC<PlatformClinicsProps> = ({
 
   useEffect(() => {
     fetchClinics();
+    const handleRealtime = () => {
+      fetchClinics();
+    };
+    window.addEventListener('supabase-realtime-update', handleRealtime);
+    return () => window.removeEventListener('supabase-realtime-update', handleRealtime);
   }, []);
 
   const handleCurrencyChangeInForm = (code: string) => {

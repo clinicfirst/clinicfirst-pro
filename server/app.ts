@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import { db } from './db';
 import { authRouter } from './routes/auth.routes';
 import { platformRouter } from './routes/platform.routes';
 import { clinicRouter } from './routes/clinic.routes';
@@ -8,6 +9,16 @@ import { aiRouter } from './routes/ai.routes';
 dotenv.config();
 
 const app = express();
+
+// Ensure DB is hydrated from Supabase before processing requests
+app.use(async (req, res, next) => {
+  try {
+    await db.ensureHydrated();
+  } catch (err) {
+    console.warn('[Server] Supabase auto-hydration error:', err);
+  }
+  next();
+});
 
 // CORS handling
 app.use((req, res, next) => {

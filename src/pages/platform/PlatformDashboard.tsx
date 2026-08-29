@@ -67,6 +67,11 @@ export const PlatformDashboard: React.FC<PlatformDashboardProps> = ({
 
   useEffect(() => {
     fetchDashboardData();
+    const handleRealtime = () => {
+      fetchDashboardData();
+    };
+    window.addEventListener('supabase-realtime-update', handleRealtime);
+    return () => window.removeEventListener('supabase-realtime-update', handleRealtime);
   }, []);
 
   return (

@@ -2,55 +2,138 @@ import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const url = process.env.VITE_SUPABASE_URL;
-const key = process.env.VITE_SUPABASE_ANON_KEY;
-const supabase = url && key ? createClient(url, key) : null;
+const url =
+  process.env.VITE_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
+  '';
+const key =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  '';
+
+export const supabase = url && key ? createClient(url, key) : null;
 
 let lastState: any = null;
 
+export function setLastSyncedState(state: any) {
+  if (state) {
+    lastState = JSON.parse(JSON.stringify(state));
+  }
+}
+
+export async function fetchFromSupabase(): Promise<any | null> {
+  if (!supabase) {
+    return null;
+  }
+
+  const tables = [
+    'clinics',
+    'users',
+    'doctors',
+    'doctor_schedules',
+    'doctor_leaves',
+    'services',
+    'doctor_services',
+    'patients',
+    'appointments',
+    'ai_agents',
+    'calls',
+    'escalations',
+    'audit_logs',
+    'platform_knowledge_base',
+  ];
+
+  const results: Record<string, any[]> = {};
+
+  await Promise.all(
+    tables.map(async (table) => {
+      try {
+        const { data, error } = await supabase.from(table).select('*');
+        if (!error && data) {
+          results[table] = data;
+        } else if (error) {
+          // Table might not exist or error, keep empty array
+          results[table] = [];
+        }
+      } catch (err) {
+        results[table] = [];
+      }
+    })
+  );
+
+  return results;
+}
+
 export async function syncToSupabase(currentState: any) {
-  if (!supabase) return;
+  if (!supabase || !currentState) return;
   if (!lastState) {
-    // Deep clone
     lastState = JSON.parse(JSON.stringify(currentState));
     return;
   }
-  
-  // Find differences table by table
+
   const tables = [
-    'clinics', 'users', 'doctors', 'doctor_schedules', 'doctor_leaves',
-    'services', 'doctor_services', 'patients', 'appointments', 'ai_agents',
-    'calls', 'audit_logs', 'platform_knowledge_base'
+    'clinics',
+    'users',
+    'doctors',
+    'doctor_schedules',
+    'doctor_leaves',
+    'services',
+    'doctor_services',
+    'patients',
+    'appointments',
+    'ai_agents',
+    'calls',
+    'audit_logs',
+    'platform_knowledge_base',
   ];
 
   for (const table of tables) {
     const currentRecords = currentState[table] || [];
     const lastRecords = lastState[table] || [];
-    
-    // Find new or updated
+
+    // Find new or updated records
     for (const record of currentRecords) {
       const lastRecord = lastRecords.find((r: any) => r.id === record.id);
       if (!lastRecord || JSON.stringify(record) !== JSON.stringify(lastRecord)) {
-        // Upsert
         let sanitized = { ...record };
-        if (table === 'users') { delete sanitized.doctor_id; delete sanitized.permissions; }
-        if (table === 'calls') { delete sanitized.active_ai_config_version; delete sanitized.end_time; }
-        if (table === 'patients' && sanitized.dob === "") sanitized.dob = null;
-        if (table === 'appointments') { delete sanitized.notes; }
-        
-        supabase.from(table).upsert(sanitized).then(({error}) => {
-            if (error) console.error(`[Supabase Sync] Error upserting ${table}:`, error.message);
-        });
+        if (table === 'users') {
+          delete sanitized.doctor_id;
+          delete sanitized.permissions;
+        }
+        if (table === 'calls') {
+          delete sanitized.active_ai_config_version;
+          delete sanitized.end_time;
+        }
+        if (table === 'patients' && sanitized.dob === '') {
+          sanitized.dob = null;
+        }
+        if (table === 'appointments') {
+          delete sanitized.notes;
+        }
+
+        try {
+          const { error } = await supabase.from(table).upsert(sanitized);
+          if (error) {
+            console.error(`[Supabase Sync] Error upserting into ${table}:`, error.message);
+          }
+        } catch (e: any) {
+          console.error(`[Supabase Sync] Exception upserting into ${table}:`, e.message);
+        }
       }
     }
-    
-    // Find deleted
+
+    // Find deleted records
     for (const lastRecord of lastRecords) {
       if (!currentRecords.find((r: any) => r.id === lastRecord.id)) {
-        supabase.from(table).delete().eq('id', lastRecord.id).then();
+        try {
+          await supabase.from(table).delete().eq('id', lastRecord.id);
+        } catch (e: any) {
+          console.error(`[Supabase Sync] Error deleting from ${table}:`, e.message);
+        }
       }
     }
   }
-  
+
   lastState = JSON.parse(JSON.stringify(currentState));
 }

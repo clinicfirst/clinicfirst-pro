@@ -40,7 +40,7 @@ class SyncEngine {
     this.dbPromise = openDB<SyncSchema>('clinicfirst-sync-db', 2, {
       upgrade(db, oldVersion, newVersion, transaction) {
         if (oldVersion < 2) {
-          if (db.objectStoreNames.contains('mutations')) db.deleteObjectStore('mutations');
+          if ((db.objectStoreNames as any).contains('mutations')) (db as any).deleteObjectStore('mutations');
         }
         if (!db.objectStoreNames.contains('apiMutations')) {
           const store = db.createObjectStore('apiMutations', { keyPath: 'id' });
