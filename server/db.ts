@@ -88,7 +88,7 @@ export function verifyPassword(password: string, combinedHash: string): boolean 
 }
 
 class DatabaseEngine {
-  private data: DatabaseSchema;
+  public data: DatabaseSchema;
   private isHydrated: boolean = false;
   private isHydrating: boolean = false;
   private lastHydrationTime: number = 0;

@@ -5,6 +5,7 @@ import { authRouter } from './routes/auth.routes';
 import { platformRouter } from './routes/platform.routes';
 import { clinicRouter } from './routes/clinic.routes';
 import { aiRouter } from './routes/ai.routes';
+import { voiceRouter } from './routes/voice.routes';
 
 dotenv.config();
 
@@ -91,6 +92,9 @@ app.use('/clinic', clinicRouter);
 
 app.use('/api/ai', aiRouter);
 app.use('/ai', aiRouter);
+
+app.use('/api/voice', voiceRouter);
+app.use('/voice', voiceRouter);
 
 // Health check
 app.get(['/api/health', '/health'], (req, res) => {

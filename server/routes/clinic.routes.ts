@@ -1347,6 +1347,44 @@ clinicRouter.post(
 // 8. AI Receptionist Configuration (Clinic Admin only)
 // -------------------------------------------------------------
 clinicRouter.get(
+  '/me/ai-widget-config',
+  (req: AuthenticatedRequest, res: Response) => {
+    // 1. Authenticated user exists & clinic membership is valid
+    const clinicId = req.user?.clinic_id;
+    if (!clinicId) {
+      return res.status(403).json({ error: 'User does not belong to a valid clinic' });
+    }
+
+    // 2. Platform AI is enabled
+    const platformConfig = db.getPlatformAiConfig();
+    if (platformConfig.status !== 'ACTIVE') {
+      return res.status(403).json({ error: 'Platform AI features are currently disabled.' });
+    }
+
+    // 3. Clinic AI agent exists and is enabled
+    const agent = db.getAiAgent(clinicId);
+    if (!agent || agent.status !== 'ACTIVE') {
+      return res.status(403).json({ error: 'AI Receptionist is not enabled for this clinic.' });
+    }
+
+    // 4. Provider agent ID is configured
+    const providerAgentId = agent.provider_agent_id;
+    if (!providerAgentId) {
+      return res.status(404).json({ error: 'AI Receptionist provider agent is not configured for this clinic.' });
+    }
+
+    // 5. Return browser-safe configuration required by the Sarvam Embed
+    return res.json({
+      enabled: true,
+      appId: providerAgentId,
+      orgId: process.env.VITE_SARVAM_ORG_ID || '',
+      workspaceId: process.env.VITE_SARVAM_WORKSPACE_ID || '',
+      embedKey: process.env.VITE_SARVAM_EMBED_KEY || '',
+    });
+  }
+);
+
+clinicRouter.get(
   '/ai-agent',
   requireClinicPermission('view_calls'),
   (req: AuthenticatedRequest, res: Response) => {

@@ -18,6 +18,7 @@ import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { Input, Select } from '../../components/common/Input';
 import { AiPhoneSimulator } from '../../components/ai/AiPhoneSimulator';
+import { SarvamVoiceWidget } from '../../components/ai/SarvamVoiceWidget';
 import { apiRequest } from '../../api';
 import { AiAgent } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -167,6 +168,14 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
           <div className="text-2xl font-bold font-mono text-[#0A0A0A]">{callsToday}</div>
           <p className="text-[11px] text-gray-500 mt-0.5">Live phone turns tracked</p>
         </div>
+      </div>
+
+      {/* Sarvam AI Voice Test Section */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-[#0A2540]">
+          AI Receptionist — Voice Test
+        </h2>
+        <SarvamVoiceWidget />
       </div>
 
       {/* Configuration Form */}
