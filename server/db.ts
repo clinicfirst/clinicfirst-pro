@@ -20,6 +20,9 @@ import {
   AuditLog,
   PlatformAiConfig,
   PlatformKnowledgeItem,
+  ClinicAiRule,
+  ClinicKnowledgeItem,
+  ClinicAiTool,
 } from '../src/types';
 
 interface DatabaseSchema {
@@ -39,6 +42,9 @@ interface DatabaseSchema {
   audit_logs: AuditLog[];
   platform_ai_config?: PlatformAiConfig & { internal_api_key?: string };
   platform_knowledge_base?: PlatformKnowledgeItem[];
+  clinic_ai_rules?: ClinicAiRule[];
+  clinic_knowledge_base?: ClinicKnowledgeItem[];
+  clinic_ai_tools?: ClinicAiTool[];
 }
 
 const IS_VERCEL = Boolean(process.env.VERCEL) || Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -118,6 +124,9 @@ class DatabaseEngine {
           'calls',
           'audit_logs',
           'platform_knowledge_base',
+          'clinic_ai_rules',
+          'clinic_knowledge_base',
+          'clinic_ai_tools',
         ];
 
         for (const t of tables) {
@@ -339,6 +348,18 @@ class DatabaseEngine {
     // Ensure AI Usage Events
     if (!dbData.ai_usage_events) {
       dbData.ai_usage_events = [];
+    }
+    
+    if (!dbData.clinic_ai_rules) {
+      dbData.clinic_ai_rules = [];
+    }
+
+    if (!dbData.clinic_knowledge_base) {
+      dbData.clinic_knowledge_base = [];
+    }
+
+    if (!dbData.clinic_ai_tools) {
+      dbData.clinic_ai_tools = [];
     }
 
     return dbData;

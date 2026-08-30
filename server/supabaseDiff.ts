@@ -42,6 +42,10 @@ export async function fetchFromSupabase(): Promise<any | null> {
     'escalations',
     'audit_logs',
     'platform_knowledge_base',
+    'platform_ai_config',
+    'clinic_ai_rules',
+    'clinic_knowledge_base',
+    'clinic_ai_tools',
   ];
 
   const results: Record<string, any[]> = {};
@@ -86,11 +90,22 @@ export async function syncToSupabase(currentState: any) {
     'calls',
     'audit_logs',
     'platform_knowledge_base',
+    'platform_ai_config',
+    'clinic_ai_rules',
+    'clinic_knowledge_base',
+    'clinic_ai_tools',
   ];
 
   for (const table of tables) {
-    const currentRecords = currentState[table] || [];
-    const lastRecords = lastState[table] || [];
+    let currentRecords = currentState[table] || [];
+    if (table === 'platform_ai_config' && !Array.isArray(currentRecords)) {
+      currentRecords = currentState[table] && Object.keys(currentState[table]).length > 0 ? [currentState[table]] : [];
+    }
+
+    let lastRecords = lastState[table] || [];
+    if (table === 'platform_ai_config' && !Array.isArray(lastRecords)) {
+      lastRecords = lastState[table] && Object.keys(lastState[table]).length > 0 ? [lastState[table]] : [];
+    }
 
     // Find new or updated records
     for (const record of currentRecords) {

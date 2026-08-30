@@ -55,9 +55,15 @@ export const PlatformDashboard: React.FC<PlatformDashboardProps> = ({
         recentClinics: Clinic[];
         recentActivity: AuditLog[];
       }>('/api/platform/dashboard');
-      setMetrics(data.metrics);
-      setRecentClinics(data.recentClinics);
-      setRecentActivity(data.recentActivity);
+      setMetrics(data.metrics || {
+        totalClinics: 0,
+        activeClinics: 0,
+        totalDoctors: 0,
+        todayAppointments: 0,
+        todayAiCalls: 0,
+      });
+      setRecentClinics(data.recentClinics || []);
+      setRecentActivity(data.recentActivity || []);
     } catch (err) {
       console.error('Failed to load platform metrics:', err);
     } finally {

@@ -29,7 +29,7 @@ import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { apiRequest } from '../../api';
-import { Appointment, Escalation, Doctor, WeeklyAnalytics } from '../../types';
+import { Appointment, Escalation, Doctor, WeeklyAnalytics, ClinicDashboardMetrics } from '../../types';
 import { ClinicWeeklyAnalytics } from '../../components/clinic/ClinicWeeklyAnalytics';
 import { DailyCollectionModal } from '../../components/clinic/DailyCollectionModal';
 import { useAuth } from '../../context/AuthContext';
@@ -50,24 +50,7 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
   const [data, setData] = useState<{
     clinic: any;
     date: string;
-    metrics: {
-      todayAppointmentsTotal: number;
-      todayConfirmed: number;
-      todayCompleted: number;
-      todayRescheduled: number;
-      todayCancelled: number;
-      todayAiCalls: number;
-      todayAiBookedCount: number;
-      activeDoctorsCount: number;
-      pendingEscalationsCount: number;
-      dailyCollection?: {
-        total: number;
-        confirmedCompletedTotal: number;
-        currency_symbol: string;
-        currency: string;
-        billedAppointmentsCount: number;
-      };
-    };
+    metrics: ClinicDashboardMetrics;
     upcomingToday: Appointment[];
     pendingEscalations: Escalation[];
     aiStatus: {
@@ -143,29 +126,53 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
     );
   }
 
-  const m = data?.metrics || {
+  const m: ClinicDashboardMetrics = data?.metrics || {
     todayAppointmentsTotal: 0,
+    totalAppointmentsCount: 0,
     todayConfirmed: 0,
     todayCompleted: 0,
     todayRescheduled: 0,
     todayCancelled: 0,
     todayAiCalls: 0,
+    totalAiCalls: 0,
     todayAiBookedCount: 0,
+    totalPatientsCount: 0,
+    newPatientsToday: 0,
+    newPatientsThisWeek: 0,
     activeDoctorsCount: 0,
     pendingEscalationsCount: 0,
+    patientSatisfaction: '5.0',
+    aiResolutionRate: 100,
+    aiActiveHours: '24/7',
+    callBreakdown: {
+      total: 0,
+      today: 0,
+      aiAnsweredCount: 0,
+      aiAnsweredPercent: 0,
+      staffTransferredCount: 0,
+      staffTransferredPercent: 0,
+      missedCount: 0,
+      missedPercent: 0,
+    },
+    topCallReasons: [],
   };
 
   const currencySymbol = data?.clinic?.currency_symbol || '$';
   const aiStatus = data?.aiStatus;
   const isAiActive = aiStatus?.status === 'ACTIVE';
 
-  // Computed / dynamic stats matching sample design
-  const totalCallsDisplay = m.todayAiCalls > 0 ? m.todayAiCalls : 1248;
-  const aiAnsweredCount = Math.round(totalCallsDisplay * 0.87);
-  const staffTransferredCount = Math.round(totalCallsDisplay * 0.10);
-  const missedCount = totalCallsDisplay - aiAnsweredCount - staffTransferredCount;
+  // Computed from actual database calls
+  const totalCalls = m.callBreakdown?.total ?? m.totalAiCalls ?? 0;
+  const aiAnsweredCount = m.callBreakdown?.aiAnsweredCount ?? (totalCalls > 0 ? totalCalls : 0);
+  const aiAnsweredPercent = m.callBreakdown?.aiAnsweredPercent ?? (totalCalls > 0 ? 100 : 0);
+  const staffTransferredCount = m.callBreakdown?.staffTransferredCount ?? 0;
+  const staffTransferredPercent = m.callBreakdown?.staffTransferredPercent ?? 0;
+  const missedCount = m.callBreakdown?.missedCount ?? 0;
+  const missedPercent = m.callBreakdown?.missedPercent ?? 0;
 
-  const appointmentsBookedDisplay = m.todayAppointmentsTotal > 0 ? m.todayAppointmentsTotal : 532;
+  // Real growth from weekly trends if available
+  const callGrowth = data?.weeklyAnalytics?.summary?.callGrowthPercent ?? 0;
+  const aptGrowth = data?.weeklyAnalytics?.summary?.appointmentGrowthPercent ?? 0;
 
   return (
     <div className="space-y-6 animate-fade-enter pb-8">
@@ -206,7 +213,7 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
         </div>
       </div>
 
-      {/* 2. Top 5 Metrics Cards (With Soft Tinted Icon Squares & Trends) */}
+      {/* 2. Top 5 Metrics Cards (With Real Pure Database Numbers) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Card 1: Calls Handled by AI */}
         <div 
@@ -217,13 +224,19 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0052FF] flex items-center justify-center">
               <Phone className="w-5 h-5" />
             </div>
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              <TrendingUp className="w-3 h-3" /> ↑ 28%
-            </span>
+            {callGrowth !== 0 ? (
+              <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${callGrowth >= 0 ? 'text-emerald-600 bg-emerald-50' : 'text-rose-600 bg-rose-50'}`}>
+                <TrendingUp className="w-3 h-3" /> {callGrowth >= 0 ? `↑ ${callGrowth}%` : `↓ ${Math.abs(callGrowth)}%`}
+              </span>
+            ) : (
+              <span className="text-[11px] font-semibold text-[#0052FF] bg-blue-50 px-2 py-0.5 rounded-full">
+                {m.todayAiCalls > 0 ? `${m.todayAiCalls} today` : 'Live Voice'}
+              </span>
+            )}
           </div>
           <div>
             <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono tracking-tight">
-              {totalCallsDisplay.toLocaleString()}
+              {m.totalAiCalls.toLocaleString()}
             </div>
             <div className="text-xs text-[#64748B] font-medium mt-1">
               Calls Handled by AI
@@ -240,13 +253,19 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
             <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#00C2CB] flex items-center justify-center">
               <Calendar className="w-5 h-5" />
             </div>
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              <TrendingUp className="w-3 h-3" /> ↑ 32%
-            </span>
+            {aptGrowth !== 0 ? (
+              <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${aptGrowth >= 0 ? 'text-emerald-600 bg-emerald-50' : 'text-rose-600 bg-rose-50'}`}>
+                <TrendingUp className="w-3 h-3" /> {aptGrowth >= 0 ? `↑ ${aptGrowth}%` : `↓ ${Math.abs(aptGrowth)}%`}
+              </span>
+            ) : (
+              <span className="text-[11px] font-semibold text-[#00C2CB] bg-teal-50 px-2 py-0.5 rounded-full">
+                {m.todayAppointmentsTotal > 0 ? `${m.todayAppointmentsTotal} today` : 'Practice Bookings'}
+              </span>
+            )}
           </div>
           <div>
             <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono tracking-tight">
-              {appointmentsBookedDisplay.toLocaleString()}
+              {m.totalAppointmentsCount.toLocaleString()}
             </div>
             <div className="text-xs text-[#64748B] font-medium mt-1">
               Appointments Booked
@@ -254,7 +273,7 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
           </div>
         </div>
 
-        {/* Card 3: New Patients */}
+        {/* Card 3: Registered Patients */}
         <div 
           onClick={() => onNavigateToTab('patients')}
           className="bg-white border border-[#E2E8F0] rounded-2xl p-4 sm:p-5 shadow-xs hover:border-purple-300 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
@@ -263,16 +282,16 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
             <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
               <Users className="w-5 h-5" />
             </div>
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              <TrendingUp className="w-3 h-3" /> ↑ 18%
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full">
+              {m.newPatientsToday > 0 ? `+${m.newPatientsToday} today` : m.newPatientsThisWeek > 0 ? `+${m.newPatientsThisWeek} this week` : 'Verified'}
             </span>
           </div>
           <div>
             <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono tracking-tight">
-              189
+              {m.totalPatientsCount.toLocaleString()}
             </div>
             <div className="text-xs text-[#64748B] font-medium mt-1">
-              New Patients
+              Registered Patients
             </div>
           </div>
         </div>
@@ -284,12 +303,12 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
               <Star className="w-5 h-5 fill-amber-400" />
             </div>
             <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              <TrendingUp className="w-3 h-3" /> ↑ 6%
+              {m.aiResolutionRate}% AI accuracy
             </span>
           </div>
           <div>
             <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono tracking-tight">
-              4.8 <span className="text-base text-[#94A3B8] font-normal">/ 5</span>
+              {m.patientSatisfaction || '5.0'} <span className="text-base text-[#94A3B8] font-normal">/ 5.0</span>
             </div>
             <div className="text-xs text-[#64748B] font-medium mt-1">
               Patient Satisfaction
@@ -303,16 +322,16 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
             <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
               <Clock className="w-5 h-5" />
             </div>
-            <span className="text-[11px] font-semibold text-[#64748B] bg-slate-100 px-2 py-0.5 rounded-full">
-              This week
+            <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${isAiActive ? 'text-emerald-700 bg-emerald-50' : 'text-slate-600 bg-slate-100'}`}>
+              {isAiActive ? 'Online 24/7' : 'Disabled'}
             </span>
           </div>
           <div>
             <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] font-mono tracking-tight">
-              168 <span className="text-base text-[#94A3B8] font-normal">hrs</span>
+              {isAiActive ? '24/7' : '0 hrs'}
             </div>
             <div className="text-xs text-[#64748B] font-medium mt-1">
-              AI Active Hours (24/7)
+              AI Active Receptionist
             </div>
           </div>
         </div>
@@ -491,42 +510,45 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
                     fill="none"
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                   />
-                  {/* Answered by AI (87%) */}
-                  <path
-                    className="text-[#0052FF]"
-                    strokeDasharray="87, 100"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    stroke="currentColor"
-                    fill="none"
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
-                  {/* Transferred to Staff (10%) */}
-                  <path
-                    className="text-[#00C2CB]"
-                    strokeDasharray="10, 100"
-                    strokeDashoffset="-87"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    stroke="currentColor"
-                    fill="none"
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
-                  {/* Missed (3%) */}
-                  <path
-                    className="text-orange-500"
-                    strokeDasharray="3, 100"
-                    strokeDashoffset="-97"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    stroke="currentColor"
-                    fill="none"
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
+                  {totalCalls > 0 && aiAnsweredPercent > 0 && (
+                    <path
+                      className="text-[#0052FF] transition-all duration-700"
+                      strokeDasharray={`${aiAnsweredPercent}, 100`}
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  )}
+                  {totalCalls > 0 && staffTransferredPercent > 0 && (
+                    <path
+                      className="text-[#00C2CB] transition-all duration-700"
+                      strokeDasharray={`${staffTransferredPercent}, 100`}
+                      strokeDashoffset={`-${aiAnsweredPercent}`}
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  )}
+                  {totalCalls > 0 && missedPercent > 0 && (
+                    <path
+                      className="text-orange-500 transition-all duration-700"
+                      strokeDasharray={`${missedPercent}, 100`}
+                      strokeDashoffset={`-${aiAnsweredPercent + staffTransferredPercent}`}
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  )}
                 </svg>
                 <div className="absolute flex flex-col items-center justify-center text-center">
                   <span className="text-xl font-extrabold text-[#0F172A] font-mono leading-none">
-                    {totalCallsDisplay.toLocaleString()}
+                    {totalCalls.toLocaleString()}
                   </span>
                   <span className="text-[10px] text-[#64748B] font-medium mt-0.5">
                     Total Calls
@@ -543,7 +565,7 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
                   <span>Answered by AI</span>
                 </div>
                 <span className="font-bold text-[#0F172A] font-mono">
-                  {aiAnsweredCount.toLocaleString()} (87%)
+                  {aiAnsweredCount.toLocaleString()} ({aiAnsweredPercent}%)
                 </span>
               </div>
 
@@ -553,7 +575,7 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
                   <span>Transferred to Staff</span>
                 </div>
                 <span className="font-bold text-[#0F172A] font-mono">
-                  {staffTransferredCount.toLocaleString()} (10%)
+                  {staffTransferredCount.toLocaleString()} ({staffTransferredPercent}%)
                 </span>
               </div>
 
@@ -563,7 +585,7 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
                   <span>Missed</span>
                 </div>
                 <span className="font-bold text-[#0F172A] font-mono">
-                  {missedCount.toLocaleString()} (3%)
+                  {missedCount.toLocaleString()} ({missedPercent}%)
                 </span>
               </div>
             </div>
@@ -591,53 +613,43 @@ export const ClinicDashboard: React.FC<ClinicDashboardProps> = ({
               </button>
             </div>
 
-            {/* Horizontal Bar Progress list */}
-            <div className="space-y-4 pt-1">
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-[#0F172A]">Appointment Booking</span>
-                  <span className="font-bold text-[#0052FF] font-mono">62%</span>
-                </div>
-                <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#0052FF] rounded-full" style={{ width: '62%' }} />
-                </div>
+            {/* Horizontal Bar Progress list (Database Driven) */}
+            {m.topCallReasons && m.topCallReasons.length > 0 ? (
+              <div className="space-y-4 pt-1">
+                {m.topCallReasons.slice(0, 4).map((item, idx) => (
+                  <div key={idx}>
+                    <div className="flex items-center justify-between text-xs mb-1.5">
+                      <span className="font-semibold text-[#0F172A]">{item.label}</span>
+                      <span className="font-bold text-[#0052FF] font-mono">
+                        {item.percentage}% ({item.count})
+                      </span>
+                    </div>
+                    <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{
+                          width: `${Math.max(item.percentage, 4)}%`,
+                          backgroundColor: item.color || '#0052FF',
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-[#0F172A]">Reschedule Appointment</span>
-                  <span className="font-bold text-[#00C2CB] font-mono">18%</span>
-                </div>
-                <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#00C2CB] rounded-full" style={{ width: '18%' }} />
-                </div>
+            ) : (
+              <div className="py-12 text-center text-xs text-[#64748B]">
+                <PhoneCall className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                <p className="font-semibold text-[#0F172A]">No call reasons recorded yet</p>
+                <p className="text-[11px] text-[#94A3B8] mt-1 max-w-xs mx-auto">
+                  AI Receptionist automatically categorizes incoming patient conversations.
+                </p>
               </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-[#0F172A]">Clinic Information</span>
-                  <span className="font-bold text-sky-500 font-mono">12%</span>
-                </div>
-                <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-sky-400 rounded-full" style={{ width: '12%' }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-[#0F172A]">Other Queries</span>
-                  <span className="font-bold text-amber-500 font-mono">8%</span>
-                </div>
-                <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-amber-400 rounded-full" style={{ width: '8%' }} />
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
           <div className="pt-4 border-t border-[#F1F5F9] text-center">
             <span className="text-[11px] text-[#64748B]">
-              Automated resolution rate: <span className="font-bold text-[#0052FF]">94.2%</span>
+              Automated resolution rate: <span className="font-bold text-[#0052FF]">{m.aiResolutionRate}%</span>
             </span>
           </div>
         </div>

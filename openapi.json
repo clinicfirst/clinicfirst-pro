@@ -1,0 +1,5 @@
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+{
+  "message": "Invalid API key",
+  "hint": "Only the `service_role` API key can be used for this endpoint."
+}

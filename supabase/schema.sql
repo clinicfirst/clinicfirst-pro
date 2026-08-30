@@ -17,6 +17,10 @@ DROP TABLE IF EXISTS doctors CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS clinics CASCADE;
 DROP TABLE IF EXISTS platform_knowledge_base CASCADE;
+DROP TABLE IF EXISTS platform_ai_config CASCADE;
+DROP TABLE IF EXISTS clinic_ai_rules CASCADE;
+DROP TABLE IF EXISTS clinic_knowledge_base CASCADE;
+DROP TABLE IF EXISTS clinic_ai_tools CASCADE;
 
 -- 3. Create Tables
 CREATE TABLE clinics (
@@ -137,7 +141,12 @@ CREATE TABLE ai_agents (
   languages JSONB,
   status TEXT,
   escalation_contact JSONB,
-  instructions_note TEXT
+  instructions_note TEXT,
+  provider_agent_id TEXT,
+  enabled BOOLEAN DEFAULT true,
+  primary_language TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE calls (
@@ -156,6 +165,8 @@ CREATE TABLE calls (
   outcome TEXT,
   transcript JSONB,
   language_detected TEXT,
+  provider_session_id TEXT,
+  provider_agent_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -181,6 +192,54 @@ CREATE TABLE platform_knowledge_base (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE platform_ai_config (
+  id TEXT PRIMARY KEY,
+  platform_ai_enabled BOOLEAN DEFAULT true,
+  provider TEXT,
+  model TEXT,
+  voice_provider TEXT,
+  voice_name TEXT,
+  temperature NUMERIC,
+  status TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE clinic_ai_rules (
+  id TEXT PRIMARY KEY,
+  clinic_id TEXT REFERENCES clinics(id),
+  rule_name TEXT NOT NULL,
+  rule_type TEXT NOT NULL,
+  rule_content TEXT NOT NULL,
+  priority INTEGER DEFAULT 0,
+  enabled BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE clinic_knowledge_base (
+  id TEXT PRIMARY KEY,
+  clinic_id TEXT REFERENCES clinics(id),
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  category TEXT,
+  status TEXT,
+  version TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE clinic_ai_tools (
+  id TEXT PRIMARY KEY,
+  clinic_id TEXT REFERENCES clinics(id),
+  tool_name TEXT NOT NULL,
+  tool_type TEXT NOT NULL,
+  enabled BOOLEAN DEFAULT true,
+  configuration JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- 4. Set up Row Level Security (RLS) - Basic Tenant Isolation
 ALTER TABLE clinics ENABLE ROW LEVEL SECURITY;
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
@@ -195,8 +254,16 @@ ALTER TABLE ai_agents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE calls ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE platform_knowledge_base ENABLE ROW LEVEL SECURITY;
+ALTER TABLE platform_ai_config ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clinic_ai_rules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clinic_knowledge_base ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clinic_ai_tools ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Allow public access for migration" ON clinics FOR ALL USING (true);
+CREATE POLICY "Allow public access for migration" ON platform_ai_config FOR ALL USING (true);
+CREATE POLICY "Allow public access for migration" ON clinic_ai_rules FOR ALL USING (true);
+CREATE POLICY "Allow public access for migration" ON clinic_knowledge_base FOR ALL USING (true);
+CREATE POLICY "Allow public access for migration" ON clinic_ai_tools FOR ALL USING (true);
 CREATE POLICY "Allow public access for migration" ON users FOR ALL USING (true);
 CREATE POLICY "Allow public access for migration" ON doctors FOR ALL USING (true);
 CREATE POLICY "Allow public access for migration" ON doctor_schedules FOR ALL USING (true);

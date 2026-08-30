@@ -189,20 +189,25 @@ export interface AiAgent {
   clinic_id: string;
   name: string;
   greeting: string;
-  voice_provider: 'gemini_live' | 'sarvam';
+  voice_provider: 'gemini_live' | 'sarvam' | string;
   voice_config: {
     voice_name?: string;
     temperature?: number;
     speaking_rate?: number;
   };
   languages: string[];
-  status: 'ACTIVE' | 'INACTIVE';
+  status: 'ACTIVE' | 'INACTIVE' | string;
   escalation_contact: {
     phone?: string;
     email?: string;
     name?: string;
   };
   instructions_note?: string;
+  provider_agent_id?: string;
+  enabled?: boolean;
+  primary_language?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export type KnowledgeCategory =
@@ -298,6 +303,8 @@ export interface Call {
     timestamp: string;
   }>;
   language_detected: string;
+  provider_session_id?: string;
+  provider_agent_id?: string;
   escalation_id?: string;
   active_ai_config_version?: string;
   created_at: string;
@@ -352,6 +359,53 @@ export interface CallOutcomeDistributionItem {
   count: number;
   percentage: number;
   color: string;
+}
+
+export interface CallBreakdownSummary {
+  total: number;
+  today: number;
+  aiAnsweredCount: number;
+  aiAnsweredPercent: number;
+  staffTransferredCount: number;
+  staffTransferredPercent: number;
+  missedCount: number;
+  missedPercent: number;
+}
+
+export interface TopCallReasonItem {
+  label: string;
+  count: number;
+  percentage: number;
+  color: string;
+}
+
+export interface ClinicDashboardMetrics {
+  todayAppointmentsTotal: number;
+  totalAppointmentsCount: number;
+  todayConfirmed: number;
+  todayCompleted: number;
+  todayRescheduled: number;
+  todayCancelled: number;
+  todayAiCalls: number;
+  totalAiCalls: number;
+  todayAiBookedCount: number;
+  totalPatientsCount: number;
+  newPatientsToday: number;
+  newPatientsThisWeek: number;
+  activeDoctorsCount: number;
+  pendingEscalationsCount: number;
+  patientSatisfaction: string;
+  aiResolutionRate: number;
+  aiActiveHours: string;
+  callBreakdown: CallBreakdownSummary;
+  topCallReasons: TopCallReasonItem[];
+  dailyCollection?: {
+    total: number;
+    confirmedCompletedTotal: number;
+    currency_symbol: string;
+    currency: string;
+    billedAppointmentsCount: number;
+  };
 }
 
 export interface WeeklyAnalytics {
@@ -428,6 +482,41 @@ export interface DailyCollectionSummary {
     total_fees: number;
   }[];
   items: DailyCollectionItem[];
+}
+
+export interface ClinicAiRule {
+  id: string;
+  clinic_id: string;
+  rule_name: string;
+  rule_type: string;
+  rule_content: string;
+  priority: number;
+  enabled: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ClinicKnowledgeItem {
+  id: string;
+  clinic_id: string;
+  title: string;
+  content: string;
+  category?: string;
+  status?: string;
+  version?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ClinicAiTool {
+  id: string;
+  clinic_id: string;
+  tool_name: string;
+  tool_type: string;
+  enabled: boolean;
+  configuration?: any;
+  created_at?: string;
+  updated_at?: string;
 }
 
 

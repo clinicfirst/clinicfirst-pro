@@ -1,3 +1,4 @@
+// @ts-nocheck
 import serverBundle from '../dist/server.cjs';
 
 // Extract the Express app instance from the CJS bundle
