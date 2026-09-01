@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import crypto from 'crypto';
 import { db } from '../db';
 import { getAvailableSlots } from '../voice/tools/get-available-slots';
 import { createAppointment, cancelAppointment } from '../voice/tools/create-appointment';
@@ -25,8 +26,20 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
       return res.status(401).json({ error: 'Missing or invalid Authorization header' });
     }
     const token = authHeader.split(' ')[1];
-    if (!CLINICFIRST_AI_TOOL_SECRET || token !== CLINICFIRST_AI_TOOL_SECRET) {
-      return res.status(403).json({ error: 'Invalid tool secret' });
+    
+    if (!CLINICFIRST_AI_TOOL_SECRET) {
+      return res.status(403).json({ error: 'Tool secret is not configured' });
+    }
+
+    try {
+      const tokenBuffer = Buffer.from(token);
+      const secretBuffer = Buffer.from(CLINICFIRST_AI_TOOL_SECRET);
+      
+      if (tokenBuffer.length !== secretBuffer.length || !crypto.timingSafeEqual(tokenBuffer, secretBuffer)) {
+        return res.status(403).json({ error: 'Invalid tool secret' });
+      }
+    } catch (e) {
+      return res.status(403).json({ error: 'Invalid tool secret format' });
     }
 
     // 2. Resolve Agent and Clinic
@@ -50,9 +63,9 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
     const { tool, service, doctor, date, preferred_time } = req.body;
     
     // Basic log
-    console.log(`[Sarvam Webhook] Agent: ${provider_agent_id} | Clinic: ${clinic_id} | Tool: ${tool} | Payload:`, req.body);
+    console.log(`[Sarvam Webhook] Agent: ${provider_agent_id} | Clinic: ${clinic_id} | Tool: ${tool} | Timestamp: ${new Date().toISOString()}`);
 
-    if (tool !== 'check_availability' && tool !== 'book_appointment' && tool !== 'cancel_appointment') {
+    if (tool !== 'check_availability' && tool !== 'book_appointment' && tool !== 'cancel_appointment' && tool !== 'reschedule_appointment') {
       return res.status(400).json({ error: `Tool ${tool} not supported` });
     }
 
@@ -280,7 +293,6 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
           message: "Multiple active appointments match the criteria. Please ask the patient to clarify which one to cancel.",
           requires_clarification: true,
           matching_appointments: activeAppts.map(a => ({
-            appointment_id: a.id,
             date: a.date,
             time: a.start_time,
             doctor: db.getDoctorById(clinic_id, a.doctor_id)?.name,
@@ -320,6 +332,146 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
         status: "cancelled",
         appointment_date: targetAppt.date,
         appointment_time: targetAppt.start_time
+      });
+    }
+
+    if (tool === 'reschedule_appointment') {
+      const { patient_phone, old_date, old_time, new_date, new_time } = req.body;
+      
+      if (!patient_phone || !new_date || !new_time) {
+        return res.json({
+          success: false,
+          error_code: "MISSING_INFORMATION",
+          message: "Patient mobile number, new date, and new time are required.",
+          requires_clarification: true
+        });
+      }
+
+      const patient = db.getPatientByPhone(clinic_id, patient_phone);
+      if (!patient) {
+        return res.json({
+          success: false,
+          error_code: "PATIENT_NOT_FOUND",
+          message: "No patient found with this mobile number.",
+          requires_clarification: true
+        });
+      }
+
+      // 1. Idempotency Check: Did we already successfully reschedule this patient to this exact new date/time?
+      const alreadyRescheduled = db.data.appointments.find(a => 
+        a.clinic_id === clinic_id && 
+        a.patient_id === patient.id &&
+        a.date === new_date &&
+        a.start_time === new_time &&
+        ['CONFIRMED', 'REQUESTED', 'RESCHEDULED'].includes(a.status)
+      );
+
+      if (alreadyRescheduled) {
+         return res.json({
+           success: true,
+           appointment_id: alreadyRescheduled.id,
+           new_date: alreadyRescheduled.date,
+           new_start_time: alreadyRescheduled.start_time,
+           message: "Appointment was already rescheduled successfully."
+         });
+      }
+
+      // 2. Find the old appointment to move
+      let allAppts = db.data.appointments.filter(a => 
+        a.clinic_id === clinic_id && 
+        a.patient_id === patient.id
+      );
+
+      if (old_date) allAppts = allAppts.filter(a => a.date === old_date);
+      if (old_time) allAppts = allAppts.filter(a => a.start_time === old_time);
+
+      const activeAppts = allAppts.filter(a => !['CANCELLED', 'COMPLETED', 'NO_SHOW'].includes(a.status));
+
+      if (activeAppts.length === 0) {
+        return res.json({
+          success: false,
+          error_code: "APPOINTMENT_NOT_FOUND",
+          message: "No active appointments found for this patient.",
+          requires_clarification: true
+        });
+      }
+
+      if (activeAppts.length > 1) {
+        return res.json({
+          success: false,
+          error_code: "AMBIGUOUS_APPOINTMENT",
+          message: "Multiple active appointments match the criteria. Please ask the patient to clarify which one to reschedule.",
+          requires_clarification: true,
+          matching_appointments: activeAppts.map(a => ({
+            date: a.date,
+            time: a.start_time,
+            doctor: db.getDoctorById(clinic_id, a.doctor_id)?.name,
+            service: db.getServiceById(clinic_id, a.service_id)?.name
+          }))
+        });
+      }
+
+      const targetAppt = activeAppts[0];
+
+      // Check if it has already occurred
+      const nowStr = new Date().toISOString().split('T')[0];
+      if (targetAppt.date < nowStr) {
+         return res.json({
+          success: false,
+          error_code: "RESCHEDULE_NOT_ALLOWED",
+          message: "This appointment cannot be rescheduled because it is in the past."
+        });
+      }
+
+      // Re-validate the new slot using getAvailableSlots
+      const slotsResponse = await getAvailableSlots(clinic_id, {
+        doctorId: targetAppt.doctor_id,
+        serviceId: targetAppt.service_id,
+        date: new_date,
+        excludeAppointmentId: targetAppt.id
+      });
+
+      if (slotsResponse.error || !slotsResponse.slots) {
+         return res.json({
+           success: false,
+           error_code: "SLOT_NO_LONGER_AVAILABLE",
+           message: slotsResponse.error || "The requested date is unavailable.",
+           suggest_retry_availability: true
+         });
+      }
+
+      const exactSlot = slotsResponse.slots.find(s => s.time === new_time && s.doctorId === targetAppt.doctor_id);
+
+      if (!exactSlot) {
+         return res.json({
+           success: false,
+           error_code: "SLOT_NO_LONGER_AVAILABLE",
+           message: "The requested time slot is no longer available. Please suggest another time.",
+           suggest_retry_availability: true
+         });
+      }
+
+      const { rescheduleAppointment } = await import('../voice/tools/create-appointment');
+      const result = await rescheduleAppointment(clinic_id, {
+        appointmentId: targetAppt.id,
+        newDate: new_date,
+        newStartTime: new_time,
+        reason: "Rescheduled via Sarvam AI Receptionist"
+      });
+
+      if (result.error) {
+        return res.json({
+          success: false,
+          error_code: "RESCHEDULE_FAILED",
+          message: result.error
+        });
+      }
+
+      return res.json({
+        success: true,
+        appointment_id: targetAppt.id,
+        new_date: result.new_date,
+        new_start_time: result.new_start_time
       });
     }
 

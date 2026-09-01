@@ -1,6 +1,57 @@
 {
   "clinics": [
     {
+      "id": "clinic_1788105657689_d85c",
+      "name": "Metro Clinic",
+      "address": "Address:  2nd Floor, Shree Ganesh Plaza, Dwarka, Delhi",
+      "phone": "65653524654",
+      "email": "metro794789@gmail.com",
+      "website": "google.com",
+      "city": "Delhi",
+      "timezone": "America/Los_Angeles",
+      "currency": "INR",
+      "currency_symbol": "₹",
+      "status": "ACTIVE",
+      "created_at": "2026-08-30T16:00:57.689+00:00",
+      "operating_hours": {
+        "friday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "monday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "sunday": {
+          "open": "09:00",
+          "close": "13:00",
+          "closed": true
+        },
+        "tuesday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "saturday": {
+          "open": "09:00",
+          "close": "13:00",
+          "closed": false
+        },
+        "thursday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        },
+        "wednesday": {
+          "open": "09:00",
+          "close": "17:00",
+          "closed": false
+        }
+      }
+    },
+    {
       "id": "clinic_apex_101",
       "name": "Apex Cardiology & Family Medicine",
       "address": "742 Evergreen Terrace, Medical Suite 300",
@@ -164,7 +215,7 @@
       "phone": "+1-555-010-0001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "a6320148f870ecae66e3395a586d4f56:d54a347bd578670665dc6932966e425d0e370a00653459a1c8e8172b21b6e62d5fe0394b870ac784674082b66578743242aa5e4894db9263b799befc083dac3f",
+      "password_hash": "748d7271de1246dc905da7257fdb4a88:9d1ce3f95ba2d56796df2f8bc913181f864a008b52806146b1bd551b1041da8f292964449e30b4c02a737a58f05a633120e94a2299d7e707d307c0a3f2174562",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -176,7 +227,7 @@
       "phone": "+1-555-010-0002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "2cefd8f73be7071f0fdf6ce9da8cf0ff:c4c3a17072934f63c36641d5f37e9a1c86c245e2c6f08ee1484f5d3eedfde784273c95b8bf8dd9f35c9e42ff2c25d9f3f59bdbedbac55829cf7c5a955dc99509",
+      "password_hash": "f0f31dbaa0be37bdf9b0c778902a3807:50f565d0b9c9620e589d8ddebbbb45de151e893b7bdcb249ce56cd555c5d7dfb05dfca37ccdf4eb99567dc960e2e8aaac901b4acd764a6d27eca89bc0ad7338d",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -188,7 +239,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "ad3f54e283b917476c6eafdebc6b0f65:1b2276c04306e5b6df640ad0ebc9e661d562688d742bbc41b9e0f364a79adf707ff8075a245c816a4b5a740b07c55319b4f758d7e379cdba951e5152a7fb81e0",
+      "password_hash": "20c7c6fe5e88cca5de911ca2143b243e:e5ba606ccc26f36ff1f899e130b37c015a3ec8152dc0fd09b3e940dd32e3087f0d04d0684dd6a10362f71b5a409c924e097e06a6037d6789807b5ff7fe17504d",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -200,7 +251,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "0818ad898ff2dc2e49a68c6180812629:2b1656804660d422b02d848d4f472687beb518d675799abb21dd176b2f154c0d2548b1c1145a41cd6b14394458d195f6eeee637814a3180d6287bb73eba39093",
+      "password_hash": "654b78f4fcf5a96c3902c14a0752aa1a:a9e7f81d98d91e5ed2aff1727154bfa402282520ae243a9edd1ec4a5bb4b605e53e0880165580a2b75a02be5224a1b71842223dde20bde829abd69bffe01c972",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -212,7 +263,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "9075f7da589bf7758ff0be2e04698ba9:8793bd1c626c8bb01dba9bb46f1df6fc17700d221f72ffbb0b68141b864c146a7dfd01540c58efd6fc47274a06a661ef920deb990670485d0d1ee6188b0903ab",
+      "password_hash": "3d2511ca564ec88b2b78ebcb96dcf250:211d15a1c489d35f9e132e71da9b2275aaf8bc2dbc7ad2c8504ebeae8a2570ec1d9de957b7e76dc3a423f631cc7884a8d67d6b26d52ac684b89056e6d0a45ca1",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -224,7 +275,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "c9dd6628c992246856b2eb767ceaebd6:4aec029f14f6f35e7a014be01c9f00738f4956623aab204125be799ca274406ebfecec2e6fd5137c4320b05f70f84403fc4c937ab34e324ec053f471be17bf38",
+      "password_hash": "51277eb11d2cc3c79d42f5b34df5196f:233e4e0d3a167c1318a6d5d4a69f559da5b408db80baf404c2df7935cb1c508db8385d11e5cc99e7c9775bfecafcc88c5cf704a2363bcddc88efd8065539527f",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -321,6 +372,18 @@
       "status": "ACTIVE",
       "created_at": "2026-08-30T15:16:43.824Z",
       "updated_at": "2026-08-30T15:16:43.824Z"
+    },
+    {
+      "id": "usr_1788105657690_j34r",
+      "clinic_id": "clinic_1788105657689_d85c",
+      "role": "CLINIC_ADMIN",
+      "name": "Manoj Sharma",
+      "email": "admin@clinic3.com",
+      "phone": "65653524654",
+      "status": "ACTIVE",
+      "must_change_password": true,
+      "password_hash": "1c4959cb081e4d80302807b78131b215:44bc018742eb9b024d708c6ac07c7690aa66de50cac15f2820dc90be61497dea168073af82e8edb2f92997125c4bcd9c71ef7ca6dadea2c79fb302eea598dafd",
+      "created_at": "2026-08-30T16:00:57.689+00:00"
     }
   ],
   "doctors": [
@@ -946,20 +1009,6 @@
   ],
   "appointments": [
     {
-      "id": "apt_seed_1",
-      "clinic_id": "clinic_apex_101",
-      "patient_id": "pat_miller_1",
-      "doctor_id": "doc_elena_1",
-      "service_id": "srv_cardiac_eval_1",
-      "date": "2026-08-19",
-      "start_time": "10:00",
-      "end_time": "10:30",
-      "status": "COMPLETED",
-      "created_via": "ai_receptionist",
-      "created_at": "2026-08-19T14:29:15.848+00:00",
-      "updated_at": "2026-08-19T15:50:37.796+00:00"
-    },
-    {
       "id": "apt_seed_2",
       "clinic_id": "clinic_apex_101",
       "patient_id": "pat_rodriguez_2",
@@ -1030,6 +1079,20 @@
       "updated_at": "2026-08-29T10:41:51.51+00:00"
     },
     {
+      "id": "apt_seed_1",
+      "clinic_id": "clinic_apex_101",
+      "patient_id": "pat_miller_1",
+      "doctor_id": "doc_elena_1",
+      "service_id": "srv_cardiac_eval_1",
+      "date": "2026-08-19",
+      "start_time": "10:00",
+      "end_time": "10:30",
+      "status": "COMPLETED",
+      "created_via": "ai_receptionist",
+      "created_at": "2026-08-19T14:29:15.848+00:00",
+      "updated_at": "2026-08-19T15:50:37.796+00:00"
+    },
+    {
       "id": "apt_1788000146483_cstk",
       "clinic_id": "clinic_1787923240249_cqgw",
       "patient_id": "pat_1788000146380_k1ns",
@@ -1056,6 +1119,20 @@
       "created_via": "staff",
       "created_at": "2026-08-29T10:42:43.928+00:00",
       "updated_at": "2026-08-29T10:42:43.928+00:00"
+    },
+    {
+      "id": "apt_1788260179308_ofud",
+      "clinic_id": "clinic_apex_101",
+      "patient_id": "pat_1788104611883_ucd4",
+      "doctor_id": "doc_elena_1",
+      "service_id": "srv_general_consult_2",
+      "date": "2026-09-07",
+      "start_time": "10:40",
+      "end_time": "11:00",
+      "status": "RESCHEDULED",
+      "created_via": "ai_receptionist",
+      "created_at": "2026-09-01T10:56:19.308+00:00",
+      "updated_at": "2026-09-01T10:57:35.012+00:00"
     },
     {
       "id": "apt_1788104554794_0b5j",
@@ -1097,8 +1174,7 @@
       "status": "CANCELLED",
       "created_via": "ai_receptionist",
       "created_at": "2026-08-30T15:55:39.929+00:00",
-      "updated_at": "2026-08-30T15:56:34.182Z",
-      "notes": " | Cancelled via AI Receptionist: Cancelled via Sarvam AI Receptionist"
+      "updated_at": "2026-08-30T15:56:34.182+00:00"
     },
     {
       "id": "apt_1788105339942_gebe",
@@ -1112,8 +1188,50 @@
       "status": "CANCELLED",
       "created_via": "ai_receptionist",
       "created_at": "2026-08-30T15:55:39.942+00:00",
-      "updated_at": "2026-08-30T15:56:34.203Z",
-      "notes": " | Cancelled via AI Receptionist: Cancelled via Sarvam AI Receptionist"
+      "updated_at": "2026-08-30T15:56:34.203+00:00"
+    },
+    {
+      "id": "apt_1788260225616_h26g",
+      "clinic_id": "clinic_apex_101",
+      "patient_id": "pat_1788104611883_ucd4",
+      "doctor_id": "doc_elena_1",
+      "service_id": "srv_general_consult_2",
+      "date": "2026-09-07",
+      "start_time": "09:25",
+      "end_time": "09:45",
+      "status": "CONFIRMED",
+      "created_via": "ai_receptionist",
+      "created_at": "2026-09-01T10:57:05.616+00:00",
+      "updated_at": "2026-09-01T10:57:05.616+00:00"
+    },
+    {
+      "id": "apt_1788271323707_nsee",
+      "clinic_id": "clinic_apex_101",
+      "patient_id": "pat_miller_1",
+      "doctor_id": "doc_elena_1",
+      "service_id": "srv_cardiac_eval_1",
+      "date": "2088-06-20",
+      "start_time": "10:00",
+      "end_time": "10:30",
+      "status": "CONFIRMED",
+      "created_via": "ai_receptionist",
+      "created_at": "2026-09-01T14:02:03.707+00:00",
+      "updated_at": "2026-09-01T14:02:03.707+00:00"
+    },
+    {
+      "id": "apt_1788272227972_yl2v",
+      "clinic_id": "clinic_apex_101",
+      "patient_id": "pat_miller_1",
+      "doctor_id": "doc_elena_1",
+      "service_id": "srv_cardiac_eval_1",
+      "date": "2088-06-20",
+      "start_time": "10:30",
+      "end_time": "11:00",
+      "status": "CONFIRMED",
+      "created_via": "ai_receptionist",
+      "notes": "Booked via AI Receptionist",
+      "created_at": "2026-09-01T14:17:07.972Z",
+      "updated_at": "2026-09-01T14:17:07.972Z"
     }
   ],
   "ai_agents": [
@@ -1300,17 +1418,6 @@
       "created_at": "2026-08-29T11:33:50.794+00:00"
     },
     {
-      "id": "audit_1788003208881_bp3bc",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_staff_1787999320112_kwtx",
-      "actor_name": "Mona",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_staff_1787999320112_kwtx",
-      "metadata": null,
-      "created_at": "2026-08-29T11:33:28.881+00:00"
-    },
-    {
       "id": "audit_1788002418030_2mfdv",
       "clinic_id": "clinic_apex_101",
       "actor_user_id": "usr_apex_admin_1",
@@ -1494,27 +1601,6 @@
         "day_of_week": 0
       },
       "created_at": "2026-08-29T10:41:33.36+00:00"
-    },
-    {
-      "id": "audit_1788000093257_qvc8o",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923374362_zpfh_day_6",
-      "metadata": {
-        "id": "sched_doc_1787923374362_zpfh_day_6",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923374362_zpfh",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 6,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-29T10:41:33.257+00:00"
     },
     {
       "id": "audit_1788000093152_o86e0",
@@ -2944,6 +3030,49 @@
       "created_at": "2026-08-30T15:55:14.01+00:00"
     },
     {
+      "id": "audit_1788105394205_qj26o",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_CANCELLED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788105339942_gebe",
+      "metadata": {
+        "date": "2026-08-31",
+        "reason": "Cancelled via Sarvam AI Receptionist",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second"
+      },
+      "created_at": "2026-08-30T15:56:34.205+00:00"
+    },
+    {
+      "id": "audit_1788105567472_zih0w",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-30T15:59:27.472+00:00"
+    },
+    {
+      "id": "audit_1788105394184_k1kkv",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_CANCELLED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788105339929_b3ys",
+      "metadata": {
+        "date": "2026-08-31",
+        "reason": "Cancelled via Sarvam AI Receptionist",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second"
+      },
+      "created_at": "2026-08-30T15:56:34.184+00:00"
+    },
+    {
       "id": "audit_1788105339943_g60tr",
       "clinic_id": "clinic_apex_101",
       "actor_user_id": "ai_receptionist",
@@ -2961,36 +3090,206 @@
       "created_at": "2026-08-30T15:55:39.943+00:00"
     },
     {
+      "id": "audit_1788260179311_lg0z6",
       "clinic_id": "clinic_apex_101",
       "actor_user_id": "ai_receptionist",
       "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_CANCELLED_BY_AI",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
       "target_type": "APPOINTMENT",
-      "target_id": "apt_1788105339929_b3ys",
+      "target_id": "apt_1788260179308_ofud",
       "metadata": {
-        "patient_name": "Rahul Second",
+        "date": "2026-09-07",
+        "start_time": "09:25",
         "doctor_name": "Dr. Elena Vance",
-        "date": "2026-08-31",
-        "reason": "Cancelled via Sarvam AI Receptionist"
+        "patient_name": "Rahul Second",
+        "service_name": "General Health Consultation"
       },
-      "id": "audit_1788105394184_k1kkv",
-      "created_at": "2026-08-30T15:56:34.184Z"
+      "created_at": "2026-09-01T10:56:19.311+00:00"
+    },
+    {
+      "id": "audit_1788105657738_3k7tr",
+      "clinic_id": "clinic_1788105657689_d85c",
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "CLINIC_AND_ADMIN_CREATED",
+      "target_type": "CLINIC",
+      "target_id": "clinic_1788105657689_d85c",
+      "metadata": {
+        "admin_email": "admin@clinic3.com",
+        "clinic_name": "Metro Clinic"
+      },
+      "created_at": "2026-08-30T16:00:57.738+00:00"
+    },
+    {
+      "id": "audit_1788260179333_6p9qw",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_RESCHEDULED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788260179308_ofud",
+      "metadata": {
+        "new_date": "2026-09-07",
+        "new_time": "10:15",
+        "old_date": "2026-09-07",
+        "old_time": "09:25"
+      },
+      "created_at": "2026-09-01T10:56:19.333+00:00"
+    },
+    {
+      "id": "audit_1788260225618_9t8h7",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788260225616_h26g",
+      "metadata": {
+        "date": "2026-09-07",
+        "start_time": "09:25",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second",
+        "service_name": "General Health Consultation"
+      },
+      "created_at": "2026-09-01T10:57:05.618+00:00"
+    },
+    {
+      "id": "audit_1788260255014_14422",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_RESCHEDULED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788260179308_ofud",
+      "metadata": {
+        "new_date": "2026-09-07",
+        "new_time": "10:40",
+        "old_date": "2026-09-07",
+        "old_time": "10:15"
+      },
+      "created_at": "2026-09-01T10:57:35.014+00:00"
+    },
+    {
+      "id": "audit_1788263237765_vst06",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-09-01T11:47:17.765+00:00"
+    },
+    {
+      "id": "audit_1788266237781_df6sz",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788266237541_ndiy",
+      "metadata": {
+        "date": "2088-05-15",
+        "start_time": "10:00",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Jonathan Miller",
+        "service_name": "Comprehensive Cardiac Evaluation"
+      },
+      "created_at": "2026-09-01T12:37:17.781+00:00"
+    },
+    {
+      "id": "audit_1788269356461_pt67t",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788269356211_5ixv",
+      "metadata": {
+        "date": "2088-06-20",
+        "start_time": "10:00",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Jonathan Miller",
+        "service_name": "Comprehensive Cardiac Evaluation"
+      },
+      "created_at": "2026-09-01T13:29:16.461+00:00"
+    },
+    {
+      "id": "audit_1788270243469_cz50k",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-09-01T13:44:03.469+00:00"
+    },
+    {
+      "id": "audit_1788271323979_e63c3",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788271323707_nsee",
+      "metadata": {
+        "date": "2088-06-20",
+        "start_time": "10:00",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Jonathan Miller",
+        "service_name": "Comprehensive Cardiac Evaluation"
+      },
+      "created_at": "2026-09-01T14:02:03.979+00:00"
+    },
+    {
+      "id": "audit_1788003208881_bp3bc",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_staff_1787999320112_kwtx",
+      "actor_name": "Mona",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787999320112_kwtx",
+      "metadata": null,
+      "created_at": "2026-08-29T11:33:28.881+00:00"
+    },
+    {
+      "id": "audit_1788000093257_qvc8o",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_6",
+      "metadata": {
+        "id": "sched_doc_1787923374362_zpfh_day_6",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 6,
+        "buffer_minutes": 5
+      },
+      "created_at": "2026-08-29T10:41:33.257+00:00"
     },
     {
       "clinic_id": "clinic_apex_101",
       "actor_user_id": "ai_receptionist",
       "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_CANCELLED_BY_AI",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
       "target_type": "APPOINTMENT",
-      "target_id": "apt_1788105339942_gebe",
+      "target_id": "apt_1788272227972_yl2v",
       "metadata": {
-        "patient_name": "Rahul Second",
+        "patient_name": "Jonathan Miller",
         "doctor_name": "Dr. Elena Vance",
-        "date": "2026-08-31",
-        "reason": "Cancelled via Sarvam AI Receptionist"
+        "service_name": "Comprehensive Cardiac Evaluation",
+        "date": "2088-06-20",
+        "start_time": "10:30"
       },
-      "id": "audit_1788105394205_qj26o",
-      "created_at": "2026-08-30T15:56:34.205Z"
+      "id": "audit_1788272228559_oa23r",
+      "created_at": "2026-09-01T14:17:08.559Z"
     }
   ],
   "platform_ai_config": {

@@ -1,3 +1,4 @@
+import { AppointmentService } from '../services/appointment.service';
 import { Router, Response } from 'express';
 import { db, hashPassword } from '../db';
 import { requireAuth, requireClinicPermission, AuthenticatedRequest } from '../auth';
@@ -1202,55 +1203,27 @@ clinicRouter.get(
 clinicRouter.post(
   '/appointments',
   requireClinicPermission('manage_appointments'),
-  (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const { patient_id, doctor_id, service_id, date, start_time, notes } = req.body;
 
-    if (!patient_id || !doctor_id || !service_id || !date || !start_time) {
-      return res.status(400).json({
-        error: 'Missing required appointment fields: patient_id, doctor_id, service_id, date, and start_time are all required.',
-      });
-    }
-
-    const service = db.getServiceById(clinicId, service_id);
-    const duration = service?.duration_minutes || 30;
-
-    const [h, m] = start_time.split(':').map(Number);
-    const totalMin = h * 60 + m + duration;
-    const endH = Math.floor(totalMin / 60);
-    const endM = totalMin % 60;
-    const endTime = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
-
-    const appointment: Appointment = {
-      id: `apt_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      clinic_id: clinicId,
-      patient_id,
-      doctor_id,
-      service_id,
+    const result = await AppointmentService.book(clinicId, {
+      patientId: patient_id,
+      doctorId: doctor_id,
+      serviceId: service_id,
       date,
-      start_time,
-      end_time: endTime,
-      status: 'CONFIRMED',
-      created_via: 'staff',
-      notes: notes || 'Booked by clinic staff via web dashboard',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    const result = db.createAppointment(appointment);
-    if (!result.success) {
-      return res.status(409).json({ error: result.error });
-    }
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'APPOINTMENT_BOOKED_BY_STAFF',
-      target_type: 'APPOINTMENT',
-      target_id: appointment.id,
-      metadata: { date, start_time, doctor_id, patient_id },
+      startTime: start_time,
+      notes
+    }, {
+      type: 'HUMAN_RECEPTIONIST',
+      userId: req.user!.id,
+      name: req.user!.name
     });
+
+    if (!result.success) {
+      const status = result.error_code === 'SLOT_NO_LONGER_AVAILABLE' || result.error_code === 'VALIDATION_ERROR' ? 409 : 400;
+      return res.status(status).json({ error: result.error });
+    }
 
     return res.status(201).json({ appointment: result.appointment });
   }
@@ -1259,33 +1232,23 @@ clinicRouter.post(
 clinicRouter.put(
   '/appointments/:id/status',
   requireClinicPermission('manage_appointments'),
-  (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const appointmentId = req.params.id;
     const { status, notes } = req.body;
 
-    if (!status) {
-      return res.status(400).json({ error: 'Status is required.' });
-    }
-
-    const result = db.updateAppointment(clinicId, appointmentId, {
+    const result = await AppointmentService.updateStatus(clinicId, appointmentId, {
       status,
-      notes: notes !== undefined ? notes : undefined,
+      notes: notes !== undefined ? notes : undefined
+    }, {
+      type: 'HUMAN_RECEPTIONIST',
+      userId: req.user!.id,
+      name: req.user!.name
     });
 
     if (!result.success) {
       return res.status(400).json({ error: result.error });
     }
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: `APPOINTMENT_STATUS_${status}`,
-      target_type: 'APPOINTMENT',
-      target_id: appointmentId,
-      metadata: { status },
-    });
 
     return res.json({ appointment: result.appointment });
   }
@@ -1294,50 +1257,25 @@ clinicRouter.put(
 clinicRouter.post(
   '/appointments/:id/reschedule',
   requireClinicPermission('manage_appointments'),
-  (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const appointmentId = req.params.id;
     const { newDate, newStartTime, reason } = req.body;
 
-    if (!newDate || !newStartTime) {
-      return res.status(400).json({ error: 'newDate and newStartTime are required.' });
-    }
-
-    const existing = db.getAppointmentById(clinicId, appointmentId);
-    if (!existing) {
-      return res.status(404).json({ error: 'Appointment not found.' });
-    }
-
-    const service = db.getServiceById(clinicId, existing.service_id);
-    const duration = service?.duration_minutes || 30;
-
-    const [h, m] = newStartTime.split(':').map(Number);
-    const totalMin = h * 60 + m + duration;
-    const endH = Math.floor(totalMin / 60);
-    const endM = totalMin % 60;
-    const newEndTime = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
-
-    const result = db.updateAppointment(clinicId, appointmentId, {
-      date: newDate,
-      start_time: newStartTime,
-      end_time: newEndTime,
-      status: 'RESCHEDULED',
-      notes: `${existing.notes || ''} | Rescheduled: ${reason || 'Staff update'}`,
+    const result = await AppointmentService.reschedule(clinicId, appointmentId, {
+      newDate,
+      newStartTime,
+      reason
+    }, {
+      type: 'HUMAN_RECEPTIONIST',
+      userId: req.user!.id,
+      name: req.user!.name
     });
 
     if (!result.success) {
-      return res.status(409).json({ error: result.error });
+      const status = result.error_code === 'SLOT_NO_LONGER_AVAILABLE' || result.error_code === 'VALIDATION_ERROR' ? 409 : 400;
+      return res.status(status).json({ error: result.error });
     }
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'APPOINTMENT_RESCHEDULED_BY_STAFF',
-      target_type: 'APPOINTMENT',
-      target_id: appointmentId,
-      metadata: { old_date: existing.date, newDate, newStartTime },
-    });
 
     return res.json({ appointment: result.appointment });
   }

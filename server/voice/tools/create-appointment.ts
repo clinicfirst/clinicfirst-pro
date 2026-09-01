@@ -1,5 +1,7 @@
 import { db } from '../../db';
+import { supabase } from '../../supabaseDiff';
 import { Appointment } from '../../../src/types';
+import { AppointmentService, AppointmentMutationSource } from '../../services/appointment.service';
 
 export async function createAppointment(
   clinicId: string,
@@ -12,82 +14,27 @@ export async function createAppointment(
     notes?: string;
   }
 ) {
-  const { patientId, doctorId, serviceId, date, startTime, notes } = params;
+  const source: AppointmentMutationSource = { type: 'AI', name: 'AI Receptionist' };
+  const result = await AppointmentService.book(clinicId, params, source);
 
-  if (!patientId || !doctorId || !serviceId || !date || !startTime) {
-    return { error: 'Missing required parameters: patientId, doctorId, serviceId, date, startTime are all required.' };
-  }
-
-  const doctor = db.getDoctorById(clinicId, doctorId);
-  if (!doctor || doctor.status !== 'ACTIVE') {
-    return { error: 'Doctor not found or currently inactive.' };
-  }
-
-  const service = db.getServiceById(clinicId, serviceId);
-  if (!service || service.status !== 'ACTIVE') {
-    return { error: 'Service not found or currently inactive.' };
-  }
-
-  const patient = db.getPatientById(clinicId, patientId);
-  if (!patient) {
-    return { error: 'Patient not found. Please register patient first.' };
-  }
-
-  // Calculate end time
-  const [h, m] = startTime.split(':').map(Number);
-  const totalMin = h * 60 + m + service.duration_minutes;
-  const endH = Math.floor(totalMin / 60);
-  const endM = totalMin % 60;
-  const endTime = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
-
-  const appointmentPayload: Appointment = {
-    id: `apt_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-    clinic_id: clinicId,
-    patient_id: patientId,
-    doctor_id: doctorId,
-    service_id: serviceId,
-    date,
-    start_time: startTime,
-    end_time: endTime,
-    status: 'CONFIRMED',
-    created_via: 'ai_receptionist',
-    notes: notes || 'Booked via AI Receptionist voice interaction',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
-
-  const result = db.createAppointment(appointmentPayload);
   if (!result.success) {
-    return { error: result.error };
+    return { 
+      error: result.error, 
+      error_code: result.error_code, 
+      suggest_retry_availability: result.suggest_retry_availability 
+    };
   }
-
-  // Log audit
-  db.logAudit({
-    clinic_id: clinicId,
-    actor_user_id: 'ai_receptionist',
-    actor_name: 'AI Receptionist',
-    action: 'APPOINTMENT_BOOKED_BY_AI',
-    target_type: 'APPOINTMENT',
-    target_id: appointmentPayload.id,
-    metadata: {
-      patient_name: patient.name,
-      doctor_name: doctor.name,
-      service_name: service.name,
-      date,
-      start_time: startTime,
-    },
-  });
 
   return {
     success: true,
-    appointment_id: appointmentPayload.id,
-    patient_name: patient.name,
-    doctor_name: doctor.name,
-    service_name: service.name,
-    date,
-    start_time: startTime,
-    end_time: endTime,
-    confirmation_message: `Appointment successfully confirmed for ${patient.name} with ${doctor.name} for ${service.name} on ${date} at ${startTime}.`,
+    appointment_id: result.appointment?.id,
+    patient_name: result.patient_name,
+    doctor_name: result.doctor_name,
+    service_name: result.service_name,
+    date: result.date,
+    start_time: result.start_time,
+    end_time: result.end_time,
+    confirmation_message: `Appointment successfully confirmed for ${result.patient_name} with ${result.doctor_name} for ${result.service_name} on ${result.date} at ${result.start_time}.`,
   };
 }
 
@@ -100,60 +47,29 @@ export async function rescheduleAppointment(
     reason?: string;
   }
 ) {
-  const { appointmentId, newDate, newStartTime, reason } = params;
-  if (!appointmentId || !newDate || !newStartTime) {
-    return { error: 'appointmentId, newDate, and newStartTime are required.' };
-  }
-
-  const existing = db.getAppointmentById(clinicId, appointmentId);
-  if (!existing) {
-    return { error: 'Appointment not found.' };
-  }
-
-  const service = db.getServiceById(clinicId, existing.service_id);
-  const duration = service?.duration_minutes || 30;
-
-  const [h, m] = newStartTime.split(':').map(Number);
-  const totalMin = h * 60 + m + duration;
-  const endH = Math.floor(totalMin / 60);
-  const endM = totalMin % 60;
-  const newEndTime = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
-
-  const result = db.updateAppointment(clinicId, appointmentId, {
-    date: newDate,
-    start_time: newStartTime,
-    end_time: newEndTime,
-    status: 'RESCHEDULED',
-    notes: `${existing.notes || ''} | Rescheduled via AI: ${reason || 'Patient request'}`,
-  });
+  const source: AppointmentMutationSource = { type: 'AI', name: 'AI Receptionist' };
+  const result = await AppointmentService.reschedule(clinicId, params.appointmentId, {
+    newDate: params.newDate,
+    newStartTime: params.newStartTime,
+    reason: params.reason
+  }, source);
 
   if (!result.success) {
-    return { error: result.error };
+    return { 
+      error: result.error, 
+      error_code: result.error_code, 
+      suggest_retry_availability: result.suggest_retry_availability 
+    };
   }
-
-  db.logAudit({
-    clinic_id: clinicId,
-    actor_user_id: 'ai_receptionist',
-    actor_name: 'AI Receptionist',
-    action: 'APPOINTMENT_RESCHEDULED_BY_AI',
-    target_type: 'APPOINTMENT',
-    target_id: appointmentId,
-    metadata: {
-      old_date: existing.date,
-      old_time: existing.start_time,
-      new_date: newDate,
-      new_time: newStartTime,
-    },
-  });
 
   return {
     success: true,
-    appointment_id: appointmentId,
-    patient_name: existing.patient?.name,
-    doctor_name: existing.doctor?.name,
-    new_date: newDate,
-    new_start_time: newStartTime,
-    message: `Appointment successfully rescheduled to ${newDate} at ${newStartTime}.`,
+    appointment_id: result.appointment?.id,
+    patient_name: result.patient_name,
+    doctor_name: result.doctor_name,
+    new_date: result.new_date,
+    new_start_time: result.new_start_time,
+    message: `Appointment successfully rescheduled to ${result.new_date} at ${result.new_start_time}.`,
   };
 }
 
@@ -164,44 +80,20 @@ export async function cancelAppointment(
     reason?: string;
   }
 ) {
-  const { appointmentId, reason } = params;
-  if (!appointmentId) {
-    return { error: 'appointmentId is required to cancel.' };
-  }
-
-  const existing = db.getAppointmentById(clinicId, appointmentId);
-  if (!existing) {
-    return { error: 'Appointment not found.' };
-  }
-
-  const result = db.updateAppointment(clinicId, appointmentId, {
+  const source: AppointmentMutationSource = { type: 'AI', name: 'AI Receptionist' };
+  const result = await AppointmentService.updateStatus(clinicId, params.appointmentId, {
     status: 'CANCELLED',
-    notes: `${existing.notes || ''} | Cancelled via AI Receptionist: ${reason || 'Patient requested cancellation'}`,
-  });
+    notes: params.reason
+  }, source);
 
   if (!result.success) {
-    return { error: result.error };
+    return { error: result.error, error_code: result.error_code };
   }
-
-  db.logAudit({
-    clinic_id: clinicId,
-    actor_user_id: 'ai_receptionist',
-    actor_name: 'AI Receptionist',
-    action: 'APPOINTMENT_CANCELLED_BY_AI',
-    target_type: 'APPOINTMENT',
-    target_id: appointmentId,
-    metadata: {
-      patient_name: existing.patient?.name,
-      doctor_name: existing.doctor?.name,
-      date: existing.date,
-      reason,
-    },
-  });
 
   return {
     success: true,
-    appointment_id: appointmentId,
-    message: `Appointment on ${existing.date} at ${existing.start_time} has been cancelled as requested.`,
+    appointment_id: result.appointment?.id,
+    message: `Appointment on ${result.date} at ${result.start_time} has been cancelled as requested.`,
   };
 }
 

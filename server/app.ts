@@ -6,10 +6,26 @@ import { platformRouter } from './routes/platform.routes';
 import { clinicRouter } from './routes/clinic.routes';
 import { aiRouter } from './routes/ai.routes';
 import { voiceRouter } from './routes/voice.routes';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
 const app = express();
+
+// Set trust proxy for environments like Cloud Run, Vercel, or standard reverse proxies
+// This ensures req.ip correctly resolves to the client's IP instead of the load balancer's IP
+app.set('trust proxy', 1);
+
+const sarvamWebhookLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 30, // 30 requests per IP per minute
+  message: { error: 'Too many requests from this IP, please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Protect the Sarvam webhook route specifically before the global body parser
+app.use(['/api/voice/webhook/sarvam/*', '/voice/webhook/sarvam/*'], sarvamWebhookLimiter, express.json({ limit: '100kb' }));
 
 // Ensure DB is hydrated from Supabase before processing requests
 app.use(async (req, res, next) => {
@@ -114,6 +130,10 @@ app.use('/api', (req, res) => {
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (err.status === 413 || err.type === 'entity.too.large') {
+    return res.status(413).json({ success: false, error_code: 'PAYLOAD_TOO_LARGE' });
+  }
+
   console.error('[API Server Error]', err);
   if (!res.headersSent) {
     res.status(500).json({ error: err?.message || 'An unexpected server error occurred.' });

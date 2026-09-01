@@ -19,9 +19,10 @@ export async function getAvailableSlots(
     doctorId?: string;
     serviceId?: string;
     date: string; // "YYYY-MM-DD"
+    excludeAppointmentId?: string;
   }
 ) {
-  const { doctorId, serviceId, date } = params;
+  const { doctorId, serviceId, date, excludeAppointmentId } = params;
   if (!date) {
     return { error: 'Date (YYYY-MM-DD) is required to check slot availability.' };
   }
@@ -102,7 +103,8 @@ export async function getAvailableSlots(
 
   const existingAppointments = db.getAppointments(clinicId, { date });
   const activeBookings = existingAppointments.filter((a) =>
-    ['CONFIRMED', 'REQUESTED', 'RESCHEDULED'].includes(a.status)
+    ['CONFIRMED', 'REQUESTED', 'RESCHEDULED'].includes(a.status) &&
+    (!excludeAppointmentId || a.id !== excludeAppointmentId)
   );
 
   for (const doc of candidateDoctors) {
