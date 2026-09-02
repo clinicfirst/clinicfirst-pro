@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
-import { v4 as uuidv4 } from 'uuid';
+
 import { db } from '../db';
 import { ClinicKnowledgeRelease } from '../../src/types';
 import { requireAuth, requireClinicPermission } from '../auth';
@@ -90,7 +90,7 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
     const finalHash = hash;
 
     const newRelease: ClinicKnowledgeRelease = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       clinic_id: clinic_id,
       version: nextVersion,
       document_hash: finalHash,
