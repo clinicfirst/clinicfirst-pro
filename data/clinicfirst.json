@@ -55,7 +55,7 @@
       "id": "clinic_apex_101",
       "name": "Apex Cardiology & Family Medicine",
       "address": "742 Evergreen Terrace, Medical Suite 300",
-      "phone": "+1-555-019-3333",
+      "phone": "+1-555-019-2005",
       "email": "contact@apexclinic.com",
       "website": "https://apexclinic.example.com",
       "city": "Seattle, WA",
@@ -215,7 +215,7 @@
       "phone": "+1-555-010-0001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "9ac1c86ff8658fefe3ae64bc05f8554f:155ad869fb2c2647f9c370c68d981b2103a47ab9b0fe786cab78518ab2000fe025e6048c94a0d579b5311de834d13d75068bf751d0e5495be8e131d50133983a",
+      "password_hash": "a19559b7fa9ceff8c904946c5c542541:3f75540895e451631cfca1caf237aa54b74402dd84e06408216bfd8097b779297ce4f50344ef29add4775b308cab2fb1e5eae9de9947f2e6aa5241388dc8013d",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -227,7 +227,7 @@
       "phone": "+1-555-010-0002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "3159968db28b474bdb71312e5028108b:3dee956a3831ca8e27c3411878957b8e4e3d40433795956b75c29ae18ed35b736acbc9ababb4831bfe5b73a87aa7af38b777ce941c0581c7dde4146b58703976",
+      "password_hash": "58d1636be1bfd9717f596ac9cdedc358:9e56603d9d980ffe0247722b8379bb8be3a7ae2d79d4e20423fdb76761ec28e39a7afee88fd0a5008fa621bfd0ed48416ab56f0996f399b473539427ebc76d0a",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -239,7 +239,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "571736578cc6974d295ecfd63d4c966e:6d885092b0a7f5af34c1cf4e29fa0f6e57a64ef0077d1d23e6e5e8630ef9dcaa0e7e125507cfd22877a084776afa66e4bb3b4fe06e3dd0cde62d9aec34eca2cd",
+      "password_hash": "e250c5fd3859e1994c4409f68717948d:15aa1f7f882e6ad30b76aa6de536e0e0e3bb3eee1422040f050ab29ac033d1f50b9bb685f7f00d1d7dbdb9455e46c37e8f5e79668b4f27b25ff9bff71540a9f1",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -251,7 +251,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "f8bd1f8689ba483e39186546e191de4d:200f41512fb1605e99cc36d3fa8c294484dea96d7a886cef706ab66c58d04d6ea76ef0d46757e60ba9f5b0c16543c347184b8ff35d9d579a36e46bf2b4b661be",
+      "password_hash": "bd3227ed397ef4a544be57d7dc9f3ff6:2cc1961f7d26da8bfc45f743f40698692eb6d7adaa8ceebac080a5d8c0942a48bc2af7cf9b6a3cbce4202fdfd64f258050ed5bdb14add0f12c777b78fd2c6a8b",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -263,7 +263,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "1a838ff6e150c5b2ee90c3309b3eed8d:2572363889350cf457f4ed49354a8d308cff434849d7dfba2e454b6d1ae36cb36cb9f8e0ab82f1a45263015da2270c2ca0ac59ec96aee98e1f0e5806cbda974b",
+      "password_hash": "4fa6565e33ddd622d7468e487725785f:79ebb71215f9a602aa07eb3de6539ec4a24d699440ab427002dc128c61020bad4e032b73ebfcdb4d8599410dc2b398641f5f1000038b0e251442435eca88c62d",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -275,7 +275,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "cbcbbfb7f5e7555e065d39e43a3b0cc1:a3e982604a3d3ca27f2954a260193006eaeb45a575725180ac85170c1c4590dd85776814ab926352d557ea172c0b23429acd6f38bef6fed7173ac878263f2e3b",
+      "password_hash": "76336b231f66f4579d908423185b9ec4:8623879f47065ee3013e58e5e356db2dcd1cd56e57bd6821333f73e8299f470f082237e694ac41c02bfc2cc474a97ac60628a8ebdf33ac342668a302e8e9bc1e",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -3357,6 +3357,19 @@
       },
       "id": "audit_1788355133085_qz4ss",
       "created_at": "2026-09-02T13:18:53.085Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_platform_admin_1",
+      "actor_name": "System Owner",
+      "action": "CLINIC_UPDATED_BY_PLATFORM_ADMIN",
+      "target_type": "CLINIC",
+      "target_id": "clinic_apex_101",
+      "metadata": {
+        "phone": "+1-555-019-2005"
+      },
+      "id": "audit_1788355541004_3rry7",
+      "created_at": "2026-09-02T13:25:41.004Z"
     }
   ],
   "platform_ai_config": {

@@ -896,6 +896,13 @@ class DatabaseEngine {
     this.saveDatabase();
   }
 
+  public insertKnowledgeReleaseInMemory(release: ClinicKnowledgeRelease): void {
+    if (!this.data.clinic_knowledge_releases) {
+      this.data.clinic_knowledge_releases = [];
+    }
+    this.data.clinic_knowledge_releases.push(release);
+  }
+
   public updateKnowledgeReleaseStatus(id: string, clinic_id: string, status: 'COMPILED' | 'PUBLISHED' | 'PUBLISH_FAILED'): boolean {
     if (!this.data.clinic_knowledge_releases) return false;
     const release = this.data.clinic_knowledge_releases.find(r => r.id === id && r.clinic_id === clinic_id);
@@ -905,6 +912,19 @@ class DatabaseEngine {
         release.published_at = new Date().toISOString();
       }
       this.saveDatabase();
+      return true;
+    }
+    return false;
+  }
+
+  public updateKnowledgeReleaseStatusInMemory(id: string, clinic_id: string, status: 'COMPILED' | 'PUBLISHED' | 'PUBLISH_FAILED'): boolean {
+    if (!this.data.clinic_knowledge_releases) return false;
+    const release = this.data.clinic_knowledge_releases.find(r => r.id === id && r.clinic_id === clinic_id);
+    if (release) {
+      release.status = status;
+      if (status === 'PUBLISHED') {
+        release.published_at = new Date().toISOString();
+      }
       return true;
     }
     return false;

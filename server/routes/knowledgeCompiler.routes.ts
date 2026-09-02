@@ -106,7 +106,7 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
         return res.status(500).json({ error: `Supabase persistence failed: ${error.message}` });
       }
     }
-    db.insertKnowledgeRelease(newRelease);
+    db.insertKnowledgeReleaseInMemory(newRelease);
 
     res.json({
       success: true,
@@ -141,7 +141,7 @@ knowledgeCompilerRouter.post('/:clinic_id/releases/:releaseId/publish', requireA
       }
     }
 
-    const success = db.updateKnowledgeReleaseStatus(releaseId, clinic_id, 'PUBLISHED');
+    const success = db.updateKnowledgeReleaseStatusInMemory(releaseId, clinic_id, 'PUBLISHED');
     
     if (success) {
       res.json({ success: true });
