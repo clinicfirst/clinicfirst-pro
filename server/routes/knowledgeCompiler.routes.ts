@@ -73,8 +73,25 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
     // Generate Hash
     const hash = crypto.createHash('sha256').update(md).digest('hex');
 
-    // Check previous version
-    const latestRelease = db.getLatestKnowledgeRelease(clinic_id);
+    // Check previous version authoritatively from Supabase if available
+    let latestRelease = null;
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('clinic_knowledge_releases')
+        .select('*')
+        .eq('clinic_id', clinic_id)
+        .order('version', { ascending: false })
+        .limit(1)
+        .single();
+        
+      if (!error && data) {
+        latestRelease = data;
+      } else if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
+        return res.status(500).json({ error: `Supabase query failed: ${error.message}` });
+      }
+    } else {
+      latestRelease = db.getLatestKnowledgeRelease(clinic_id);
+    }
     
     if (latestRelease && latestRelease.document_hash === hash) {
       return res.json({
@@ -84,35 +101,69 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
       });
     }
 
-    const nextVersion = latestRelease ? latestRelease.version + 1 : 1;
-    md = md.replace('{VERSION_PLACEHOLDER}', nextVersion.toString());
+    let nextVersion = latestRelease ? latestRelease.version + 1 : 1;
+    let successInsert = false;
+    let attempts = 0;
+    let newRelease: ClinicKnowledgeRelease | null = null;
     
-    // Re-hash with version string
-    const finalHash = hash;
+    while (!successInsert && attempts < 3) {
+      attempts++;
+      const mdWithVersion = md.replace('{VERSION_PLACEHOLDER}', nextVersion.toString());
+      
+      newRelease = {
+        id: crypto.randomUUID(),
+        clinic_id: clinic_id,
+        version: nextVersion,
+        document_hash: hash,
+        status: 'COMPILED',
+        compiled_content: mdWithVersion,
+        compiled_at: new Date().toISOString()
+      };
 
-    const newRelease: ClinicKnowledgeRelease = {
-      id: crypto.randomUUID(),
-      clinic_id: clinic_id,
-      version: nextVersion,
-      document_hash: finalHash,
-      status: 'COMPILED',
-      compiled_content: md,
-      compiled_at: new Date().toISOString()
-    };
-
-    if (supabase) {
-      const { error } = await supabase.from('clinic_knowledge_releases').insert(newRelease);
-      if (error) {
-        return res.status(500).json({ error: `Supabase persistence failed: ${error.message}` });
+      if (supabase) {
+        const { error } = await supabase.from('clinic_knowledge_releases').insert(newRelease);
+        if (error) {
+          // Check for unique constraint violation (duplicate version)
+          if (error.code === '23505' || (error.message && error.message.includes('unique constraint'))) {
+            // Re-fetch latest authoritative version
+            const { data: retryData, error: retryError } = await supabase
+              .from('clinic_knowledge_releases')
+              .select('*')
+              .eq('clinic_id', clinic_id)
+              .order('version', { ascending: false })
+              .limit(1)
+              .single();
+              
+            if (!retryError && retryData) {
+              if (retryData.document_hash === hash) {
+                // Another thread just published the exact same hash
+                return res.json({
+                  success: true,
+                  message: 'No changes detected. Existing version is up to date.',
+                  release: retryData
+                });
+              }
+              // It's a new version, update nextVersion and retry
+              nextVersion = retryData.version + 1;
+              continue;
+            }
+          }
+          return res.status(500).json({ error: `Supabase persistence failed: ${error.message}` });
+        }
       }
+      successInsert = true;
     }
+    
+    if (!successInsert || !newRelease) {
+       return res.status(500).json({ error: 'Failed to persist release after multiple attempts due to concurrent updates.' });
+    }
+
     db.insertKnowledgeReleaseInMemory(newRelease);
 
     res.json({
       success: true,
       release: newRelease
     });
-
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
