@@ -277,3 +277,16 @@ CREATE POLICY "Allow public access for migration" ON calls FOR ALL USING (true);
 CREATE POLICY "Allow public access for migration" ON audit_logs FOR ALL USING (true);
 CREATE POLICY "Allow public access for migration" ON platform_knowledge_base FOR ALL USING (true);
 
+
+-- PHASE 15 MIGRATION: clinic_knowledge_releases
+CREATE TABLE clinic_knowledge_releases (
+  id TEXT PRIMARY KEY,
+  clinic_id TEXT REFERENCES clinics(id),
+  version INTEGER NOT NULL,
+  document_hash TEXT NOT NULL,
+  status TEXT NOT NULL,
+  compiled_content TEXT NOT NULL,
+  compiled_at TIMESTAMPTZ DEFAULT NOW(),
+  published_at TIMESTAMPTZ,
+  published_by TEXT
+);

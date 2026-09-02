@@ -23,6 +23,7 @@ import {
   ClinicAiRule,
   ClinicKnowledgeItem,
   ClinicAiTool,
+  ClinicKnowledgeRelease,
 } from '../src/types';
 
 interface DatabaseSchema {
@@ -45,6 +46,7 @@ interface DatabaseSchema {
   clinic_ai_rules?: ClinicAiRule[];
   clinic_knowledge_base?: ClinicKnowledgeItem[];
   clinic_ai_tools?: ClinicAiTool[];
+  clinic_knowledge_releases?: ClinicKnowledgeRelease[];
 }
 
 const IS_VERCEL = Boolean(process.env.VERCEL) || Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -874,6 +876,39 @@ class DatabaseEngine {
   }
 
   // --- CRUD & Queries with Strict Tenant Isolation ---
+
+  
+  public getKnowledgeReleases(clinic_id: string): ClinicKnowledgeRelease[] {
+    return (this.data.clinic_knowledge_releases || []).filter(r => r.clinic_id === clinic_id);
+  }
+
+  public getLatestKnowledgeRelease(clinic_id: string): ClinicKnowledgeRelease | null {
+    const releases = this.getKnowledgeReleases(clinic_id);
+    if (releases.length === 0) return null;
+    return releases.sort((a, b) => b.version - a.version)[0];
+  }
+
+  public insertKnowledgeRelease(release: ClinicKnowledgeRelease): void {
+    if (!this.data.clinic_knowledge_releases) {
+      this.data.clinic_knowledge_releases = [];
+    }
+    this.data.clinic_knowledge_releases.push(release);
+    this.saveDatabase();
+  }
+
+  public updateKnowledgeReleaseStatus(id: string, clinic_id: string, status: 'COMPILED' | 'PUBLISHED' | 'PUBLISH_FAILED'): boolean {
+    if (!this.data.clinic_knowledge_releases) return false;
+    const release = this.data.clinic_knowledge_releases.find(r => r.id === id && r.clinic_id === clinic_id);
+    if (release) {
+      release.status = status;
+      if (status === 'PUBLISHED') {
+        release.published_at = new Date().toISOString();
+      }
+      this.saveDatabase();
+      return true;
+    }
+    return false;
+  }
 
   public getClinics() {
     return this.data.clinics;

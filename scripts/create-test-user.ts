@@ -8,9 +8,9 @@ db.data.users.push({
   name: 'Test Admin',
   role: 'CLINIC_ADMIN',
   password_hash: p,
-  status: 'ACTIVE',
+  status: "ACTIVE", must_change_password: false,
   created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString()
+  
 });
 db.flush();
 console.log("User created.");

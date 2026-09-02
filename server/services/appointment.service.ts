@@ -207,7 +207,7 @@ export class AppointmentService {
     // 3. Post-commit Side Effects
     // Update local memory
     const idx = db.data.appointments.findIndex((a) => a.id === appointmentId);
-    let updatedAppointment = existing;
+    let updatedAppointment: any = existing;
     if (idx >= 0) {
       db.data.appointments[idx] = {
         ...db.data.appointments[idx],
@@ -289,7 +289,7 @@ export class AppointmentService {
 
     // Sync local memory
     const idx = db.data.appointments.findIndex((a) => a.id === appointmentId);
-    let updatedAppointment = existing;
+    let updatedAppointment: any = existing;
     if (idx >= 0) {
       db.data.appointments[idx] = {
         ...db.data.appointments[idx],

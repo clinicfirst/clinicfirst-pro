@@ -520,3 +520,15 @@ export interface ClinicAiTool {
 }
 
 
+
+export interface ClinicKnowledgeRelease {
+  id: string;
+  clinic_id: string;
+  version: number;
+  document_hash: string;
+  status: 'COMPILED' | 'PUBLISHED' | 'PUBLISH_FAILED';
+  compiled_content: string;
+  compiled_at: string;
+  published_at?: string;
+  published_by?: string;
+}

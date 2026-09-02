@@ -5,6 +5,7 @@ import { authRouter } from './routes/auth.routes';
 import { platformRouter } from './routes/platform.routes';
 import { clinicRouter } from './routes/clinic.routes';
 import { aiRouter } from './routes/ai.routes';
+import { knowledgeCompilerRouter } from './routes/knowledgeCompiler.routes';
 import { voiceRouter } from './routes/voice.routes';
 import rateLimit from 'express-rate-limit';
 
@@ -100,6 +101,29 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRouter);
 app.use('/auth', authRouter);
 
+
+
+import { supabase } from './supabaseDiff';
+import { requireAuth } from './auth';
+app.get('/api/diagnostic/verify-supabase', requireAuth, async (req, res) => {
+  if (req.user?.role !== 'PLATFORM_ADMIN') return res.status(403).json({ error: 'Forbidden' });
+  const configured = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
+  let clientInitialized = false;
+  let connectionPass = false;
+  if (supabase) {
+    clientInitialized = true;
+    try {
+      const { data, error } = await supabase.from('platform_ai_config').select('id').limit(1);
+      if (!error) connectionPass = true;
+    } catch(e) {}
+  }
+  res.json({
+    configured: configured ? 'YES' : 'NO',
+    clientInitialized: clientInitialized ? 'YES' : 'NO',
+    connectionPass: connectionPass ? 'PASS' : 'FAIL'
+  });
+});
+
 app.use('/api/platform', platformRouter);
 app.use('/platform', platformRouter);
 
@@ -107,6 +131,7 @@ app.use('/api/clinic', clinicRouter);
 app.use('/clinic', clinicRouter);
 
 app.use('/api/ai', aiRouter);
+app.use('/api/compiler', knowledgeCompilerRouter);
 app.use('/ai', aiRouter);
 
 app.use('/api/voice', voiceRouter);

@@ -8,10 +8,14 @@ const url =
   '';
 const key =
   process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.VITE_SUPABASE_ANON_KEY ||
-  process.env.SUPABASE_ANON_KEY ||
+  
+  
   '';
 
+if (url && !key) {
+  console.error('CRITICAL ERROR: SUPABASE_SERVICE_ROLE_KEY is missing. Backend Supabase client failed closed.');
+  console.error('The backend will NOT fall back to anon credentials. Database sync and mutation is disabled.');
+}
 export const supabase = url && key ? createClient(url, key) : null;
 
 let lastState: any = null;
@@ -45,6 +49,7 @@ export async function fetchFromSupabase(): Promise<any | null> {
     'platform_ai_config',
     'clinic_ai_rules',
     'clinic_knowledge_base',
+    'clinic_knowledge_releases',
     'clinic_ai_tools',
   ];
 
@@ -93,6 +98,7 @@ export async function syncToSupabase(currentState: any) {
     'platform_ai_config',
     'clinic_ai_rules',
     'clinic_knowledge_base',
+    'clinic_knowledge_releases',
     'clinic_ai_tools',
   ];
 

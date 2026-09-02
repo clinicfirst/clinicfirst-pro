@@ -15,7 +15,7 @@ async function run() {
     console.log('Login failed', await res.text());
     return;
   }
-  const { token, clinic } = await res.json();
+  const { token, clinic } = (await res.json()) as any;
   const clinicId = clinic.id;
   console.log('✅ Logged in as testadmin (Clinic A). Clinic ID:', clinicId);
 

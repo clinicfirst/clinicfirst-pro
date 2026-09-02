@@ -18,6 +18,7 @@ import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { Input, Select } from '../../components/common/Input';
 import { AiPhoneSimulator } from '../../components/ai/AiPhoneSimulator';
+import { KnowledgeCompilerPanel } from '../../components/clinic/KnowledgeCompilerPanel';
 import { SarvamVoiceWidget } from '../../components/ai/SarvamVoiceWidget';
 import { apiRequest } from '../../api';
 import { AiAgent } from '../../types';
@@ -129,6 +130,10 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
             Voice provider routing, clinical tool bindings, greeting script, and human triage escalation.
           </p>
         </div>
+      </div>
+
+      <div className="mb-8">
+        <KnowledgeCompilerPanel />
       </div>
 
       {/* Voice Architecture Status & Tool Guarantees */}

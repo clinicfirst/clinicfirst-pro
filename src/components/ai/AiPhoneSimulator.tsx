@@ -187,7 +187,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
         agentName: string;
         greeting: string;
         audioBase64?: string;
-      }>('/api/ai/phone-call/start', {
+      }>('/api/ai/call/start', {
         method: 'POST',
         body: JSON.stringify({
           clinicId,
@@ -242,7 +242,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
         outcome?: string;
         toolCalls?: Array<{ name: string; args: any; result: any }>;
         audioBase64?: string;
-      }>('/api/ai/phone-call/turn', {
+      }>('/api/ai/call/message', {
         method: 'POST',
         body: JSON.stringify({
           sessionId,
@@ -292,7 +292,7 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
   const endCall = async () => {
     try {
       if (sessionId) {
-        await apiRequest('/api/ai/phone-call/end', {
+        await apiRequest('/api/ai/call/end', {
           method: 'POST',
           body: JSON.stringify({
             sessionId,
