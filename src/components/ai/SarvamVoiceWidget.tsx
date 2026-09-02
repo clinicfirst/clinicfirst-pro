@@ -111,14 +111,18 @@ export const SarvamVoiceWidget: React.FC = () => {
 
       {!scriptLoaded ? (
         <div className="text-xs text-gray-500 font-medium py-4">Initializing voice widget...</div>
+      ) : (!config?.embedKey || !config?.appId || !config?.orgId || !config?.workspaceId || config.embedKey === 'demo-embed-key') ? (
+        <div className="text-xs text-red-500 font-medium py-4">
+          Widget configuration is incomplete. Please set Sarvam credentials in the environment.
+        </div>
       ) : (
         <div className="sarvam-widget-wrapper">
           {/* @ts-ignore */}
           <sarvam-widget
-            api-key={config?.embedKey || ''}
-            app-id={config?.appId || ''}
-            org-id={config?.orgId || ''}
-            workspace-id={config?.workspaceId || ''}
+            api-key={config.embedKey}
+            app-id={config.appId}
+            org-id={config.orgId}
+            workspace-id={config.workspaceId}
             user-id={user?.id || 'anonymous-tester'}
             button-text="Call Sarvam Test Agent"
             interaction-type="voice"

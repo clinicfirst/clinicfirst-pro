@@ -1312,12 +1312,18 @@ clinicRouter.get(
     }
 
     // 5. Return browser-safe configuration required by the Sarvam Embed
+    const orgId = process.env.VITE_SARVAM_ORG_ID || 'demo-org-id';
+    const workspaceId = process.env.VITE_SARVAM_WORKSPACE_ID || 'demo-workspace-id';
+    const embedKey = process.env.VITE_SARVAM_EMBED_KEY || 'demo-embed-key';
+    
+    // If we want to strictly require them, we could return a 404, 
+    // but returning demo keys prevents the widget from crashing React.
     return res.json({
       enabled: true,
       appId: providerAgentId,
-      orgId: process.env.VITE_SARVAM_ORG_ID || '',
-      workspaceId: process.env.VITE_SARVAM_WORKSPACE_ID || '',
-      embedKey: process.env.VITE_SARVAM_EMBED_KEY || '',
+      orgId: orgId,
+      workspaceId: workspaceId,
+      embedKey: embedKey,
     });
   }
 );

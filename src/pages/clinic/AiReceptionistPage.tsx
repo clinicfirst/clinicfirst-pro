@@ -136,8 +136,10 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
         <KnowledgeCompilerPanel />
       </div>
 
-      {/* Voice Architecture Status & Tool Guarantees */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {user?.role === 'PLATFORM_ADMIN' && (
+        <div className="mb-8">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3">Platform Status & Diagnostics</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-4 bg-white border border-gray-200 rounded-lg">
           <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 block mb-1">
             Engine & Architecture
@@ -176,18 +178,29 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
       </div>
 
       {/* Sarvam AI Voice Test Section */}
-      <div className="space-y-3">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-[#0A2540]">
-          AI Receptionist — Voice Test
-        </h2>
-        <SarvamVoiceWidget />
+        </div>
+      )}
+
+      {/* Sarvam AI Voice Test Section */}
+      <div className="mb-8 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-[#0A0A0A]">
+            Test AI Receptionist
+          </h2>
+          <p className="text-sm text-gray-500">
+            Talk to your AI receptionist using your browser microphone.
+          </p>
+        </div>
+        <div className="border border-gray-100 rounded-lg bg-gray-50 p-4">
+          <SarvamVoiceWidget />
+        </div>
       </div>
 
       {/* Configuration Form */}
       <form onSubmit={handleSave} className="space-y-6">
         <Card
-          title="Receptionist Identity & Voice Configuration"
-          subtitle="Define how the AI answers incoming patient phone calls"
+          title="Receptionist Identity & Behavior"
+          subtitle="Configure how your AI receptionist greets patients and handles instructions"
           action={
             canConfigure && (
               <Button
@@ -228,7 +241,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
             {/* Greeting Script */}
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1">
-                Standard Call Greeting Script *
+                Standard Greeting *
               </label>
               <textarea
                 rows={3}
@@ -237,7 +250,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
                 value={form.greeting}
                 onChange={(e) => setForm({ ...form, greeting: e.target.value })}
                 className="w-full p-3 border border-gray-300 rounded focus:border-[#0A2540] text-xs focus:outline-none leading-relaxed"
-                placeholder="Thank you for calling our clinic. How can I assist you with your appointment today?"
+                placeholder="Thank you for calling our clinic. How can I assist you today?"
               />
               <p className="text-[11px] text-gray-500 mt-1">
                 The AI Receptionist speaks this exact sentence immediately when the call connects.

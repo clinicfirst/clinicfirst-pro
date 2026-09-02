@@ -106,7 +106,7 @@ app.use('/auth', authRouter);
 import { supabase } from './supabaseDiff';
 import { requireAuth } from './auth';
 app.get('/api/diagnostic/verify-supabase', requireAuth, async (req, res) => {
-  if (req.user?.role !== 'PLATFORM_ADMIN') return res.status(403).json({ error: 'Forbidden' });
+  if ((req as any).user?.role !== 'PLATFORM_ADMIN') return res.status(403).json({ error: 'Forbidden' });
   const configured = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
   let clientInitialized = false;
   let connectionPass = false;
