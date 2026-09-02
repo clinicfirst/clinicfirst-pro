@@ -55,7 +55,7 @@
       "id": "clinic_apex_101",
       "name": "Apex Cardiology & Family Medicine",
       "address": "742 Evergreen Terrace, Medical Suite 300",
-      "phone": "+1-555-019-2000",
+      "phone": "+1-555-019-3333",
       "email": "contact@apexclinic.com",
       "website": "https://apexclinic.example.com",
       "city": "Seattle, WA",
@@ -215,7 +215,7 @@
       "phone": "+1-555-010-0001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "34284e2aa6f876c04e8d1802df28b4ee:733906e7d04c10d28ab18902c9e6fa90f0682d9265e4e816ec5c9e124888ed3991e6a8c6bd4c414dab3082ac6acb24e8a51970da02a88c8400e5cf02e7d9f403",
+      "password_hash": "9ac1c86ff8658fefe3ae64bc05f8554f:155ad869fb2c2647f9c370c68d981b2103a47ab9b0fe786cab78518ab2000fe025e6048c94a0d579b5311de834d13d75068bf751d0e5495be8e131d50133983a",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -227,7 +227,7 @@
       "phone": "+1-555-010-0002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "6870093a78246623ac2882f2549be6ff:e9f48347b26c500d0cd8f0b9f88b7126a754f1bc510e4a1d4dd78ba9a1ee2e2ed89685e19d014c8571bef22c914b34ec04996c18b2b2306401ff35cb07432869",
+      "password_hash": "3159968db28b474bdb71312e5028108b:3dee956a3831ca8e27c3411878957b8e4e3d40433795956b75c29ae18ed35b736acbc9ababb4831bfe5b73a87aa7af38b777ce941c0581c7dde4146b58703976",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -239,7 +239,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "9f371dfec0e09900fcb07b97aa63281f:187ddcdffebd8b70464771c01a4ad830b57c66261729d44c0fb42a481c61d0de1fd918c271b140d61306151114a9c5fda13042d59504d39dfd96848420773da9",
+      "password_hash": "571736578cc6974d295ecfd63d4c966e:6d885092b0a7f5af34c1cf4e29fa0f6e57a64ef0077d1d23e6e5e8630ef9dcaa0e7e125507cfd22877a084776afa66e4bb3b4fe06e3dd0cde62d9aec34eca2cd",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -251,7 +251,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "087bbad9071074745af78c737fffbe3a:44bf6514cfff04b5fa121c1ee76764173ae321c71bb00d8d401276b2fd202602a9dd559368cb665d665e7707e1dd764876fcfcec8b070aeaf69a58e89b135f60",
+      "password_hash": "f8bd1f8689ba483e39186546e191de4d:200f41512fb1605e99cc36d3fa8c294484dea96d7a886cef706ab66c58d04d6ea76ef0d46757e60ba9f5b0c16543c347184b8ff35d9d579a36e46bf2b4b661be",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -263,7 +263,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "354960c47a2fef49f33ce5e4424a52a1:b622e198d4925e3ed221a337444a920f06768dc923150ba1597dd3e50b76873d6782b8467132761be14f1c12a14b3d65bb03aac0aa0bc1b1aa76c378f8852cae",
+      "password_hash": "1a838ff6e150c5b2ee90c3309b3eed8d:2572363889350cf457f4ed49354a8d308cff434849d7dfba2e454b6d1ae36cb36cb9f8e0ab82f1a45263015da2270c2ca0ac59ec96aee98e1f0e5806cbda974b",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -275,7 +275,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "6621888af08696a75279700ae39773bb:b5181554dd318c7d4e8faf8bee83303d7a63861130124765f5a7fb19bcef5add6866c4fe06c26b41fb8a681149b567f8aba8279dc5d049944b5f91b6b8c90a20",
+      "password_hash": "cbcbbfb7f5e7555e065d39e43a3b0cc1:a3e982604a3d3ca27f2954a260193006eaeb45a575725180ac85170c1c4590dd85776814ab926352d557ea172c0b23429acd6f38bef6fed7173ac878263f2e3b",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -1406,6 +1406,17 @@
   "escalations": [],
   "audit_logs": [
     {
+      "id": "audit_1788276258427_lqlpj",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-09-01T15:24:18.427+00:00"
+    },
+    {
       "id": "audit_1788274491490_ux2cv",
       "clinic_id": "clinic_apex_101",
       "actor_user_id": "usr_apex_admin_1",
@@ -1417,6 +1428,463 @@
       "created_at": "2026-09-01T14:54:51.49+00:00"
     },
     {
+      "id": "audit_1788272228559_oa23r",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788272227972_yl2v",
+      "metadata": {
+        "date": "2088-06-20",
+        "start_time": "10:30",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Jonathan Miller",
+        "service_name": "Comprehensive Cardiac Evaluation"
+      },
+      "created_at": "2026-09-01T14:17:08.559+00:00"
+    },
+    {
+      "id": "audit_1788271323979_e63c3",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788271323707_nsee",
+      "metadata": {
+        "date": "2088-06-20",
+        "start_time": "10:00",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Jonathan Miller",
+        "service_name": "Comprehensive Cardiac Evaluation"
+      },
+      "created_at": "2026-09-01T14:02:03.979+00:00"
+    },
+    {
+      "id": "audit_1788270243469_cz50k",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-09-01T13:44:03.469+00:00"
+    },
+    {
+      "id": "audit_1788269356461_pt67t",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788269356211_5ixv",
+      "metadata": {
+        "date": "2088-06-20",
+        "start_time": "10:00",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Jonathan Miller",
+        "service_name": "Comprehensive Cardiac Evaluation"
+      },
+      "created_at": "2026-09-01T13:29:16.461+00:00"
+    },
+    {
+      "id": "audit_1788266237781_df6sz",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788266237541_ndiy",
+      "metadata": {
+        "date": "2088-05-15",
+        "start_time": "10:00",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Jonathan Miller",
+        "service_name": "Comprehensive Cardiac Evaluation"
+      },
+      "created_at": "2026-09-01T12:37:17.781+00:00"
+    },
+    {
+      "id": "audit_1788263237765_vst06",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-09-01T11:47:17.765+00:00"
+    },
+    {
+      "id": "audit_1788260255014_14422",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_RESCHEDULED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788260179308_ofud",
+      "metadata": {
+        "new_date": "2026-09-07",
+        "new_time": "10:40",
+        "old_date": "2026-09-07",
+        "old_time": "10:15"
+      },
+      "created_at": "2026-09-01T10:57:35.014+00:00"
+    },
+    {
+      "id": "audit_1788260225618_9t8h7",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788260225616_h26g",
+      "metadata": {
+        "date": "2026-09-07",
+        "start_time": "09:25",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second",
+        "service_name": "General Health Consultation"
+      },
+      "created_at": "2026-09-01T10:57:05.618+00:00"
+    },
+    {
+      "id": "audit_1788260179333_6p9qw",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_RESCHEDULED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788260179308_ofud",
+      "metadata": {
+        "new_date": "2026-09-07",
+        "new_time": "10:15",
+        "old_date": "2026-09-07",
+        "old_time": "09:25"
+      },
+      "created_at": "2026-09-01T10:56:19.333+00:00"
+    },
+    {
+      "id": "audit_1788260179311_lg0z6",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788260179308_ofud",
+      "metadata": {
+        "date": "2026-09-07",
+        "start_time": "09:25",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second",
+        "service_name": "General Health Consultation"
+      },
+      "created_at": "2026-09-01T10:56:19.311+00:00"
+    },
+    {
+      "id": "audit_1788105657738_3k7tr",
+      "clinic_id": "clinic_1788105657689_d85c",
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "CLINIC_AND_ADMIN_CREATED",
+      "target_type": "CLINIC",
+      "target_id": "clinic_1788105657689_d85c",
+      "metadata": {
+        "admin_email": "admin@clinic3.com",
+        "clinic_name": "Metro Clinic"
+      },
+      "created_at": "2026-08-30T16:00:57.738+00:00"
+    },
+    {
+      "id": "audit_1788105567472_zih0w",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-30T15:59:27.472+00:00"
+    },
+    {
+      "id": "audit_1788105394205_qj26o",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_CANCELLED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788105339942_gebe",
+      "metadata": {
+        "date": "2026-08-31",
+        "reason": "Cancelled via Sarvam AI Receptionist",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second"
+      },
+      "created_at": "2026-08-30T15:56:34.205+00:00"
+    },
+    {
+      "id": "audit_1788105394184_k1kkv",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_CANCELLED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788105339929_b3ys",
+      "metadata": {
+        "date": "2026-08-31",
+        "reason": "Cancelled via Sarvam AI Receptionist",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second"
+      },
+      "created_at": "2026-08-30T15:56:34.184+00:00"
+    },
+    {
+      "id": "audit_1788105339943_g60tr",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788105339942_gebe",
+      "metadata": {
+        "date": "2026-08-31",
+        "start_time": "10:15",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second",
+        "service_name": "General Health Consultation"
+      },
+      "created_at": "2026-08-30T15:55:39.943+00:00"
+    },
+    {
+      "id": "audit_1788105339930_0ial6",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788105339929_b3ys",
+      "metadata": {
+        "date": "2026-08-31",
+        "start_time": "09:25",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second",
+        "service_name": "General Health Consultation"
+      },
+      "created_at": "2026-08-30T15:55:39.93+00:00"
+    },
+    {
+      "id": "audit_1788105314010_1s2kc",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_CANCELLED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788104739676_t59u",
+      "metadata": {
+        "date": "2026-08-31",
+        "reason": "Cancelled via Sarvam AI Receptionist",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second"
+      },
+      "created_at": "2026-08-30T15:55:14.01+00:00"
+    },
+    {
+      "id": "audit_1788104739679_60339",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788104739676_t59u",
+      "metadata": {
+        "date": "2026-08-31",
+        "start_time": "14:00",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Second",
+        "service_name": "General Health Consultation"
+      },
+      "created_at": "2026-08-30T15:45:39.679+00:00"
+    },
+    {
+      "id": "audit_1788104554795_qaxst",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "ai_receptionist",
+      "actor_name": "AI Receptionist",
+      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1788104554794_0b5j",
+      "metadata": {
+        "date": "2026-08-31",
+        "start_time": "09:00",
+        "doctor_name": "Dr. Elena Vance",
+        "patient_name": "Rahul Test",
+        "service_name": "General Health Consultation"
+      },
+      "created_at": "2026-08-30T15:42:34.795+00:00"
+    },
+    {
+      "id": "audit_1788104324826_hqz21",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-30T15:38:44.826+00:00"
+    },
+    {
+      "id": "audit_1788103679033_2s6bs",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_apex_1",
+      "metadata": {
+        "status": "ACTIVE",
+        "voice_provider": "gemini_live"
+      },
+      "created_at": "2026-08-30T15:27:59.033+00:00"
+    },
+    {
+      "id": "audit_1788103614796_919a1",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "metadata": null,
+      "created_at": "2026-08-30T15:26:54.796+00:00"
+    },
+    {
+      "id": "audit_1788099816643_5habi",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-30T14:23:36.643+00:00"
+    },
+    {
+      "id": "audit_1788098819642_r1dsi",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-30T14:06:59.642+00:00"
+    },
+    {
+      "id": "audit_1788098012208_1o5c3",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-30T13:53:32.208+00:00"
+    },
+    {
+      "id": "audit_1788089161955_ycf3z",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "metadata": null,
+      "created_at": "2026-08-30T11:26:01.955+00:00"
+    },
+    {
+      "id": "audit_1788010644906_miesr",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-29T13:37:24.906+00:00"
+    },
+    {
+      "id": "audit_1788010466560_bob8e",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-29T13:34:26.56+00:00"
+    },
+    {
+      "id": "audit_1788010126665_74koo",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-29T13:28:46.665+00:00"
+    },
+    {
+      "id": "audit_1788007745693_ghbq2",
+      "clinic_id": "clinic_1788007707640_vkcu",
+      "actor_user_id": "usr_1788007707648_bxkn",
+      "actor_name": "Dr. Pramod Jawanjal",
+      "action": "PASSWORD_CHANGED",
+      "target_type": "USER",
+      "target_id": "usr_1788007707648_bxkn",
+      "metadata": null,
+      "created_at": "2026-08-29T12:49:05.693+00:00"
+    },
+    {
+      "id": "audit_1788007727628_yvmec",
+      "clinic_id": "clinic_1788007707640_vkcu",
+      "actor_user_id": "usr_1788007707648_bxkn",
+      "actor_name": "Dr. Pramod Jawanjal",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1788007707648_bxkn",
+      "metadata": null,
+      "created_at": "2026-08-29T12:48:47.628+00:00"
+    },
+    {
+      "id": "audit_1788007707722_djg7h",
+      "clinic_id": "clinic_1788007707640_vkcu",
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "CLINIC_AND_ADMIN_CREATED",
+      "target_type": "CLINIC",
+      "target_id": "clinic_1788007707640_vkcu",
+      "metadata": {
+        "admin_email": "admin@clinic1.com",
+        "clinic_name": "TEST"
+      },
+      "created_at": "2026-08-29T12:48:27.722+00:00"
+    },
+    {
+      "id": "audit_1788005307938_xbe4z",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-29T12:08:27.938+00:00"
+    },
+    {
       "id": "audit_1788003230794_cvwsc",
       "clinic_id": null,
       "actor_user_id": "usr_platform_admin_2",
@@ -1426,6 +1894,17 @@
       "target_id": "usr_platform_admin_2",
       "metadata": null,
       "created_at": "2026-08-29T11:33:50.794+00:00"
+    },
+    {
+      "id": "audit_1788003208881_bp3bc",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_staff_1787999320112_kwtx",
+      "actor_name": "Mona",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787999320112_kwtx",
+      "metadata": null,
+      "created_at": "2026-08-29T11:33:28.881+00:00"
     },
     {
       "id": "audit_1788002418030_2mfdv",
@@ -1613,6 +2092,27 @@
       "created_at": "2026-08-29T10:41:33.36+00:00"
     },
     {
+      "id": "audit_1788000093257_qvc8o",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_6",
+      "metadata": {
+        "id": "sched_doc_1787923374362_zpfh_day_6",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 6,
+        "buffer_minutes": 5
+      },
+      "created_at": "2026-08-29T10:41:33.257+00:00"
+    },
+    {
       "id": "audit_1788000093152_o86e0",
       "clinic_id": "clinic_1787923240249_cqgw",
       "actor_user_id": "usr_1787923240250_irur",
@@ -1792,131 +2292,6 @@
       "created_at": "2026-08-29T10:40:28.749+00:00"
     },
     {
-      "id": "audit_1787156702488_7g516",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-19T16:25:02.488+00:00"
-    },
-    {
-      "id": "audit_1787156495689_zzdqc",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_staff_1",
-      "actor_name": "Sarah Jenkins",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_staff_1",
-      "metadata": null,
-      "created_at": "2026-08-19T16:21:35.689+00:00"
-    },
-    {
-      "id": "audit_1787999352941_hfikf",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_1787923240250_irur",
-      "metadata": null,
-      "created_at": "2026-08-29T10:29:12.941+00:00"
-    },
-    {
-      "id": "audit_1787923629240_me1c2",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_staff_1787923527385_8sqt",
-      "actor_name": "Shital",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_staff_1787923527385_8sqt",
-      "metadata": null,
-      "created_at": "2026-08-28T13:27:09.24+00:00"
-    },
-    {
-      "id": "audit_1787923483143_ktxr2",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923374362_zpfh_day_3",
-      "metadata": {
-        "id": "sched_doc_1787923374362_zpfh_day_3",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923374362_zpfh",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 3,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-28T13:24:43.143+00:00"
-    },
-    {
-      "id": "audit_1787923357371_n4mkg",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "DOCTOR_CREATED",
-      "target_type": "DOCTOR",
-      "target_id": "doc_1787923357367_643s",
-      "metadata": {
-        "name": "Dr. Raj Patel",
-        "specialization": "Pediatrician"
-      },
-      "created_at": "2026-08-28T13:22:37.371+00:00"
-    },
-    {
-      "id": "audit_1787922259335_20bmx",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_staff_1",
-      "actor_name": "Sarah Jenkins",
-      "action": "APPOINTMENT_STATUS_COMPLETED",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1787922254504_be3h",
-      "metadata": {
-        "status": "COMPLETED"
-      },
-      "created_at": "2026-08-28T13:04:19.335+00:00"
-    },
-    {
-      "id": "audit_1787156723237_zwbiv",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-19T16:25:23.237+00:00"
-    },
-    {
-      "id": "audit_1788005307938_xbe4z",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-29T12:08:27.938+00:00"
-    },
-    {
-      "id": "audit_1788276258427_lqlpj",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-09-01T15:24:18.427+00:00"
-    },
-    {
       "id": "audit_1788000028645_6f8bo",
       "clinic_id": "clinic_1787923240249_cqgw",
       "actor_user_id": "usr_1787923240250_irur",
@@ -1936,6 +2311,155 @@
         "buffer_minutes": 5
       },
       "created_at": "2026-08-29T10:40:28.645+00:00"
+    },
+    {
+      "id": "audit_1788000028537_se1fo",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923357367_643s_day_5",
+      "metadata": {
+        "id": "sched_doc_1787923357367_643s_day_5",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 5,
+        "buffer_minutes": 5
+      },
+      "created_at": "2026-08-29T10:40:28.537+00:00"
+    },
+    {
+      "id": "audit_1788000028430_jplp7",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923357367_643s_day_4",
+      "metadata": {
+        "id": "sched_doc_1787923357367_643s_day_4",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 4,
+        "buffer_minutes": 5
+      },
+      "created_at": "2026-08-29T10:40:28.43+00:00"
+    },
+    {
+      "id": "audit_1788000028330_vmrqg",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923357367_643s_day_3",
+      "metadata": {
+        "id": "sched_doc_1787923357367_643s_day_3",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 3,
+        "buffer_minutes": 5
+      },
+      "created_at": "2026-08-29T10:40:28.33+00:00"
+    },
+    {
+      "id": "audit_1788000028213_ocyx2",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923357367_643s_day_2",
+      "metadata": {
+        "id": "sched_doc_1787923357367_643s_day_2",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 2,
+        "buffer_minutes": 5
+      },
+      "created_at": "2026-08-29T10:40:28.213+00:00"
+    },
+    {
+      "id": "audit_1788000028113_8y7o6",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923357367_643s_day_1",
+      "metadata": {
+        "id": "sched_doc_1787923357367_643s_day_1",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 1,
+        "buffer_minutes": 5
+      },
+      "created_at": "2026-08-29T10:40:28.113+00:00"
+    },
+    {
+      "id": "audit_1787999713409_7div0",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_staff_1",
+      "metadata": null,
+      "created_at": "2026-08-29T10:35:13.409+00:00"
+    },
+    {
+      "id": "audit_1787999652424_e1btw",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-29T10:34:12.424+00:00"
+    },
+    {
+      "id": "audit_1787999585931_6p27z",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_staff_1",
+      "metadata": null,
+      "created_at": "2026-08-29T10:33:05.931+00:00"
+    },
+    {
+      "id": "audit_1787999352941_hfikf",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "metadata": null,
+      "created_at": "2026-08-29T10:29:12.941+00:00"
     },
     {
       "id": "audit_1787999329028_aelcl",
@@ -1960,119 +2484,6 @@
       "created_at": "2026-08-29T10:28:49.028+00:00"
     },
     {
-      "id": "audit_1787923613191_jgsf1",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "STAFF_PASSWORD_RESET",
-      "target_type": "USER",
-      "target_id": "usr_staff_1787923527385_8sqt",
-      "metadata": {
-        "target_email": "shital@clinic.com"
-      },
-      "created_at": "2026-08-28T13:26:53.191+00:00"
-    },
-    {
-      "id": "audit_1787923483034_bbhwq",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923374362_zpfh_day_2",
-      "metadata": {
-        "id": "sched_doc_1787923374362_zpfh_day_2",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923374362_zpfh",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 2,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-28T13:24:43.034+00:00"
-    },
-    {
-      "id": "audit_1787923307819_b998z",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
-      "target_type": "AI_AGENT",
-      "target_id": "agent_clinic_1787923240249_cqgw",
-      "metadata": {
-        "status": "ACTIVE",
-        "voice_provider": "gemini_live"
-      },
-      "created_at": "2026-08-28T13:21:47.819+00:00"
-    },
-    {
-      "id": "audit_1787922254505_cjbty",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_staff_1",
-      "actor_name": "Sarah Jenkins",
-      "action": "APPOINTMENT_BOOKED_BY_STAFF",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1787922254504_be3h",
-      "metadata": {
-        "date": "2026-08-28",
-        "doctor_id": "doc_elena_1",
-        "patient_id": "pat_miller_1",
-        "start_time": "09:35"
-      },
-      "created_at": "2026-08-28T13:04:14.505+00:00"
-    },
-    {
-      "id": "audit_1787155123318_njt7u",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
-      "target_type": "AI_AGENT",
-      "target_id": "agent_apex_1",
-      "metadata": {
-        "status": "ACTIVE",
-        "voice_provider": "gemini_live"
-      },
-      "created_at": "2026-08-19T15:58:43.318+00:00"
-    },
-    {
-      "id": "audit_1788007707722_djg7h",
-      "clinic_id": "clinic_1788007707640_vkcu",
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "CLINIC_AND_ADMIN_CREATED",
-      "target_type": "CLINIC",
-      "target_id": "clinic_1788007707640_vkcu",
-      "metadata": {
-        "admin_email": "admin@clinic1.com",
-        "clinic_name": "TEST"
-      },
-      "created_at": "2026-08-29T12:48:27.722+00:00"
-    },
-    {
-      "id": "audit_1788000028537_se1fo",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923357367_643s_day_5",
-      "metadata": {
-        "id": "sched_doc_1787923357367_643s_day_5",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923357367_643s",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 5,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-29T10:40:28.537+00:00"
-    },
-    {
       "id": "audit_1787999320161_xd7sl",
       "clinic_id": "clinic_1787923240249_cqgw",
       "actor_user_id": "usr_1787923240250_irur",
@@ -2087,94 +2498,6 @@
       "created_at": "2026-08-29T10:28:40.161+00:00"
     },
     {
-      "id": "audit_1787923603467_9t89g",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_1787923240250_irur",
-      "metadata": null,
-      "created_at": "2026-08-28T13:26:43.467+00:00"
-    },
-    {
-      "id": "audit_1787923482925_kwhpl",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923374362_zpfh_day_1",
-      "metadata": {
-        "id": "sched_doc_1787923374362_zpfh_day_1",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923374362_zpfh",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 1,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-28T13:24:42.925+00:00"
-    },
-    {
-      "id": "audit_1787923290950_mu0wi",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "PASSWORD_CHANGED",
-      "target_type": "USER",
-      "target_id": "usr_1787923240250_irur",
-      "metadata": null,
-      "created_at": "2026-08-28T13:21:30.95+00:00"
-    },
-    {
-      "id": "audit_1787922216677_52xdg",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_staff_1",
-      "actor_name": "Sarah Jenkins",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_staff_1",
-      "metadata": null,
-      "created_at": "2026-08-28T13:03:36.677+00:00"
-    },
-    {
-      "id": "audit_1787154638934_e5f1x",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "APPOINTMENT_STATUS_COMPLETED",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_seed_2",
-      "metadata": {
-        "status": "COMPLETED"
-      },
-      "created_at": "2026-08-19T15:50:38.934+00:00"
-    },
-    {
-      "id": "audit_1788000028430_jplp7",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923357367_643s_day_4",
-      "metadata": {
-        "id": "sched_doc_1787923357367_643s_day_4",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923357367_643s",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 4,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-29T10:40:28.43+00:00"
-    },
-    {
       "id": "audit_1787999284844_p61ys",
       "clinic_id": "clinic_1787923240249_cqgw",
       "actor_user_id": "usr_1787923240250_irur",
@@ -2184,6 +2507,113 @@
       "target_id": "usr_1787923240250_irur",
       "metadata": null,
       "created_at": "2026-08-29T10:28:04.844+00:00"
+    },
+    {
+      "id": "audit_1787999263512_2hsul",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_staff_1787923527385_8sqt",
+      "actor_name": "Shital",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "metadata": null,
+      "created_at": "2026-08-29T10:27:43.512+00:00"
+    },
+    {
+      "id": "audit_1787999211450_btufl",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-29T10:26:51.45+00:00"
+    },
+    {
+      "id": "audit_1787924526620_41lwf",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_apex_1",
+      "metadata": {
+        "status": "ACTIVE",
+        "voice_provider": "gemini_live"
+      },
+      "created_at": "2026-08-28T13:42:06.62+00:00"
+    },
+    {
+      "id": "audit_1787923891916_lzg5d",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_clinic_1787923240249_cqgw",
+      "metadata": {
+        "status": "ACTIVE",
+        "voice_provider": "gemini_live"
+      },
+      "created_at": "2026-08-28T13:31:31.916+00:00"
+    },
+    {
+      "id": "audit_1787923861629_972mu",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "metadata": null,
+      "created_at": "2026-08-28T13:31:01.629+00:00"
+    },
+    {
+      "id": "audit_1787923637722_d8tpg",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_staff_1787923527385_8sqt",
+      "actor_name": "Shital",
+      "action": "PASSWORD_CHANGED",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "metadata": null,
+      "created_at": "2026-08-28T13:27:17.722+00:00"
+    },
+    {
+      "id": "audit_1787923629240_me1c2",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_staff_1787923527385_8sqt",
+      "actor_name": "Shital",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "metadata": null,
+      "created_at": "2026-08-28T13:27:09.24+00:00"
+    },
+    {
+      "id": "audit_1787923613191_jgsf1",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "STAFF_PASSWORD_RESET",
+      "target_type": "USER",
+      "target_id": "usr_staff_1787923527385_8sqt",
+      "metadata": {
+        "target_email": "shital@clinic.com"
+      },
+      "created_at": "2026-08-28T13:26:53.191+00:00"
+    },
+    {
+      "id": "audit_1787923603467_9t89g",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "metadata": null,
+      "created_at": "2026-08-28T13:26:43.467+00:00"
     },
     {
       "id": "audit_1787923566084_l3nf6",
@@ -2208,91 +2638,6 @@
       "created_at": "2026-08-28T13:26:06.084+00:00"
     },
     {
-      "id": "audit_1787923474886_n11pe",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "DOCTOR_LEAVE_LOGGED",
-      "target_type": "LEAVE",
-      "target_id": "leave_1787923474885_gupz",
-      "metadata": {
-        "id": "leave_1787923474885_gupz",
-        "reason": "Medical Conference / Scheduled Leave",
-        "end_date": "2026-09-04",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923374362_zpfh",
-        "start_date": "2026-09-04"
-      },
-      "created_at": "2026-08-28T13:24:34.886+00:00"
-    },
-    {
-      "id": "audit_1787923280650_1wi07",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_1787923240250_irur",
-      "metadata": null,
-      "created_at": "2026-08-28T13:21:20.65+00:00"
-    },
-    {
-      "id": "audit_1787918181489_hiczo",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_staff_1",
-      "actor_name": "Sarah Jenkins",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_staff_1",
-      "metadata": null,
-      "created_at": "2026-08-28T11:56:21.489+00:00"
-    },
-    {
-      "id": "audit_1787154637796_4nsez",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "APPOINTMENT_STATUS_COMPLETED",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_seed_1",
-      "metadata": {
-        "status": "COMPLETED"
-      },
-      "created_at": "2026-08-19T15:50:37.796+00:00"
-    },
-    {
-      "id": "audit_1788000028330_vmrqg",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923357367_643s_day_3",
-      "metadata": {
-        "id": "sched_doc_1787923357367_643s_day_3",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923357367_643s",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 3,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-29T10:40:28.33+00:00"
-    },
-    {
-      "id": "audit_1787999263512_2hsul",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_staff_1787923527385_8sqt",
-      "actor_name": "Shital",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_staff_1787923527385_8sqt",
-      "metadata": null,
-      "created_at": "2026-08-29T10:27:43.512+00:00"
-    },
-    {
       "id": "audit_1787923527433_axqzr",
       "clinic_id": "clinic_1787923240249_cqgw",
       "actor_user_id": "usr_1787923240250_irur",
@@ -2305,98 +2650,6 @@
         "email": "shital@clinic.com"
       },
       "created_at": "2026-08-28T13:25:27.433+00:00"
-    },
-    {
-      "id": "audit_1787923454431_1supt",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "DOCTOR_LEAVE_LOGGED",
-      "target_type": "LEAVE",
-      "target_id": "leave_1787923454430_kzg0",
-      "metadata": {
-        "id": "leave_1787923454430_kzg0",
-        "reason": "Medical Conference / Scheduled Leave",
-        "end_date": "2026-08-28",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923357367_643s",
-        "start_date": "2026-08-31"
-      },
-      "created_at": "2026-08-28T13:24:14.431+00:00"
-    },
-    {
-      "id": "audit_1787923258850_0od9t",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_AI_CONFIG_UPDATED",
-      "target_type": "AI_CONFIG",
-      "target_id": null,
-      "metadata": {
-        "apiKeyChanged": false
-      },
-      "created_at": "2026-08-28T13:20:58.85+00:00"
-    },
-    {
-      "id": "audit_1787918177000_9jmsk",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-28T11:56:17+00:00"
-    },
-    {
-      "id": "audit_1787154085349_t2jbs",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "DOCTOR_UPDATED",
-      "target_type": "DOCTOR",
-      "target_id": "doc_priya_3",
-      "metadata": {
-        "name": "Dr. Priya Sharma",
-        "email": "priya.sharma@apexclinic.com",
-        "phone": "+1-555-019-2103",
-        "qualification": "MBBS, DCH - Stanford Health",
-        "specialization": "Pediatrics & Family Medicine",
-        "consultation_duration_minutes": 15
-      },
-      "created_at": "2026-08-19T15:41:25.349+00:00"
-    },
-    {
-      "id": "audit_1788000028213_ocyx2",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923357367_643s_day_2",
-      "metadata": {
-        "id": "sched_doc_1787923357367_643s_day_2",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923357367_643s",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 2,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-29T10:40:28.213+00:00"
-    },
-    {
-      "id": "audit_1787999211450_btufl",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-29T10:26:51.45+00:00"
     },
     {
       "id": "audit_1787923483593_hu29e",
@@ -2413,102 +2666,6 @@
       "created_at": "2026-08-28T13:24:43.593+00:00"
     },
     {
-      "id": "audit_1787923443876_k64v1",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "DOCTOR_LEAVE_LOGGED",
-      "target_type": "LEAVE",
-      "target_id": "leave_1787923443875_yekg",
-      "metadata": {
-        "id": "leave_1787923443875_yekg",
-        "reason": "Medical Conference / Scheduled Leave",
-        "end_date": "2026-08-28",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923357367_643s",
-        "start_date": "2026-08-28"
-      },
-      "created_at": "2026-08-28T13:24:03.876+00:00"
-    },
-    {
-      "id": "audit_1787923240302_h5yim",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "CLINIC_AND_ADMIN_CREATED",
-      "target_type": "CLINIC",
-      "target_id": "clinic_1787923240249_cqgw",
-      "metadata": {
-        "admin_email": "admin@clinic.com",
-        "clinic_name": "Sanjeevani Multispeciality Clinic"
-      },
-      "created_at": "2026-08-28T13:20:40.302+00:00"
-    },
-    {
-      "id": "audit_1787918063409_uubtk",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_doc_elena_1",
-      "actor_name": "Dr. Elena Vance",
-      "action": "PASSWORD_CHANGED",
-      "target_type": "USER",
-      "target_id": "usr_doc_elena_1",
-      "metadata": null,
-      "created_at": "2026-08-28T11:54:23.409+00:00"
-    },
-    {
-      "id": "audit_1787154079963_pzn9o",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "DOCTOR_UPDATED",
-      "target_type": "DOCTOR",
-      "target_id": "doc_marcus_2",
-      "metadata": {
-        "name": "Dr. Marcus Chen",
-        "email": "marcus.chen@apexclinic.com",
-        "phone": "+1-555-019-2102",
-        "qualification": "MD - Johns Hopkins",
-        "specialization": "Internal Medicine & Preventative Care",
-        "consultation_duration_minutes": 15
-      },
-      "created_at": "2026-08-19T15:41:19.963+00:00"
-    },
-    {
-      "id": "audit_1788000028113_8y7o6",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923357367_643s_day_1",
-      "metadata": {
-        "id": "sched_doc_1787923357367_643s_day_1",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923357367_643s",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 1,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-29T10:40:28.113+00:00"
-    },
-    {
-      "id": "audit_1787924526620_41lwf",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
-      "target_type": "AI_AGENT",
-      "target_id": "agent_apex_1",
-      "metadata": {
-        "status": "ACTIVE",
-        "voice_provider": "gemini_live"
-      },
-      "created_at": "2026-08-28T13:42:06.62+00:00"
-    },
-    {
       "id": "audit_1787923483477_ankzy",
       "clinic_id": "clinic_1787923240249_cqgw",
       "actor_user_id": "usr_1787923240250_irur",
@@ -2521,88 +2678,6 @@
         "day_of_week": 6
       },
       "created_at": "2026-08-28T13:24:43.477+00:00"
-    },
-    {
-      "id": "audit_1787923410533_bzrdq",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SERVICE_CREATED",
-      "target_type": "SERVICE",
-      "target_id": "srv_1787923410532_a25x",
-      "metadata": {
-        "fee": 500,
-        "name": "Pediatric Consultation"
-      },
-      "created_at": "2026-08-28T13:23:30.533+00:00"
-    },
-    {
-      "id": "audit_1787923144332_3mxvs",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "CLINIC_UPDATED_BY_PLATFORM_ADMIN",
-      "target_type": "CLINIC",
-      "target_id": "clinic_apex_101",
-      "metadata": {
-        "currency": "INR",
-        "currency_symbol": "₹"
-      },
-      "created_at": "2026-08-28T13:19:04.332+00:00"
-    },
-    {
-      "id": "audit_1787918039936_0cvnn",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_doc_elena_1",
-      "actor_name": "Dr. Elena Vance",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_doc_elena_1",
-      "metadata": null,
-      "created_at": "2026-08-28T11:53:59.936+00:00"
-    },
-    {
-      "id": "audit_1787154075372_a7p6r",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "DOCTOR_UPDATED",
-      "target_type": "DOCTOR",
-      "target_id": "doc_elena_1",
-      "metadata": {
-        "name": "Dr. Elena Vance",
-        "email": "elena.vance@apexclinic.com",
-        "phone": "+1-555-019-2101",
-        "qualification": "MD, FACC - Harvard Medical",
-        "specialization": "Cardiology & Heart Health",
-        "consultation_duration_minutes": 15
-      },
-      "created_at": "2026-08-19T15:41:15.372+00:00"
-    },
-    {
-      "id": "audit_1787999713409_7div0",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_staff_1",
-      "actor_name": "Sarah Jenkins",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_staff_1",
-      "metadata": null,
-      "created_at": "2026-08-29T10:35:13.409+00:00"
-    },
-    {
-      "id": "audit_1787923891916_lzg5d",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
-      "target_type": "AI_AGENT",
-      "target_id": "agent_clinic_1787923240249_cqgw",
-      "metadata": {
-        "status": "ACTIVE",
-        "voice_provider": "gemini_live"
-      },
-      "created_at": "2026-08-28T13:31:31.916+00:00"
     },
     {
       "id": "audit_1787923483369_df1pe",
@@ -2626,610 +2701,6 @@
       "created_at": "2026-08-28T13:24:43.369+00:00"
     },
     {
-      "id": "audit_1787923400600_0ba0m",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SERVICE_CREATED",
-      "target_type": "SERVICE",
-      "target_id": "srv_1787923400599_qce0",
-      "metadata": {
-        "fee": 900,
-        "name": "Comprehensive Cardiac Evaluation"
-      },
-      "created_at": "2026-08-28T13:23:20.6+00:00"
-    },
-    {
-      "id": "audit_1787923115657_z6rz0",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_AI_CONFIG_UPDATED",
-      "target_type": "AI_CONFIG",
-      "target_id": null,
-      "metadata": {
-        "apiKeyChanged": false
-      },
-      "created_at": "2026-08-28T13:18:35.657+00:00"
-    },
-    {
-      "id": "audit_1787157045859_6er82",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-19T16:30:45.859+00:00"
-    },
-    {
-      "id": "audit_1787153418572_wyh53",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-19T15:30:18.572+00:00"
-    },
-    {
-      "id": "audit_1787999652424_e1btw",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-29T10:34:12.424+00:00"
-    },
-    {
-      "id": "audit_1787923861629_972mu",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_1787923240250_irur",
-      "metadata": null,
-      "created_at": "2026-08-28T13:31:01.629+00:00"
-    },
-    {
-      "id": "audit_1787155395215_x7tjy",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-19T16:03:15.215+00:00"
-    },
-    {
-      "id": "audit_1787923389643_162cf",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SERVICE_CREATED",
-      "target_type": "SERVICE",
-      "target_id": "srv_1787923389642_o9t1",
-      "metadata": {
-        "fee": 400,
-        "name": "General Consultation"
-      },
-      "created_at": "2026-08-28T13:23:09.643+00:00"
-    },
-    {
-      "id": "audit_1787922984587_26epv",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-28T13:16:24.587+00:00"
-    },
-    {
-      "id": "audit_1787156743753_mz7bq",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-19T16:25:43.753+00:00"
-    },
-    {
-      "id": "audit_init_1",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_1",
-      "actor_name": "System Owner",
-      "action": "PLATFORM_INITIALIZED",
-      "target_type": "SYSTEM",
-      "target_id": null,
-      "metadata": {
-        "version": "1.0.0"
-      },
-      "created_at": "2026-08-19T14:29:15.848+00:00"
-    },
-    {
-      "id": "audit_1788104324826_hqz21",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-30T15:38:44.826+00:00"
-    },
-    {
-      "id": "audit_1788104554795_qaxst",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788104554794_0b5j",
-      "metadata": {
-        "date": "2026-08-31",
-        "start_time": "09:00",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Test",
-        "service_name": "General Health Consultation"
-      },
-      "created_at": "2026-08-30T15:42:34.795+00:00"
-    },
-    {
-      "id": "audit_1788104739679_60339",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788104739676_t59u",
-      "metadata": {
-        "date": "2026-08-31",
-        "start_time": "14:00",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Second",
-        "service_name": "General Health Consultation"
-      },
-      "created_at": "2026-08-30T15:45:39.679+00:00"
-    },
-    {
-      "id": "audit_1788105314010_1s2kc",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_CANCELLED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788104739676_t59u",
-      "metadata": {
-        "date": "2026-08-31",
-        "reason": "Cancelled via Sarvam AI Receptionist",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Second"
-      },
-      "created_at": "2026-08-30T15:55:14.01+00:00"
-    },
-    {
-      "id": "audit_1788105394205_qj26o",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_CANCELLED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788105339942_gebe",
-      "metadata": {
-        "date": "2026-08-31",
-        "reason": "Cancelled via Sarvam AI Receptionist",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Second"
-      },
-      "created_at": "2026-08-30T15:56:34.205+00:00"
-    },
-    {
-      "id": "audit_1788105567472_zih0w",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-30T15:59:27.472+00:00"
-    },
-    {
-      "id": "audit_1788105339943_g60tr",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788105339942_gebe",
-      "metadata": {
-        "date": "2026-08-31",
-        "start_time": "10:15",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Second",
-        "service_name": "General Health Consultation"
-      },
-      "created_at": "2026-08-30T15:55:39.943+00:00"
-    },
-    {
-      "id": "audit_1788260179311_lg0z6",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788260179308_ofud",
-      "metadata": {
-        "date": "2026-09-07",
-        "start_time": "09:25",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Second",
-        "service_name": "General Health Consultation"
-      },
-      "created_at": "2026-09-01T10:56:19.311+00:00"
-    },
-    {
-      "id": "audit_1788105657738_3k7tr",
-      "clinic_id": "clinic_1788105657689_d85c",
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "CLINIC_AND_ADMIN_CREATED",
-      "target_type": "CLINIC",
-      "target_id": "clinic_1788105657689_d85c",
-      "metadata": {
-        "admin_email": "admin@clinic3.com",
-        "clinic_name": "Metro Clinic"
-      },
-      "created_at": "2026-08-30T16:00:57.738+00:00"
-    },
-    {
-      "id": "audit_1788260179333_6p9qw",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_RESCHEDULED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788260179308_ofud",
-      "metadata": {
-        "new_date": "2026-09-07",
-        "new_time": "10:15",
-        "old_date": "2026-09-07",
-        "old_time": "09:25"
-      },
-      "created_at": "2026-09-01T10:56:19.333+00:00"
-    },
-    {
-      "id": "audit_1788260225618_9t8h7",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788260225616_h26g",
-      "metadata": {
-        "date": "2026-09-07",
-        "start_time": "09:25",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Second",
-        "service_name": "General Health Consultation"
-      },
-      "created_at": "2026-09-01T10:57:05.618+00:00"
-    },
-    {
-      "id": "audit_1788260255014_14422",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_RESCHEDULED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788260179308_ofud",
-      "metadata": {
-        "new_date": "2026-09-07",
-        "new_time": "10:40",
-        "old_date": "2026-09-07",
-        "old_time": "10:15"
-      },
-      "created_at": "2026-09-01T10:57:35.014+00:00"
-    },
-    {
-      "id": "audit_1788263237765_vst06",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-09-01T11:47:17.765+00:00"
-    },
-    {
-      "id": "audit_1787999585931_6p27z",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_staff_1",
-      "actor_name": "Sarah Jenkins",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_staff_1",
-      "metadata": null,
-      "created_at": "2026-08-29T10:33:05.931+00:00"
-    },
-    {
-      "id": "audit_1787923637722_d8tpg",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_staff_1787923527385_8sqt",
-      "actor_name": "Shital",
-      "action": "PASSWORD_CHANGED",
-      "target_type": "USER",
-      "target_id": "usr_staff_1787923527385_8sqt",
-      "metadata": null,
-      "created_at": "2026-08-28T13:27:17.722+00:00"
-    },
-    {
-      "id": "audit_1787923374366_diaeo",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "DOCTOR_CREATED",
-      "target_type": "DOCTOR",
-      "target_id": "doc_1787923374362_zpfh",
-      "metadata": {
-        "name": "Dr. Meera Joshi",
-        "specialization": "Cardiologist"
-      },
-      "created_at": "2026-08-28T13:22:54.366+00:00"
-    },
-    {
-      "id": "audit_1787922290299_c4jvp",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-28T13:04:50.299+00:00"
-    },
-    {
-      "id": "audit_1787156732385_dfomq",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-19T16:25:32.385+00:00"
-    },
-    {
-      "id": "audit_clinic_1",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_platform_admin_1",
-      "actor_name": "System Owner",
-      "action": "CLINIC_CREATED",
-      "target_type": "CLINIC",
-      "target_id": "clinic_apex_101",
-      "metadata": {
-        "clinic_name": "Apex Cardiology & Family Medicine"
-      },
-      "created_at": "2026-08-19T14:29:15.848+00:00"
-    },
-    {
-      "id": "audit_1788007727628_yvmec",
-      "clinic_id": "clinic_1788007707640_vkcu",
-      "actor_user_id": "usr_1788007707648_bxkn",
-      "actor_name": "Dr. Pramod Jawanjal",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_1788007707648_bxkn",
-      "metadata": null,
-      "created_at": "2026-08-29T12:48:47.628+00:00"
-    },
-    {
-      "id": "audit_1788007745693_ghbq2",
-      "clinic_id": "clinic_1788007707640_vkcu",
-      "actor_user_id": "usr_1788007707648_bxkn",
-      "actor_name": "Dr. Pramod Jawanjal",
-      "action": "PASSWORD_CHANGED",
-      "target_type": "USER",
-      "target_id": "usr_1788007707648_bxkn",
-      "metadata": null,
-      "created_at": "2026-08-29T12:49:05.693+00:00"
-    },
-    {
-      "id": "audit_1788010126665_74koo",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-29T13:28:46.665+00:00"
-    },
-    {
-      "id": "audit_1788010466560_bob8e",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-29T13:34:26.56+00:00"
-    },
-    {
-      "id": "audit_1788010644906_miesr",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-29T13:37:24.906+00:00"
-    },
-    {
-      "id": "audit_1788089161955_ycf3z",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_1787923240250_irur",
-      "metadata": null,
-      "created_at": "2026-08-30T11:26:01.955+00:00"
-    },
-    {
-      "id": "audit_1788098012208_1o5c3",
-      "clinic_id": null,
-      "actor_user_id": "usr_platform_admin_2",
-      "actor_name": "Platform Administrator",
-      "action": "PLATFORM_ADMIN_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_platform_admin_2",
-      "metadata": null,
-      "created_at": "2026-08-30T13:53:32.208+00:00"
-    },
-    {
-      "id": "audit_1788098819642_r1dsi",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-30T14:06:59.642+00:00"
-    },
-    {
-      "id": "audit_1788099816643_5habi",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_1",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_apex_admin_1",
-      "metadata": null,
-      "created_at": "2026-08-30T14:23:36.643+00:00"
-    },
-    {
-      "id": "audit_1788103614796_919a1",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_1787923240250_irur",
-      "metadata": null,
-      "created_at": "2026-08-30T15:26:54.796+00:00"
-    },
-    {
-      "id": "audit_1788103679033_2s6bs",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "usr_apex_admin_legacy",
-      "actor_name": "Dr. Arthur Pendelton",
-      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
-      "target_type": "AI_AGENT",
-      "target_id": "agent_apex_1",
-      "metadata": {
-        "status": "ACTIVE",
-        "voice_provider": "gemini_live"
-      },
-      "created_at": "2026-08-30T15:27:59.033+00:00"
-    },
-    {
-      "id": "audit_1788105339930_0ial6",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788105339929_b3ys",
-      "metadata": {
-        "date": "2026-08-31",
-        "start_time": "09:25",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Second",
-        "service_name": "General Health Consultation"
-      },
-      "created_at": "2026-08-30T15:55:39.93+00:00"
-    },
-    {
-      "id": "audit_1788105394184_k1kkv",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_CANCELLED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788105339929_b3ys",
-      "metadata": {
-        "date": "2026-08-31",
-        "reason": "Cancelled via Sarvam AI Receptionist",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Rahul Second"
-      },
-      "created_at": "2026-08-30T15:56:34.184+00:00"
-    },
-    {
-      "id": "audit_1788003208881_bp3bc",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_staff_1787999320112_kwtx",
-      "actor_name": "Mona",
-      "action": "CLINIC_USER_LOGIN",
-      "target_type": "USER",
-      "target_id": "usr_staff_1787999320112_kwtx",
-      "metadata": null,
-      "created_at": "2026-08-29T11:33:28.881+00:00"
-    },
-    {
-      "id": "audit_1788000093257_qvc8o",
-      "clinic_id": "clinic_1787923240249_cqgw",
-      "actor_user_id": "usr_1787923240250_irur",
-      "actor_name": "Dr. Ujwala Maske",
-      "action": "SCHEDULE_UPDATED",
-      "target_type": "SCHEDULE",
-      "target_id": "sched_doc_1787923374362_zpfh_day_6",
-      "metadata": {
-        "id": "sched_doc_1787923374362_zpfh_day_6",
-        "end_time": "17:00",
-        "break_end": "14:00",
-        "clinic_id": "clinic_1787923240249_cqgw",
-        "doctor_id": "doc_1787923374362_zpfh",
-        "start_time": "09:00",
-        "break_start": "13:00",
-        "day_of_week": 6,
-        "buffer_minutes": 5
-      },
-      "created_at": "2026-08-29T10:41:33.257+00:00"
-    },
-    {
-      "id": "audit_1788272228559_oa23r",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788272227972_yl2v",
-      "metadata": {
-        "date": "2088-06-20",
-        "start_time": "10:30",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Jonathan Miller",
-        "service_name": "Comprehensive Cardiac Evaluation"
-      },
-      "created_at": "2026-09-01T14:17:08.559+00:00"
-    },
-    {
       "id": "audit_1787923483248_bv49u",
       "clinic_id": "clinic_1787923240249_cqgw",
       "actor_user_id": "usr_1787923240250_irur",
@@ -3251,41 +2722,284 @@
       "created_at": "2026-08-28T13:24:43.248+00:00"
     },
     {
-      "id": "audit_1788266237781_df6sz",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788266237541_ndiy",
+      "id": "audit_1787923483143_ktxr2",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_3",
       "metadata": {
-        "date": "2088-05-15",
-        "start_time": "10:00",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Jonathan Miller",
-        "service_name": "Comprehensive Cardiac Evaluation"
+        "id": "sched_doc_1787923374362_zpfh_day_3",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 3,
+        "buffer_minutes": 5
       },
-      "created_at": "2026-09-01T12:37:17.781+00:00"
+      "created_at": "2026-08-28T13:24:43.143+00:00"
     },
     {
-      "id": "audit_1788269356461_pt67t",
-      "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
-      "target_type": "APPOINTMENT",
-      "target_id": "apt_1788269356211_5ixv",
+      "id": "audit_1787923483034_bbhwq",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_2",
       "metadata": {
-        "date": "2088-06-20",
-        "start_time": "10:00",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Jonathan Miller",
-        "service_name": "Comprehensive Cardiac Evaluation"
+        "id": "sched_doc_1787923374362_zpfh_day_2",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 2,
+        "buffer_minutes": 5
       },
-      "created_at": "2026-09-01T13:29:16.461+00:00"
+      "created_at": "2026-08-28T13:24:43.034+00:00"
     },
     {
-      "id": "audit_1788270243469_cz50k",
+      "id": "audit_1787923482925_kwhpl",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SCHEDULE_UPDATED",
+      "target_type": "SCHEDULE",
+      "target_id": "sched_doc_1787923374362_zpfh_day_1",
+      "metadata": {
+        "id": "sched_doc_1787923374362_zpfh_day_1",
+        "end_time": "17:00",
+        "break_end": "14:00",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "start_time": "09:00",
+        "break_start": "13:00",
+        "day_of_week": 1,
+        "buffer_minutes": 5
+      },
+      "created_at": "2026-08-28T13:24:42.925+00:00"
+    },
+    {
+      "id": "audit_1787923474886_n11pe",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_LEAVE_LOGGED",
+      "target_type": "LEAVE",
+      "target_id": "leave_1787923474885_gupz",
+      "metadata": {
+        "id": "leave_1787923474885_gupz",
+        "reason": "Medical Conference / Scheduled Leave",
+        "end_date": "2026-09-04",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923374362_zpfh",
+        "start_date": "2026-09-04"
+      },
+      "created_at": "2026-08-28T13:24:34.886+00:00"
+    },
+    {
+      "id": "audit_1787923454431_1supt",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_LEAVE_LOGGED",
+      "target_type": "LEAVE",
+      "target_id": "leave_1787923454430_kzg0",
+      "metadata": {
+        "id": "leave_1787923454430_kzg0",
+        "reason": "Medical Conference / Scheduled Leave",
+        "end_date": "2026-08-28",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_date": "2026-08-31"
+      },
+      "created_at": "2026-08-28T13:24:14.431+00:00"
+    },
+    {
+      "id": "audit_1787923443876_k64v1",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_LEAVE_LOGGED",
+      "target_type": "LEAVE",
+      "target_id": "leave_1787923443875_yekg",
+      "metadata": {
+        "id": "leave_1787923443875_yekg",
+        "reason": "Medical Conference / Scheduled Leave",
+        "end_date": "2026-08-28",
+        "clinic_id": "clinic_1787923240249_cqgw",
+        "doctor_id": "doc_1787923357367_643s",
+        "start_date": "2026-08-28"
+      },
+      "created_at": "2026-08-28T13:24:03.876+00:00"
+    },
+    {
+      "id": "audit_1787923410533_bzrdq",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SERVICE_CREATED",
+      "target_type": "SERVICE",
+      "target_id": "srv_1787923410532_a25x",
+      "metadata": {
+        "fee": 500,
+        "name": "Pediatric Consultation"
+      },
+      "created_at": "2026-08-28T13:23:30.533+00:00"
+    },
+    {
+      "id": "audit_1787923400600_0ba0m",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SERVICE_CREATED",
+      "target_type": "SERVICE",
+      "target_id": "srv_1787923400599_qce0",
+      "metadata": {
+        "fee": 900,
+        "name": "Comprehensive Cardiac Evaluation"
+      },
+      "created_at": "2026-08-28T13:23:20.6+00:00"
+    },
+    {
+      "id": "audit_1787923389643_162cf",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "SERVICE_CREATED",
+      "target_type": "SERVICE",
+      "target_id": "srv_1787923389642_o9t1",
+      "metadata": {
+        "fee": 400,
+        "name": "General Consultation"
+      },
+      "created_at": "2026-08-28T13:23:09.643+00:00"
+    },
+    {
+      "id": "audit_1787923374366_diaeo",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_CREATED",
+      "target_type": "DOCTOR",
+      "target_id": "doc_1787923374362_zpfh",
+      "metadata": {
+        "name": "Dr. Meera Joshi",
+        "specialization": "Cardiologist"
+      },
+      "created_at": "2026-08-28T13:22:54.366+00:00"
+    },
+    {
+      "id": "audit_1787923357371_n4mkg",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "DOCTOR_CREATED",
+      "target_type": "DOCTOR",
+      "target_id": "doc_1787923357367_643s",
+      "metadata": {
+        "name": "Dr. Raj Patel",
+        "specialization": "Pediatrician"
+      },
+      "created_at": "2026-08-28T13:22:37.371+00:00"
+    },
+    {
+      "id": "audit_1787923307819_b998z",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_clinic_1787923240249_cqgw",
+      "metadata": {
+        "status": "ACTIVE",
+        "voice_provider": "gemini_live"
+      },
+      "created_at": "2026-08-28T13:21:47.819+00:00"
+    },
+    {
+      "id": "audit_1787923290950_mu0wi",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "PASSWORD_CHANGED",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "metadata": null,
+      "created_at": "2026-08-28T13:21:30.95+00:00"
+    },
+    {
+      "id": "audit_1787923280650_1wi07",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_1787923240250_irur",
+      "actor_name": "Dr. Ujwala Maske",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_1787923240250_irur",
+      "metadata": null,
+      "created_at": "2026-08-28T13:21:20.65+00:00"
+    },
+    {
+      "id": "audit_1787923258850_0od9t",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_AI_CONFIG_UPDATED",
+      "target_type": "AI_CONFIG",
+      "target_id": null,
+      "metadata": {
+        "apiKeyChanged": false
+      },
+      "created_at": "2026-08-28T13:20:58.85+00:00"
+    },
+    {
+      "id": "audit_1787923240302_h5yim",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "CLINIC_AND_ADMIN_CREATED",
+      "target_type": "CLINIC",
+      "target_id": "clinic_1787923240249_cqgw",
+      "metadata": {
+        "admin_email": "admin@clinic.com",
+        "clinic_name": "Sanjeevani Multispeciality Clinic"
+      },
+      "created_at": "2026-08-28T13:20:40.302+00:00"
+    },
+    {
+      "id": "audit_1787923144332_3mxvs",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "CLINIC_UPDATED_BY_PLATFORM_ADMIN",
+      "target_type": "CLINIC",
+      "target_id": "clinic_apex_101",
+      "metadata": {
+        "currency": "INR",
+        "currency_symbol": "₹"
+      },
+      "created_at": "2026-08-28T13:19:04.332+00:00"
+    },
+    {
+      "id": "audit_1787923115657_z6rz0",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_AI_CONFIG_UPDATED",
+      "target_type": "AI_CONFIG",
+      "target_id": null,
+      "metadata": {
+        "apiKeyChanged": false
+      },
+      "created_at": "2026-08-28T13:18:35.657+00:00"
+    },
+    {
+      "id": "audit_1787922984587_26epv",
       "clinic_id": null,
       "actor_user_id": "usr_platform_admin_2",
       "actor_name": "Platform Administrator",
@@ -3293,24 +3007,356 @@
       "target_type": "USER",
       "target_id": "usr_platform_admin_2",
       "metadata": null,
-      "created_at": "2026-09-01T13:44:03.469+00:00"
+      "created_at": "2026-08-28T13:16:24.587+00:00"
     },
     {
-      "id": "audit_1788271323979_e63c3",
+      "id": "audit_1787922290299_c4jvp",
       "clinic_id": "clinic_apex_101",
-      "actor_user_id": "ai_receptionist",
-      "actor_name": "AI Receptionist",
-      "action": "APPOINTMENT_BOOKED_BY_AI",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-28T13:04:50.299+00:00"
+    },
+    {
+      "id": "audit_1787922259335_20bmx",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "APPOINTMENT_STATUS_COMPLETED",
       "target_type": "APPOINTMENT",
-      "target_id": "apt_1788271323707_nsee",
+      "target_id": "apt_1787922254504_be3h",
       "metadata": {
-        "date": "2088-06-20",
-        "start_time": "10:00",
-        "doctor_name": "Dr. Elena Vance",
-        "patient_name": "Jonathan Miller",
-        "service_name": "Comprehensive Cardiac Evaluation"
+        "status": "COMPLETED"
       },
-      "created_at": "2026-09-01T14:02:03.979+00:00"
+      "created_at": "2026-08-28T13:04:19.335+00:00"
+    },
+    {
+      "id": "audit_1787922254505_cjbty",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "APPOINTMENT_BOOKED_BY_STAFF",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_1787922254504_be3h",
+      "metadata": {
+        "date": "2026-08-28",
+        "doctor_id": "doc_elena_1",
+        "patient_id": "pat_miller_1",
+        "start_time": "09:35"
+      },
+      "created_at": "2026-08-28T13:04:14.505+00:00"
+    },
+    {
+      "id": "audit_1787922216677_52xdg",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_staff_1",
+      "metadata": null,
+      "created_at": "2026-08-28T13:03:36.677+00:00"
+    },
+    {
+      "id": "audit_1787918181489_hiczo",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_staff_1",
+      "metadata": null,
+      "created_at": "2026-08-28T11:56:21.489+00:00"
+    },
+    {
+      "id": "audit_1787918177000_9jmsk",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-28T11:56:17+00:00"
+    },
+    {
+      "id": "audit_1787918063409_uubtk",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_doc_elena_1",
+      "actor_name": "Dr. Elena Vance",
+      "action": "PASSWORD_CHANGED",
+      "target_type": "USER",
+      "target_id": "usr_doc_elena_1",
+      "metadata": null,
+      "created_at": "2026-08-28T11:54:23.409+00:00"
+    },
+    {
+      "id": "audit_1787918039936_0cvnn",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_doc_elena_1",
+      "actor_name": "Dr. Elena Vance",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_doc_elena_1",
+      "metadata": null,
+      "created_at": "2026-08-28T11:53:59.936+00:00"
+    },
+    {
+      "id": "audit_1787157045859_6er82",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-19T16:30:45.859+00:00"
+    },
+    {
+      "id": "audit_1787156743753_mz7bq",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-19T16:25:43.753+00:00"
+    },
+    {
+      "id": "audit_1787156732385_dfomq",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-19T16:25:32.385+00:00"
+    },
+    {
+      "id": "audit_1787156723237_zwbiv",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "metadata": null,
+      "created_at": "2026-08-19T16:25:23.237+00:00"
+    },
+    {
+      "id": "audit_1787156702488_7g516",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-19T16:25:02.488+00:00"
+    },
+    {
+      "id": "audit_1787156495689_zzdqc",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_staff_1",
+      "actor_name": "Sarah Jenkins",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_staff_1",
+      "metadata": null,
+      "created_at": "2026-08-19T16:21:35.689+00:00"
+    },
+    {
+      "id": "audit_1787155395215_x7tjy",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-19T16:03:15.215+00:00"
+    },
+    {
+      "id": "audit_1787155123318_njt7u",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_apex_1",
+      "metadata": {
+        "status": "ACTIVE",
+        "voice_provider": "gemini_live"
+      },
+      "created_at": "2026-08-19T15:58:43.318+00:00"
+    },
+    {
+      "id": "audit_1787154638934_e5f1x",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "APPOINTMENT_STATUS_COMPLETED",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_seed_2",
+      "metadata": {
+        "status": "COMPLETED"
+      },
+      "created_at": "2026-08-19T15:50:38.934+00:00"
+    },
+    {
+      "id": "audit_1787154637796_4nsez",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "APPOINTMENT_STATUS_COMPLETED",
+      "target_type": "APPOINTMENT",
+      "target_id": "apt_seed_1",
+      "metadata": {
+        "status": "COMPLETED"
+      },
+      "created_at": "2026-08-19T15:50:37.796+00:00"
+    },
+    {
+      "id": "audit_1787154085349_t2jbs",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "DOCTOR_UPDATED",
+      "target_type": "DOCTOR",
+      "target_id": "doc_priya_3",
+      "metadata": {
+        "name": "Dr. Priya Sharma",
+        "email": "priya.sharma@apexclinic.com",
+        "phone": "+1-555-019-2103",
+        "qualification": "MBBS, DCH - Stanford Health",
+        "specialization": "Pediatrics & Family Medicine",
+        "consultation_duration_minutes": 15
+      },
+      "created_at": "2026-08-19T15:41:25.349+00:00"
+    },
+    {
+      "id": "audit_1787154079963_pzn9o",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "DOCTOR_UPDATED",
+      "target_type": "DOCTOR",
+      "target_id": "doc_marcus_2",
+      "metadata": {
+        "name": "Dr. Marcus Chen",
+        "email": "marcus.chen@apexclinic.com",
+        "phone": "+1-555-019-2102",
+        "qualification": "MD - Johns Hopkins",
+        "specialization": "Internal Medicine & Preventative Care",
+        "consultation_duration_minutes": 15
+      },
+      "created_at": "2026-08-19T15:41:19.963+00:00"
+    },
+    {
+      "id": "audit_1787154075372_a7p6r",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "DOCTOR_UPDATED",
+      "target_type": "DOCTOR",
+      "target_id": "doc_elena_1",
+      "metadata": {
+        "name": "Dr. Elena Vance",
+        "email": "elena.vance@apexclinic.com",
+        "phone": "+1-555-019-2101",
+        "qualification": "MD, FACC - Harvard Medical",
+        "specialization": "Cardiology & Heart Health",
+        "consultation_duration_minutes": 15
+      },
+      "created_at": "2026-08-19T15:41:15.372+00:00"
+    },
+    {
+      "id": "audit_1787153418572_wyh53",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "metadata": null,
+      "created_at": "2026-08-19T15:30:18.572+00:00"
+    },
+    {
+      "id": "audit_init_1",
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_1",
+      "actor_name": "System Owner",
+      "action": "PLATFORM_INITIALIZED",
+      "target_type": "SYSTEM",
+      "target_id": null,
+      "metadata": {
+        "version": "1.0.0"
+      },
+      "created_at": "2026-08-19T14:29:15.848+00:00"
+    },
+    {
+      "id": "audit_clinic_1",
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_platform_admin_1",
+      "actor_name": "System Owner",
+      "action": "CLINIC_CREATED",
+      "target_type": "CLINIC",
+      "target_id": "clinic_apex_101",
+      "metadata": {
+        "clinic_name": "Apex Cardiology & Family Medicine"
+      },
+      "created_at": "2026-08-19T14:29:15.848+00:00"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1788343678181_az3ey",
+      "created_at": "2026-09-02T10:07:58.181Z"
+    },
+    {
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "id": "audit_1788350422565_xerbt",
+      "created_at": "2026-09-02T12:00:22.565Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_platform_admin_1",
+      "actor_name": "System Owner",
+      "action": "CLINIC_UPDATED_BY_PLATFORM_ADMIN",
+      "target_type": "CLINIC",
+      "target_id": "clinic_apex_101",
+      "metadata": {
+        "phone": "+1-555-019-3333"
+      },
+      "id": "audit_1788355118490_2shg3",
+      "created_at": "2026-09-02T13:18:38.490Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_platform_admin_1",
+      "actor_name": "System Owner",
+      "action": "CLINIC_UPDATED_BY_PLATFORM_ADMIN",
+      "target_type": "CLINIC",
+      "target_id": "clinic_apex_101",
+      "metadata": {
+        "phone": "+1-555-019-3333"
+      },
+      "id": "audit_1788355133085_qz4ss",
+      "created_at": "2026-09-02T13:18:53.085Z"
     }
   ],
   "platform_ai_config": {
@@ -3421,6 +3467,15 @@
       "status": "COMPILED",
       "compiled_content": "# Clinic AI Receptionist Knowledge\n\nKnowledge Version: 3\n\n## Clinic Overview\n- **Name:** Metro Clinic\n- **Address:** Address:  2nd Floor, Shree Ganesh Plaza, Dwarka, Delhi\n- **Phone:** 65653524654\n\n## Operating Hours\n{\n  \"friday\": {\n    \"open\": \"09:00\",\n    \"close\": \"17:00\",\n    \"closed\": false\n  },\n  \"monday\": {\n    \"open\": \"09:00\",\n    \"close\": \"17:00\",\n    \"closed\": false\n  },\n  \"sunday\": {\n    \"open\": \"09:00\",\n    \"close\": \"13:00\",\n    \"closed\": true\n  },\n  \"tuesday\": {\n    \"open\": \"09:00\",\n    \"close\": \"17:00\",\n    \"closed\": false\n  },\n  \"saturday\": {\n    \"open\": \"09:00\",\n    \"close\": \"13:00\",\n    \"closed\": false\n  },\n  \"thursday\": {\n    \"open\": \"09:00\",\n    \"close\": \"17:00\",\n    \"closed\": false\n  },\n  \"wednesday\": {\n    \"open\": \"09:00\",\n    \"close\": \"17:00\",\n    \"closed\": false\n  }\n}\n\n## Services\n## Doctors\n## AI Reception Guidelines\nIMPORTANT RECEPTION RULES:\n1. Never invent or guess appointment availability. For availability questions, ALWAYS use the Clinic-1st availability tool.\n2. Never claim an appointment has been booked or cancelled unless the respective API tool returns a success confirmation.\n3. Never expose internal system identifiers to the patient.\n",
       "compiled_at": "2026-09-02T07:31:27.531Z"
+    },
+    {
+      "id": "5492e54b-797f-478c-a117-eb7eb3832f97",
+      "clinic_id": "clinic_apex_101",
+      "version": 1,
+      "document_hash": "a932eb30ac6d113f03640e9ac15d5917bdb4505e2b229bb78bdb1cda804c8324",
+      "status": "COMPILED",
+      "compiled_content": "# Clinic AI Receptionist Knowledge\n\nKnowledge Version: 1\n\n## Clinic Overview\n- **Name:** Apex Cardiology & Family Medicine\n- **Address:** 742 Evergreen Terrace, Medical Suite 300\n- **Phone:** +1-555-019-2000\n\n## Operating Hours\n{\n  \"friday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:00\",\n    \"closed\": false\n  },\n  \"monday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"sunday\": {\n    \"open\": \"09:00\",\n    \"close\": \"13:00\",\n    \"closed\": true\n  },\n  \"tuesday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"saturday\": {\n    \"open\": \"09:00\",\n    \"close\": \"13:00\",\n    \"closed\": false\n  },\n  \"thursday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"wednesday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  }\n}\n\n## Services\n### Comprehensive Cardiac Evaluation\n- **Description:** Comprehensive Cardiac Evaluation\n- **Duration:** 30 minutes\n- **General Pricing:** 160\n\n### General Health Consultation\n- **Description:** General Health Consultation\n- **Duration:** 20 minutes\n- **General Pricing:** 85\n\n### ECG & Vital Signs Diagnostic\n- **Description:** ECG & Vital Signs Diagnostic\n- **Duration:** 20 minutes\n- **General Pricing:** 110\n\n### Pediatric Wellness Checkup\n- **Description:** Pediatric Wellness Checkup\n- **Duration:** 30 minutes\n- **General Pricing:** 95\n\n## Doctors\n### Dr. Dr. Elena Vance\n- **Specialty:** Cardiology & Heart Health\n- **General Info:** MD, FACC - Harvard Medical\n\n### Dr. Dr. Marcus Chen\n- **Specialty:** Internal Medicine & Preventative Care\n- **General Info:** MD - Johns Hopkins\n\n### Dr. Dr. Priya Sharma\n- **Specialty:** Pediatrics & Family Medicine\n- **General Info:** MBBS, DCH - Stanford Health\n\n## AI Reception Guidelines\nIMPORTANT RECEPTION RULES:\n1. Never invent or guess appointment availability. For availability questions, ALWAYS use the Clinic-1st availability tool.\n2. Never claim an appointment has been booked or cancelled unless the respective API tool returns a success confirmation.\n3. Never expose internal system identifiers to the patient.\n",
+      "compiled_at": "2026-09-02T13:16:59.311Z"
     }
   ]
 }

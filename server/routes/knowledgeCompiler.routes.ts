@@ -1,3 +1,4 @@
+import { supabase } from '../supabaseDiff';
 import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
 
@@ -99,6 +100,12 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
       compiled_at: new Date().toISOString()
     };
 
+    if (supabase) {
+      const { error } = await supabase.from('clinic_knowledge_releases').insert(newRelease);
+      if (error) {
+        return res.status(500).json({ error: `Supabase persistence failed: ${error.message}` });
+      }
+    }
     db.insertKnowledgeRelease(newRelease);
 
     res.json({
@@ -120,12 +127,28 @@ knowledgeCompilerRouter.get('/:clinic_id/releases', requireAuth, requireClinicPe
 
 // Mark published
 knowledgeCompilerRouter.post('/:clinic_id/releases/:releaseId/publish', requireAuth, requireClinicPermission('configure_ai_receptionist'), async (req: Request, res: Response) => {
-  const { clinic_id, releaseId } = req.params;
-  const success = db.updateKnowledgeReleaseStatus(releaseId, clinic_id, 'PUBLISHED');
-  
-  if (success) {
-    res.json({ success: true });
-  } else {
-    res.status(404).json({ error: 'Release not found' });
+  try {
+    const { clinic_id, releaseId } = req.params;
+    
+    if (supabase) {
+      const { error } = await supabase.from('clinic_knowledge_releases')
+        .update({ status: 'PUBLISHED', published_at: new Date().toISOString() })
+        .eq('id', releaseId)
+        .eq('clinic_id', clinic_id);
+      
+      if (error) {
+        return res.status(500).json({ error: `Supabase persistence failed: ${error.message}` });
+      }
+    }
+
+    const success = db.updateKnowledgeReleaseStatus(releaseId, clinic_id, 'PUBLISHED');
+    
+    if (success) {
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ error: 'Release not found' });
+    }
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
   }
 });
