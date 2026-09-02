@@ -46,7 +46,7 @@ export const CallsPage: React.FC = () => {
   }, [outcomeFilter]);
 
   const filteredCalls = calls.filter((c) =>
-    (c.caller_phone || '').toLowerCase().includes(search.toLowerCase()) ||
+    (c.patient_phone || '').toLowerCase().includes(search.toLowerCase()) ||
     (c.summary && c.summary.toLowerCase().includes(search.toLowerCase()))
   );
 
@@ -132,7 +132,7 @@ export const CallsPage: React.FC = () => {
                     </td>
 
                     <td className="px-6 py-4 font-mono font-semibold text-[#0A0A0A]">
-                      {c.caller_phone}
+                      {c.patient_phone}
                     </td>
 
                     <td className="px-6 py-4 font-mono text-gray-700">
@@ -170,7 +170,7 @@ export const CallsPage: React.FC = () => {
         <Modal
           isOpen={true}
           onClose={() => setSelectedCall(null)}
-          title={`Call Transcript: ${selectedCall.caller_phone}`}
+          title={`Call Transcript: ${selectedCall.patient_phone}`}
           subtitle={`Duration: ${selectedCall.duration_seconds}s • Outcome: ${selectedCall.outcome}`}
           maxWidth="lg"
         >

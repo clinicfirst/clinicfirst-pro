@@ -1,4 +1,6 @@
 import { Router, Request, Response } from 'express';
+import { requireAuth } from '../auth';
+import { isSarvamApiConfigured } from '../config/sarvam';
 import { voiceEngine } from '../voice/voice-engine';
 import { db } from '../db';
 
@@ -59,6 +61,14 @@ aiRouter.post('/call/end', async (req: Request, res: Response) => {
     console.error('Error finalizing call:', err);
     return res.status(500).json({ error: err.message || 'Failed to finalize call.' });
   }
+});
+
+// Sarvam API Status
+aiRouter.get('/sarvam/status', requireAuth, (req: Request, res: Response) => {
+  return res.json({
+    configured: isSarvamApiConfigured(),
+    provider: 'sarvam'
+  });
 });
 
 // Get Call Details

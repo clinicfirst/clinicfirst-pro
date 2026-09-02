@@ -323,7 +323,7 @@ export const PatientsPage: React.FC = () => {
                         <span className="font-semibold font-mono text-[#0A0A0A]">
                           {a.date} at {a.start_time}
                         </span>
-                        <span className="text-gray-500 ml-2">with {a.doctor_name}</span>
+                        <span className="text-gray-500 ml-2">with {a.doctor_id}</span>
                       </div>
                       <Badge status={a.status} />
                     </div>

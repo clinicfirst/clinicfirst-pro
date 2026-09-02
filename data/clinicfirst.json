@@ -215,7 +215,7 @@
       "phone": "+1-555-010-0001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "a19559b7fa9ceff8c904946c5c542541:3f75540895e451631cfca1caf237aa54b74402dd84e06408216bfd8097b779297ce4f50344ef29add4775b308cab2fb1e5eae9de9947f2e6aa5241388dc8013d",
+      "password_hash": "4568a42c46ecafa1a7e6ab4031ebbc3f:12f3cf8c89f26de23e84298ffbf67701131ef16f24cec2811332051952c80faf0d96c9abc90982758684e99a36941157c079ccaa024283209c8ebcb09de5ecac",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -227,7 +227,7 @@
       "phone": "+1-555-010-0002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "58d1636be1bfd9717f596ac9cdedc358:9e56603d9d980ffe0247722b8379bb8be3a7ae2d79d4e20423fdb76761ec28e39a7afee88fd0a5008fa621bfd0ed48416ab56f0996f399b473539427ebc76d0a",
+      "password_hash": "20526486974069474e1a4f7f3c840208:c97b66921f87472922f05d413483a157bfaac507cb5a92e261a5bf7a408d71e1f9804c07bf76011d1c9bbe6877f5f4bc32a52d10c9137eafdf6183fa5d29940d",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -239,7 +239,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "e250c5fd3859e1994c4409f68717948d:15aa1f7f882e6ad30b76aa6de536e0e0e3bb3eee1422040f050ab29ac033d1f50b9bb685f7f00d1d7dbdb9455e46c37e8f5e79668b4f27b25ff9bff71540a9f1",
+      "password_hash": "4e8ce765a74b2e7f28129d73f59d490b:368dd33c8fe101de2ba9839e07e4f5c5278f9d1ff3d7c3883fa6d72cc9d495d4c86d90217ef60778d60bf5b641bb619adacee0ff1e3a1cf96d09fb13048f58de",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -251,7 +251,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "bd3227ed397ef4a544be57d7dc9f3ff6:2cc1961f7d26da8bfc45f743f40698692eb6d7adaa8ceebac080a5d8c0942a48bc2af7cf9b6a3cbce4202fdfd64f258050ed5bdb14add0f12c777b78fd2c6a8b",
+      "password_hash": "2fbfefeaa8444fa967ae7e3d375665bf:25bc3659f502019bb4b4de2b96b8331ebac6888f844875e0c3eae8b26eb3397cbfcfc185fe10a202487f4852f3dfaa31c75ae40745e1ac9b1a583a370e7ff7ac",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -263,7 +263,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "4fa6565e33ddd622d7468e487725785f:79ebb71215f9a602aa07eb3de6539ec4a24d699440ab427002dc128c61020bad4e032b73ebfcdb4d8599410dc2b398641f5f1000038b0e251442435eca88c62d",
+      "password_hash": "ef2257d4a4a779fa31feac21102c8a21:085ca9ececa49649b2e563c446d8e8aa675f1e7fab82be61ed56993d77b21016d8089b6dd2eccc5898381d058a834b8752e95a9bbdf910f68e957f39e596c308",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -275,7 +275,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "76336b231f66f4579d908423185b9ec4:8623879f47065ee3013e58e5e356db2dcd1cd56e57bd6821333f73e8299f470f082237e694ac41c02bfc2cc474a97ac60628a8ebdf33ac342668a302e8e9bc1e",
+      "password_hash": "6f2fb55ffba922cd8adc20a7ff58b360:68e844275aaf52b5e6efa2d3eaea0e0d7ce35de1c1397d99c77ae21c0051c15b0a1b8ca1535274ea61d2937761cf2dcc8a8e1160f0fd51c4de734d1325f018e4",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -763,6 +763,22 @@
       "start_date": "2026-09-04",
       "end_date": "2026-09-04",
       "reason": "Medical Conference / Scheduled Leave"
+    },
+    {
+      "id": "leave_1788357759076_tpm7",
+      "clinic_id": "clinic_apex_101",
+      "doctor_id": "doc_elena_1",
+      "start_date": "2026-09-07",
+      "end_date": "2026-09-07",
+      "reason": "Medical Conference / Scheduled Leave"
+    },
+    {
+      "id": "leave_1788357767948_bjpr",
+      "clinic_id": "clinic_apex_101",
+      "doctor_id": "doc_elena_1",
+      "start_date": "2026-09-15",
+      "end_date": "2026-09-07",
+      "reason": "Medical Conference / Scheduled Leave"
     }
   ],
   "services": [
@@ -1238,7 +1254,7 @@
       "id": "agent_apex_1",
       "clinic_id": "clinic_apex_101",
       "name": "Apex Receptionist",
-      "greeting": "Hello from CLI",
+      "greeting": "Hello from Clinic.",
       "voice_provider": "gemini_live",
       "voice_config": {
         "voice_name": "Zephyr",
@@ -1249,12 +1265,11 @@
       ],
       "status": "ACTIVE",
       "escalation_contact": {
-        "name": "",
-        "email": "",
-        "phone": ""
+        "phone": "+1-555-019-2005",
+        "email": "contact@apexclinic.com",
+        "name": "Clinic Triage Staff"
       },
-      "instructions_note": "CLI testing",
-      "provider_agent_id": "sarvam_agent_123"
+      "instructions_note": "CLI testing"
     },
     {
       "id": "agent_clinic_1787923240249_cqgw",
@@ -3370,6 +3385,116 @@
       },
       "id": "audit_1788355541004_3rry7",
       "created_at": "2026-09-02T13:25:41.004Z"
+    },
+    {
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "id": "audit_1788356268637_h8hy4",
+      "created_at": "2026-09-02T13:37:48.637Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1788357574146_h4hdi",
+      "created_at": "2026-09-02T13:59:34.146Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_apex_1",
+      "metadata": {
+        "voice_provider": "gemini_live",
+        "status": "ACTIVE"
+      },
+      "id": "audit_1788357707928_m18is",
+      "created_at": "2026-09-02T14:01:47.928Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "DOCTOR_LEAVE_LOGGED",
+      "target_type": "LEAVE",
+      "target_id": "leave_1788357759076_tpm7",
+      "metadata": {
+        "id": "leave_1788357759076_tpm7",
+        "clinic_id": "clinic_apex_101",
+        "doctor_id": "doc_elena_1",
+        "start_date": "2026-09-07",
+        "end_date": "2026-09-07",
+        "reason": "Medical Conference / Scheduled Leave"
+      },
+      "id": "audit_1788357759078_htuen",
+      "created_at": "2026-09-02T14:02:39.078Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "DOCTOR_LEAVE_LOGGED",
+      "target_type": "LEAVE",
+      "target_id": "leave_1788357767948_bjpr",
+      "metadata": {
+        "id": "leave_1788357767948_bjpr",
+        "clinic_id": "clinic_apex_101",
+        "doctor_id": "doc_elena_1",
+        "start_date": "2026-09-15",
+        "end_date": "2026-09-07",
+        "reason": "Medical Conference / Scheduled Leave"
+      },
+      "id": "audit_1788357767950_qmu2g",
+      "created_at": "2026-09-02T14:02:47.950Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1788358422351_nxhrq",
+      "created_at": "2026-09-02T14:13:42.351Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_legacy",
+      "id": "audit_1788360675890_f7kzw",
+      "created_at": "2026-09-02T14:51:15.890Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_legacy",
+      "id": "audit_1788360701617_q5yv0",
+      "created_at": "2026-09-02T14:51:41.617Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_legacy",
+      "id": "audit_1788360898343_1vwpn",
+      "created_at": "2026-09-02T14:54:58.343Z"
     }
   ],
   "platform_ai_config": {
@@ -3489,6 +3614,17 @@
       "status": "COMPILED",
       "compiled_content": "# Clinic AI Receptionist Knowledge\n\nKnowledge Version: 1\n\n## Clinic Overview\n- **Name:** Apex Cardiology & Family Medicine\n- **Address:** 742 Evergreen Terrace, Medical Suite 300\n- **Phone:** +1-555-019-2000\n\n## Operating Hours\n{\n  \"friday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:00\",\n    \"closed\": false\n  },\n  \"monday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"sunday\": {\n    \"open\": \"09:00\",\n    \"close\": \"13:00\",\n    \"closed\": true\n  },\n  \"tuesday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"saturday\": {\n    \"open\": \"09:00\",\n    \"close\": \"13:00\",\n    \"closed\": false\n  },\n  \"thursday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"wednesday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  }\n}\n\n## Services\n### Comprehensive Cardiac Evaluation\n- **Description:** Comprehensive Cardiac Evaluation\n- **Duration:** 30 minutes\n- **General Pricing:** 160\n\n### General Health Consultation\n- **Description:** General Health Consultation\n- **Duration:** 20 minutes\n- **General Pricing:** 85\n\n### ECG & Vital Signs Diagnostic\n- **Description:** ECG & Vital Signs Diagnostic\n- **Duration:** 20 minutes\n- **General Pricing:** 110\n\n### Pediatric Wellness Checkup\n- **Description:** Pediatric Wellness Checkup\n- **Duration:** 30 minutes\n- **General Pricing:** 95\n\n## Doctors\n### Dr. Dr. Elena Vance\n- **Specialty:** Cardiology & Heart Health\n- **General Info:** MD, FACC - Harvard Medical\n\n### Dr. Dr. Marcus Chen\n- **Specialty:** Internal Medicine & Preventative Care\n- **General Info:** MD - Johns Hopkins\n\n### Dr. Dr. Priya Sharma\n- **Specialty:** Pediatrics & Family Medicine\n- **General Info:** MBBS, DCH - Stanford Health\n\n## AI Reception Guidelines\nIMPORTANT RECEPTION RULES:\n1. Never invent or guess appointment availability. For availability questions, ALWAYS use the Clinic-1st availability tool.\n2. Never claim an appointment has been booked or cancelled unless the respective API tool returns a success confirmation.\n3. Never expose internal system identifiers to the patient.\n",
       "compiled_at": "2026-09-02T13:16:59.311Z"
+    },
+    {
+      "id": "c38688e0-f70b-4d6e-8a8f-8628982538fb",
+      "clinic_id": "clinic_apex_101",
+      "version": 2,
+      "document_hash": "01216871363c068926ee53f91003470dce7c72675d4acc92dbc9c5f77fb52991",
+      "status": "PUBLISHED",
+      "compiled_content": "# Clinic AI Receptionist Knowledge\n\nKnowledge Version: 2\n\n## Clinic Overview\n- **Name:** Apex Cardiology & Family Medicine\n- **Address:** 742 Evergreen Terrace, Medical Suite 300\n- **Phone:** +1-555-019-2005\n\n## Operating Hours\n{\n  \"friday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:00\",\n    \"closed\": false\n  },\n  \"monday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"sunday\": {\n    \"open\": \"09:00\",\n    \"close\": \"13:00\",\n    \"closed\": true\n  },\n  \"tuesday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"saturday\": {\n    \"open\": \"09:00\",\n    \"close\": \"13:00\",\n    \"closed\": false\n  },\n  \"thursday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  },\n  \"wednesday\": {\n    \"open\": \"08:30\",\n    \"close\": \"17:30\",\n    \"closed\": false\n  }\n}\n\n## Services\n### Comprehensive Cardiac Evaluation\n- **Description:** Comprehensive Cardiac Evaluation\n- **Duration:** 30 minutes\n- **General Pricing:** 160\n\n### General Health Consultation\n- **Description:** General Health Consultation\n- **Duration:** 20 minutes\n- **General Pricing:** 85\n\n### ECG & Vital Signs Diagnostic\n- **Description:** ECG & Vital Signs Diagnostic\n- **Duration:** 20 minutes\n- **General Pricing:** 110\n\n### Pediatric Wellness Checkup\n- **Description:** Pediatric Wellness Checkup\n- **Duration:** 30 minutes\n- **General Pricing:** 95\n\n## Doctors\n### Dr. Dr. Elena Vance\n- **Specialty:** Cardiology & Heart Health\n- **General Info:** MD, FACC - Harvard Medical\n\n### Dr. Dr. Marcus Chen\n- **Specialty:** Internal Medicine & Preventative Care\n- **General Info:** MD - Johns Hopkins\n\n### Dr. Dr. Priya Sharma\n- **Specialty:** Pediatrics & Family Medicine\n- **General Info:** MBBS, DCH - Stanford Health\n\n## AI Reception Guidelines\nIMPORTANT RECEPTION RULES:\n1. Never invent or guess appointment availability. For availability questions, ALWAYS use the Clinic-1st availability tool.\n2. Never claim an appointment has been booked or cancelled unless the respective API tool returns a success confirmation.\n3. Never expose internal system identifiers to the patient.\n",
+      "compiled_at": "2026-09-02T13:59:56.779Z",
+      "published_at": "2026-09-02T14:01:14.612Z",
+      "published_by": "usr_apex_admin_1"
     }
   ]
 }

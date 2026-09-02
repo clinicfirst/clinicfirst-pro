@@ -1,3 +1,13 @@
+import { JSX } from 'react';
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'sarvam-widget': any;
+    }
+  }
+}
+
 // Central TypeScript interfaces for CLINICFIRST multi-tenant system
 
 export type UserRole = 'PLATFORM_ADMIN' | 'CLINIC_ADMIN' | 'CLINIC_STAFF' | 'DOCTOR';
@@ -290,6 +300,8 @@ export interface Call {
   doctor_id?: string;
   service_id?: string;
   appointment_id?: string;
+  caller_phone?: string;
+  patient_phone?: string;
   direction: 'inbound' | 'outbound';
   start_time: string;
   end_time?: string;
@@ -531,4 +543,13 @@ export interface ClinicKnowledgeRelease {
   compiled_at: string;
   published_at?: string;
   published_by?: string;
+}
+
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'sarvam-widget': any;
+    }
+  }
 }

@@ -118,7 +118,8 @@ export const SarvamVoiceWidget: React.FC = () => {
       ) : (
         <div className="sarvam-widget-wrapper">
           {/* @ts-ignore */}
-          <sarvam-widget
+          {/* @ts-ignore */}
+      <sarvam-widget
             api-key={config.embedKey}
             app-id={config.appId}
             org-id={config.orgId}

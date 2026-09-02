@@ -12,6 +12,7 @@ import {
   AiAgent,
 } from '../../src/types';
 import { getAvailableSlots } from '../voice/tools/get-available-slots';
+import { isSarvamApiConfigured } from '../config/sarvam';
 
 export const clinicRouter = Router();
 
@@ -435,7 +436,7 @@ clinicRouter.get(
     const isApiKeySet = Boolean(
       platformAiConfig?.api_key_configured ||
       process.env.GEMINI_API_KEY ||
-      process.env.SARVAM_API_KEY
+      isSarvamApiConfigured()
     );
     const isAiActive = aiAgent?.status === 'ACTIVE';
     const isReady = isAiActive && isApiKeySet;
