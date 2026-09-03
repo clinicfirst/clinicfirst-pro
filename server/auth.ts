@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import { db } from './db';
+import { UserService } from './services/user.service';
 import { User, PermissionAction } from '../src/types';
 import { can } from '../src/lib/permissions';
 
@@ -56,7 +57,7 @@ export function verifyToken(token: string): { sub: string; role: string; clinic_
   }
 }
 
-export function requireAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export async function requireAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Authentication required. Please log in.' });
@@ -68,7 +69,9 @@ export function requireAuth(req: AuthenticatedRequest, res: Response, next: Next
     return res.status(401).json({ error: 'Invalid or expired session. Please log in again.' });
   }
 
-  const user = db.getUserById(payload.sub);
+  
+  let user = null;
+  try { user = await UserService.getById(payload.sub); } catch(e) { return res.status(500).json({error: 'Database error validating session'}); }
   if (!user || user.status !== 'ACTIVE') {
     return res.status(403).json({ error: 'User account is inactive or not found.' });
   }

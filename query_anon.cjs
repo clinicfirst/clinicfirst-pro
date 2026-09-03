@@ -1,14 +1,11 @@
 const { createClient } = require('@supabase/supabase-js');
-const fs = require('fs');
 require('dotenv').config();
 const url = process.env.VITE_SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!url || !key) { console.error('Missing env'); process.exit(1); }
+const key = process.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(url, key);
 async function run() {
   const { data, error } = await supabase.from('users').select('*').eq('clinic_id', 'clinic_1787923240249_cqgw');
-  console.log(data);
-  const aiData = await supabase.from('ai_agents').select('*').eq('clinic_id', 'clinic_1787923240249_cqgw');
-  console.log(aiData.data);
+  console.log('Error:', error);
+  console.log('Users:', data);
 }
 run();
