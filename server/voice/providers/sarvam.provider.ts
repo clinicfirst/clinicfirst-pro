@@ -4,6 +4,8 @@ import {
   VoiceSessionConfig,
 } from '../voice-provider.interface';
 import { db } from '../../db';
+import { ClinicService } from '../../services/clinic.service';
+import { AppointmentService } from '../../services/appointment.service';
 import { AI_RECEPTIONIST_TOOL_DEFINITIONS } from '../tools';
 
 export class SarvamVoiceProvider implements IVoiceProvider {
@@ -29,7 +31,7 @@ export class SarvamVoiceProvider implements IVoiceProvider {
   }> {
     const session = this.sessions.get(sessionId);
     const toolCallsExecuted: Array<{ name: string; args: any; result: any }> = [];
-    const apiKey = db.getRawPlatformAiApiKey();
+    const apiKey = process.env.GEMINI_API_KEY;
     
     if (!apiKey) {
       throw new Error('Sarvam API key is missing. Please configure it in Platform Settings.');

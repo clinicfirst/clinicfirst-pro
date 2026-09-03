@@ -1,8 +1,13 @@
+import { KnowledgeService } from "../services/knowledge.service";
 import { supabase } from '../supabaseDiff';
 import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
 
 import { db } from '../db';
+import { ClinicService } from '../services/clinic.service';
+import { UserService } from '../services/user.service';
+import { AppointmentService } from '../services/appointment.service';
+import { PatientService } from '../services/patient.service';
 import { DoctorService } from '../services/doctor.service';
 import { ServiceService } from '../services/service.service';
 import { AiAgentService } from '../services/ai-agent.service';
@@ -13,15 +18,13 @@ import { requireAuth, requireClinicPermission } from '../auth';
 export const knowledgeCompilerRouter = Router();
 
 export async function buildClinicKnowledgeMarkdown(clinicId: string): Promise<string> {
-  const clinic = db.getClinicById(clinicId);
+  const clinic = await ClinicService.getById(clinicId);
   if (!clinic) throw new Error(`Clinic not found: ${clinicId}`);
 
   const platformConfig = await AiConfigService.getPlatformAiConfig();
   const services = await ServiceService.list(clinicId, { status: 'ACTIVE' });
   const doctors = await DoctorService.list(clinicId, { status: 'ACTIVE' });
-  const knowledgeItems = (db.data.clinic_knowledge_base || []).filter(
-    (k) => k.clinic_id === clinicId && k.status === 'PUBLISHED'
-  );
+  const knowledgeItems = await KnowledgeService.listClinicKnowledge(clinicId, 'PUBLISHED');
   const aiRules = await AiConfigService.getClinicAiRules(clinicId, { enabledOnly: true, ruleType: 'PUBLIC_AI_INSTRUCTION' });
 
   // 1. Header & Knowledge Metadata
@@ -244,7 +247,7 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
       return res.status(400).json({ error: 'clinic_id is required' });
     }
 
-    const clinic = db.getClinicById(clinic_id);
+    const clinic = await ClinicService.getById(clinic_id);
     if (!clinic) return res.status(404).json({ error: 'Clinic not found' });
 
     // Build structured markdown
@@ -254,24 +257,7 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
     const hash = crypto.createHash('sha256').update(md).digest('hex');
 
     // Check previous version authoritatively from Supabase if available
-    let latestRelease = null;
-    if (supabase) {
-      const { data, error } = await supabase
-        .from('clinic_knowledge_releases')
-        .select('*')
-        .eq('clinic_id', clinic_id)
-        .order('version', { ascending: false })
-        .limit(1)
-        .single();
-        
-      if (!error && data) {
-        latestRelease = data;
-      } else if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
-        return res.status(500).json({ error: `Supabase query failed: ${error.message}` });
-      }
-    } else {
-      latestRelease = db.getLatestKnowledgeRelease(clinic_id);
-    }
+    let latestRelease = await KnowledgeService.getLatestKnowledgeRelease(clinic_id);
     
     if (latestRelease && latestRelease.document_hash === hash) {
       return res.json({
@@ -284,7 +270,7 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
     let nextVersion = latestRelease ? latestRelease.version + 1 : 1;
     let successInsert = false;
     let attempts = 0;
-    let newRelease: ClinicKnowledgeRelease | null = null;
+    let newRelease = null;
     
     while (!successInsert && attempts < 3) {
       attempts++;
@@ -292,10 +278,8 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
       const mdWithVersion = md
         .replace('{VERSION_PLACEHOLDER}', nextVersion.toString())
         .replace('{TIMESTAMP_PLACEHOLDER}', compiledAt);
-      
+        
       newRelease = {
-        id: crypto.randomUUID(),
-        clinic_id: clinic_id,
         version: nextVersion,
         document_hash: hash,
         status: 'COMPILED',
@@ -303,45 +287,33 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
         compiled_at: compiledAt
       };
 
-      if (supabase) {
-        const { error } = await supabase.from('clinic_knowledge_releases').insert(newRelease);
-        if (error) {
-          // Check for unique constraint violation (duplicate version)
-          if (error.code === '23505' || (error.message && error.message.includes('unique constraint'))) {
-            // Re-fetch latest authoritative version
-            const { data: retryData, error: retryError } = await supabase
-              .from('clinic_knowledge_releases')
-              .select('*')
-              .eq('clinic_id', clinic_id)
-              .order('version', { ascending: false })
-              .limit(1)
-              .single();
-              
-            if (!retryError && retryData) {
-              if (retryData.document_hash === hash) {
-                // Another thread just published the exact same hash
-                return res.json({
-                  success: true,
-                  message: 'No changes detected. Existing version is up to date.',
-                  release: retryData
-                });
-              }
-              // It's a new version, update nextVersion and retry
-              nextVersion = retryData.version + 1;
-              continue;
-            }
+      try {
+        newRelease = await KnowledgeService.createKnowledgeRelease(clinic_id, newRelease);
+        successInsert = true;
+      } catch (e) {
+        if (e.message && e.message.includes('duplicate key value violates unique constraint')) {
+          // Re-fetch latest
+          const retryData = await KnowledgeService.listKnowledgeReleases(clinic_id);
+          const topRetry = retryData[0];
+          if (topRetry && topRetry.document_hash === hash) {
+            return res.json({
+              success: true,
+              message: 'No changes detected. Existing version is up to date.',
+              release: topRetry
+            });
           }
-          return res.status(500).json({ error: `Supabase persistence failed: ${error.message}` });
+          if (topRetry) {
+             nextVersion = topRetry.version + 1;
+             continue;
+          }
         }
+        return res.status(500).json({ error: `Persistence failed: ${e.message}` });
       }
-      successInsert = true;
     }
     
     if (!successInsert || !newRelease) {
        return res.status(500).json({ error: 'Failed to persist release after multiple attempts due to concurrent updates.' });
     }
-
-    db.insertKnowledgeReleaseInMemory(newRelease);
 
     res.json({
       success: true,
@@ -355,7 +327,7 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
 // Get latest releases
 knowledgeCompilerRouter.get('/:clinic_id/releases', requireAuth, requireClinicPermission('view_ai_receptionist'), async (req: Request, res: Response) => {
   const { clinic_id } = req.params;
-  const releases = db.getKnowledgeReleases(clinic_id);
+  const releases = await KnowledgeService.listKnowledgeReleases(clinic_id);
   const agent = await AiAgentService.getAgentByClinic(clinic_id);
   const isSarvam = agent?.voice_provider?.toLowerCase() === 'sarvam';
   
@@ -376,26 +348,9 @@ knowledgeCompilerRouter.post('/:clinic_id/releases/:releaseId/publish', requireA
     const { clinic_id, releaseId } = req.params;
     
     // Server-side validations
-    let release;
-    if (supabase) {
-      const { data, error } = await supabase.from('clinic_knowledge_releases')
-        .select('*')
-        .eq('id', releaseId)
-        .eq('clinic_id', clinic_id)
-        .single();
-      
-      if (error) {
-         if (error.code === 'PGRST116') {
-             return res.status(404).json({ error: 'Release not found in persistent storage' });
-         }
-         return res.status(500).json({ error: `Supabase query failed: ${error.message}` });
-      }
-      release = data;
-    } else {
-      release = db.data.clinic_knowledge_releases?.find(r => r.id === releaseId && r.clinic_id === clinic_id);
-      if (!release) return res.status(404).json({ error: 'Release not found' });
-    }
-
+    const release = await KnowledgeService.getKnowledgeRelease(clinic_id, releaseId);
+    if (!release) return res.status(404).json({ error: 'Release not found' });
+    
     if (release.status === 'PUBLISHED') {
        return res.status(409).json({ error: 'Release is already published' });
     }
@@ -412,22 +367,13 @@ knowledgeCompilerRouter.post('/:clinic_id/releases/:releaseId/publish', requireA
        return res.status(400).json({ error: 'Release missing document hash' });
     }
     
-    // Verify target agent exists (optional depending on config, but required per step 10 if applicable)
-    const agent = await AiAgentService.getAgentByClinic(clinic_id);
-    const isSarvam = agent?.voice_provider?.toLowerCase() === 'sarvam';
-    if (!agent) {
-       // Optional: we might just proceed if the clinic has AI configured another way, but if SARVAM is strict:
-       // The instructions say "target AI agent exists where applicable", so we don't hard block if not found unless needed.
-    }
-
-    // Scan for secrets
     const content = release.compiled_content;
     const forbiddenPatterns = [
        'SARVAM_API_KEY',
        'SUPABASE_SERVICE_ROLE_KEY',
        'SUPABASE_SERVICE_ROLE',
        'CLINICFIRST_AI_TOOL_SECRET',
-       'sk-[a-zA-Z0-9]{32,}' // generic secret pattern
+       'sk-[a-zA-Z0-9]{32,}'
     ];
     
     for (const pattern of forbiddenPatterns) {
@@ -437,33 +383,10 @@ knowledgeCompilerRouter.post('/:clinic_id/releases/:releaseId/publish', requireA
        }
     }
 
-    // Proceed to update
-    const publishedAt = new Date().toISOString();
     const publishedBy = (req as any).user?.id || 'system';
-
-    if (supabase) {
-      const { error } = await supabase.from('clinic_knowledge_releases')
-        .update({ status: 'PUBLISHED', published_at: publishedAt, published_by: publishedBy })
-        .eq('id', releaseId)
-        .eq('clinic_id', clinic_id);
-      
-      if (error) {
-        return res.status(500).json({ error: `Supabase persistence failed: ${error.message}` });
-      }
-    }
-
-    const success = db.updateKnowledgeReleaseStatusInMemory(releaseId, clinic_id, 'PUBLISHED');
-    if (success) {
-      // update published_at / published_by in memory
-      const memRelease = db.data.clinic_knowledge_releases?.find(r => r.id === releaseId);
-      if (memRelease) {
-          memRelease.published_at = publishedAt;
-          memRelease.published_by = publishedBy;
-      }
-      res.json({ success: true });
-    } else {
-      res.status(404).json({ error: 'Release not found in memory' });
-    }
+    await KnowledgeService.updateKnowledgeReleaseStatus(clinic_id, releaseId, 'PUBLISHED', publishedBy);
+    
+    res.json({ success: true });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

@@ -1,4 +1,6 @@
 import { db } from '../../db';
+import { ClinicService } from '../../services/clinic.service';
+import { AppointmentService } from '../../services/appointment.service';
 import { DoctorService } from '../../services/doctor.service';
 import { ScheduleService } from '../../services/schedule.service';
 import { LeaveService } from '../../services/leave.service';
@@ -31,7 +33,7 @@ export async function getAvailableSlots(
     return { error: 'Date (YYYY-MM-DD) is required to check slot availability.' };
   }
 
-  const clinic = db.getClinicById(clinicId);
+  const clinic = (await ClinicService.getById(clinicId));
   if (!clinic) {
     return { error: 'Clinic not found.' };
   }
@@ -106,7 +108,7 @@ export async function getAvailableSlots(
       doctorName: string;
     }> = [];
 
-    const existingAppointments = db.getAppointments(clinicId, { date });
+    const existingAppointments = (await AppointmentService.list(clinicId, { date }));
     const activeBookings = existingAppointments.filter((a) =>
       ['CONFIRMED', 'REQUESTED', 'RESCHEDULED'].includes(a.status) &&
       (!excludeAppointmentId || a.id !== excludeAppointmentId)

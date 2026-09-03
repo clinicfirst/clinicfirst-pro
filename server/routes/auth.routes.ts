@@ -1,9 +1,13 @@
+import { ClinicService } from '../services/clinic.service';
+import { UserService } from '../services/user.service';
+import { AppointmentService } from '../services/appointment.service';
+import { PatientService } from '../services/patient.service';
+import { DoctorService } from '../services/doctor.service';
 import { AuditService } from "../services/audit.service";
 import { CallService } from "../services/call.service";
 import { Router, Request, Response } from 'express';
 import { db, verifyPassword, hashPassword } from '../db';
 import { generateToken, requireAuth, AuthenticatedRequest } from '../auth';
-import { DoctorService } from '../services/doctor.service';
 import { ServiceService } from '../services/service.service';
 import { AiAgentService } from '../services/ai-agent.service';
 
@@ -12,7 +16,7 @@ export const authRouter = Router();
 // Public System Statistics (Real live data from database)
 authRouter.get('/stats', async (req: Request, res: Response) => {
   try {
-    const clinics = db.getClinics();
+    const clinics = await ClinicService.list();
     const activeClinics = clinics.filter((c) => c.status === 'ACTIVE').length;
     const today = new Date().toISOString().split('T')[0];
 
@@ -31,7 +35,7 @@ authRouter.get('/stats', async (req: Request, res: Response) => {
       const services = await ServiceService.list(c.id, { status: 'ACTIVE' });
       totalServices += services.length;
 
-      const apts = db.getAppointments(c.id);
+      const apts = await AppointmentService.list(c.id, );
       totalAppointments += apts.length;
       todayAppointments += apts.filter((a) => a.date === today).length;
 
@@ -66,7 +70,7 @@ authRouter.get('/stats', async (req: Request, res: Response) => {
             name: firstClinic.name,
             doctorsCount: firstClinicDoctors.length,
             servicesCount: firstClinicServices.length,
-            todayAppointmentsCount: db.getAppointments(firstClinic.id, { date: today }).length,
+            todayAppointmentsCount: (await AppointmentService.list(firstClinic.id, { date: today })).length,
             agentName: firstClinicAgent?.name || 'Ava AI',
             phone: firstClinic.phone,
           }
@@ -88,12 +92,12 @@ authRouter.post('/platform/login', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Email and password are required.' });
     }
 
-    const user = db.getUserByEmail(String(email).trim());
+    const user: any = await UserService.getByEmail(String(email).trim());
     if (!user || user.role !== 'PLATFORM_ADMIN') {
       return res.status(401).json({ error: 'Invalid platform administrator credentials.' });
     }
 
-    if (!verifyPassword(String(password), user.password_hash)) {
+    if (!verifyPassword(String(password), (user as any).password_hash)) {
       return res.status(401).json({ error: 'Invalid platform administrator credentials.' });
     }
 
@@ -135,14 +139,14 @@ authRouter.post('/login', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Email and password are required.' });
     }
 
-    const user = db.getUserByEmail(String(email).trim());
+    const user: any = await UserService.getByEmail(String(email).trim());
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
     if (user.role === 'PLATFORM_ADMIN') {
       // If platform admin tries logging in via standard /login, route them cleanly
-      if (!verifyPassword(String(password), user.password_hash)) {
+      if (!verifyPassword(String(password), (user as any).password_hash)) {
         return res.status(401).json({ error: 'Invalid email or password.' });
       }
       const { password_hash, ...cleanUser } = user;
@@ -154,7 +158,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
       });
     }
 
-    if (!verifyPassword(String(password), user.password_hash)) {
+    if (!verifyPassword(String(password), (user as any).password_hash)) {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
@@ -166,7 +170,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
       return res.status(403).json({ error: 'User is not assigned to a clinic.' });
     }
 
-    const clinic = db.getClinicById(user.clinic_id);
+    const clinic = await ClinicService.getById(user.clinic_id);
     if (!clinic || clinic.status !== 'ACTIVE') {
       return res.status(403).json({ error: 'Clinic is currently inactive or suspended.' });
     }
@@ -204,7 +208,7 @@ authRouter.get('/me', requireAuth, async (req: AuthenticatedRequest, res: Respon
     const user = req.user!;
     let clinic = undefined;
     if (user.clinic_id) {
-      clinic = db.getClinicById(user.clinic_id);
+      clinic = await ClinicService.getById(user.clinic_id);
     }
 
     return res.json({
@@ -225,23 +229,23 @@ authRouter.post('/change-password', requireAuth, async (req: AuthenticatedReques
       return res.status(400).json({ error: 'New password must be at least 8 characters long.' });
     }
 
-    const user = db.getUserById(req.user!.id);
+    const user = await UserService.getById(req.user!.id);
     if (!user) {
       return res.status(404).json({ error: 'User not found.' });
     }
 
     // If user was not forced to change, verify current password
     if (!user.must_change_password && currentPassword) {
-      if (!verifyPassword(String(currentPassword), user.password_hash)) {
+      if (!verifyPassword(String(currentPassword), (user as any).password_hash)) {
         return res.status(400).json({ error: 'Current password is incorrect.' });
       }
     }
 
     const newHash = hashPassword(String(newPassword));
-    const updated = db.updateUser(user.id, {
+    const updated: any = await UserService.update(user.id, {
       password_hash: newHash,
       must_change_password: false,
-    });
+    } as any);
 
     try {
       await AuditService.logAudit({

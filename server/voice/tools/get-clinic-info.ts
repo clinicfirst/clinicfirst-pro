@@ -1,8 +1,10 @@
 import { db } from '../../db';
+import { ClinicService } from '../../services/clinic.service';
+import { AppointmentService } from '../../services/appointment.service';
 import { ServiceService } from '../../services/service.service';
 
 export async function getClinicInfo(clinicId: string) {
-  const clinic = db.getClinicById(clinicId);
+  const clinic = (await ClinicService.getById(clinicId));
   if (!clinic) {
     return { error: 'Clinic not found' };
   }

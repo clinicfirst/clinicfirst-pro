@@ -1,3 +1,9 @@
+import { ClinicService } from '../services/clinic.service';
+import { UserService } from '../services/user.service';
+import { AppointmentService } from '../services/appointment.service';
+import { PatientService } from '../services/patient.service';
+import { DoctorService } from '../services/doctor.service';
+import { KnowledgeService } from "../services/knowledge.service";
 import { AuditService } from "../services/audit.service";
 import { CallService } from "../services/call.service";
 import { Router, Response } from 'express';
@@ -5,7 +11,6 @@ import { db, hashPassword } from '../db';
 import { requireAuth, requirePlatformAdmin, AuthenticatedRequest } from '../auth';
 import { Clinic, User, OperatingHours } from '../../src/types';
 import { generateSafeGreeting } from '../services/aiValidator';
-import { DoctorService } from '../services/doctor.service';
 import { StaffService } from '../services/staff.service';
 import { ServiceService } from '../services/service.service';
 import { AiAgentService } from '../services/ai-agent.service';
@@ -19,7 +24,7 @@ platformRouter.use(requirePlatformAdmin);
 // Platform Dashboard Metrics
 platformRouter.get('/dashboard', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const clinics = db.getClinics();
+    const clinics = await ClinicService.list();
     const today = new Date().toISOString().split('T')[0];
 
     let totalDoctors = 0;
@@ -30,7 +35,7 @@ platformRouter.get('/dashboard', async (req: AuthenticatedRequest, res: Response
       const doctors = await DoctorService.list(c.id, { status: 'ACTIVE' });
       totalDoctors += doctors.length;
 
-      const apts = db.getAppointments(c.id, { date: today });
+      const apts = await AppointmentService.list(c.id, { date: today });
       totalTodayAppointments += apts.length;
 
       const calls = (await CallService.listCalls(c.id)).filter((call) => call.created_at.startsWith(today));
@@ -64,7 +69,7 @@ platformRouter.get('/dashboard', async (req: AuthenticatedRequest, res: Response
 // List all clinics
 platformRouter.get('/clinics', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const rawClinics = db.getClinics();
+    const rawClinics = await ClinicService.list();
     const clinics = await Promise.all(
       rawClinics.map(async (c) => {
         const doctors = await DoctorService.list(c.id);
@@ -146,7 +151,7 @@ platformRouter.post('/clinics', async (req: AuthenticatedRequest, res: Response)
       status: 'ACTIVE',
       created_at: now,
     };
-    db.createClinic(newClinic);
+    await ClinicService.create(newClinic);
 
     // 2. Create Clinic Admin User (tagged with role=CLINIC_ADMIN, clinic_id=clinicId, must_change_password=true)
     const adminCreateResult = await StaffService.create(clinicId, {
@@ -215,7 +220,7 @@ platformRouter.post('/clinics', async (req: AuthenticatedRequest, res: Response)
 platformRouter.get('/clinics/:id', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const clinicId = req.params.id;
-    const clinic = db.getClinicById(clinicId);
+    const clinic = await ClinicService.getById(clinicId);
     if (!clinic) {
       return res.status(404).json({ error: 'Clinic not found.' });
     }
@@ -225,7 +230,7 @@ platformRouter.get('/clinics/:id', async (req: AuthenticatedRequest, res: Respon
     const services = await ServiceService.list(clinicId);
     const aiAgent = await AiAgentService.getAgentByClinic(clinicId);
     const today = new Date().toISOString().split('T')[0];
-    const todayAppointments = db.getAppointments(clinicId, { date: today });
+    const todayAppointments = await AppointmentService.list(clinicId, { date: today });
     const todayCalls = (await CallService.listCalls(clinicId)).filter((c) => c.created_at.startsWith(today));
 
     return res.json({
@@ -250,7 +255,7 @@ platformRouter.put('/clinics/:id', async (req: AuthenticatedRequest, res: Respon
   const clinicId = req.params.id;
   const updates = req.body;
 
-  const updated = db.updateClinic(clinicId, updates);
+  const updated = await ClinicService.update(clinicId, updates);
   if (!updated) {
     return res.status(404).json({ error: 'Clinic not found.' });
   }
@@ -278,7 +283,7 @@ platformRouter.get('/audit-logs', async (req: AuthenticatedRequest, res: Respons
 platformRouter.get('/users', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const allUsers = await StaffService.listAll();
-    const clinics = db.getClinics();
+    const clinics = await ClinicService.list();
     const clinicMap = new Map(clinics.map((c) => [c.id, c.name]));
 
     const enrichedUsers = allUsers.map((u) => ({
@@ -573,7 +578,7 @@ platformRouter.post('/ai-config/remove-key', async (req: AuthenticatedRequest, r
 // Platform Knowledge Base Endpoints
 platformRouter.get('/knowledge-base', async (req: AuthenticatedRequest, res: Response) => {
   const { category, search, active_only } = req.query;
-  let items = db.getPlatformKnowledgeBase(active_only === 'true');
+  let items = await KnowledgeService.listPlatformKnowledge(active_only === 'true');
 
   if (category && category !== 'ALL') {
     items = items.filter((k) => k.category === category);
@@ -596,7 +601,7 @@ platformRouter.post('/knowledge-base', async (req: AuthenticatedRequest, res: Re
     return res.status(400).json({ error: 'Title and Category are required.' });
   }
 
-  const item = db.createKnowledgeItem({
+  const item = await KnowledgeService.createPlatformKnowledge({
     title,
     category,
     content: content || '',
@@ -624,7 +629,7 @@ platformRouter.put('/knowledge-base/:id', async (req: AuthenticatedRequest, res:
   const { id } = req.params;
   const { title, category, content, is_active, file_name, file_type, file_data, file_size } = req.body;
 
-  const updated = db.updateKnowledgeItem(id, {
+  const updated = await KnowledgeService.updatePlatformKnowledge(id, {
     title,
     category,
     content: content || '',
@@ -654,7 +659,7 @@ platformRouter.put('/knowledge-base/:id', async (req: AuthenticatedRequest, res:
 
 platformRouter.delete('/knowledge-base/:id', async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
-  const deleted = db.deleteKnowledgeItem(id);
+  const deleted = await KnowledgeService.deletePlatformKnowledge(id);
 
   if (!deleted) {
     return res.status(404).json({ error: 'Knowledge base item not found.' });
@@ -676,7 +681,7 @@ platformRouter.delete('/knowledge-base/:id', async (req: AuthenticatedRequest, r
 
 // AI Usage Events
 platformRouter.get('/ai-usage', async (req: AuthenticatedRequest, res: Response) => {
-  const events = db.getAiUsageEvents();
+  const events: any[] = [];
   // We can sort them by timestamp descending
   events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   res.json({ events });
@@ -703,12 +708,12 @@ platformRouter.get('/clinics/:clinic_id/ai-knowledge', async (req: Authenticated
   const { clinic_id } = req.params;
   const { status, category, search } = req.query;
 
-  const clinic = db.getClinicById(clinic_id);
+  const clinic = await ClinicService.getById(clinic_id);
   if (!clinic) {
     return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
   }
 
-  const items = db.getClinicKnowledge(clinic_id, {
+  const items = await KnowledgeService.listClinicKnowledge(clinic_id, {
     status: status as string,
     category: category as string,
     search: search as string,
@@ -727,7 +732,7 @@ platformRouter.post('/clinics/:clinic_id/ai-knowledge', async (req: Authenticate
   const { clinic_id } = req.params;
   const { title, category, content, status } = req.body;
 
-  const clinic = db.getClinicById(clinic_id);
+  const clinic = await ClinicService.getById(clinic_id);
   if (!clinic) {
     return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
   }
@@ -749,8 +754,7 @@ platformRouter.post('/clinics/:clinic_id/ai-knowledge', async (req: Authenticate
   const validStatuses = ['DRAFT', 'VALIDATED', 'PUBLISHED'];
   const ruleStatus = status && validStatuses.includes(status) ? status : 'DRAFT';
 
-  const newItem = db.createClinicKnowledgeItem({
-    clinic_id,
+  const newItem = await KnowledgeService.createClinicKnowledge(clinic_id, { 
     title: title.trim(),
     category,
     content: content.trim(),
@@ -762,7 +766,7 @@ platformRouter.post('/clinics/:clinic_id/ai-knowledge', async (req: Authenticate
       published_at: new Date().toISOString(),
       published_by: req.user!.id,
     }),
-  });
+   });
 
   await AuditService.logAudit({
     clinic_id,
@@ -782,12 +786,12 @@ platformRouter.put('/clinics/:clinic_id/ai-knowledge/:id', async (req: Authentic
   const { clinic_id, id } = req.params;
   const { title, category, content, status } = req.body;
 
-  const clinic = db.getClinicById(clinic_id);
+  const clinic = await ClinicService.getById(clinic_id);
   if (!clinic) {
     return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
   }
 
-  const existingItem = db.getClinicKnowledgeItemById(id, clinic_id);
+  const existingItem = await KnowledgeService.getClinicKnowledgeById(id, clinic_id);
   if (!existingItem) {
     return res.status(404).json({ error: 'Clinic AI Knowledge item not found for this clinic.' });
   }
@@ -818,7 +822,7 @@ platformRouter.put('/clinics/:clinic_id/ai-knowledge/:id', async (req: Authentic
     updates.published_by = req.user!.id;
   }
 
-  const updatedItem = db.updateClinicKnowledgeItem(id, clinic_id, updates);
+  const updatedItem = await KnowledgeService.updateClinicKnowledge(clinic_id, id, updates);
   if (!updatedItem) {
     return res.status(500).json({ error: 'Failed to update Clinic AI Knowledge item.' });
   }
@@ -840,17 +844,17 @@ platformRouter.put('/clinics/:clinic_id/ai-knowledge/:id', async (req: Authentic
 platformRouter.delete('/clinics/:clinic_id/ai-knowledge/:id', async (req: AuthenticatedRequest, res: Response) => {
   const { clinic_id, id } = req.params;
 
-  const clinic = db.getClinicById(clinic_id);
+  const clinic = await ClinicService.getById(clinic_id);
   if (!clinic) {
     return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
   }
 
-  const existingItem = db.getClinicKnowledgeItemById(id, clinic_id);
+  const existingItem = await KnowledgeService.getClinicKnowledgeById(clinic_id, id);
   if (!existingItem) {
     return res.status(404).json({ error: 'Clinic AI Knowledge item not found for this clinic.' });
   }
 
-  const deleted = db.deleteClinicKnowledgeItem(id, clinic_id);
+  const deleted = await KnowledgeService.deleteClinicKnowledge(clinic_id, id);
   if (!deleted) {
     return res.status(500).json({ error: 'Failed to delete Clinic AI Knowledge item.' });
   }
@@ -872,12 +876,12 @@ platformRouter.delete('/clinics/:clinic_id/ai-knowledge/:id', async (req: Authen
 platformRouter.post('/clinics/:clinic_id/ai-knowledge/publish', async (req: AuthenticatedRequest, res: Response) => {
   const { clinic_id } = req.params;
 
-  const clinic = db.getClinicById(clinic_id);
+  const clinic = await ClinicService.getById(clinic_id);
   if (!clinic) {
     return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
   }
 
-  const publishedItems = db.publishClinicKnowledge(clinic_id, req.user!.id);
+  const publishedItems = await KnowledgeService.publishClinicKnowledge(clinic_id, req.user!.id);
 
   await AuditService.logAudit({
     clinic_id,

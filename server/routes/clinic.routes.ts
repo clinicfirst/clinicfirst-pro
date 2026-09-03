@@ -1,9 +1,12 @@
-import { AuditService } from "../services/audit.service";
-import { EscalationService } from "../services/escalation.service";
-import { CallService } from "../services/call.service";
+import { ClinicService } from '../services/clinic.service';
+import { UserService } from '../services/user.service';
 import { AppointmentService } from '../services/appointment.service';
 import { PatientService } from '../services/patient.service';
 import { DoctorService } from '../services/doctor.service';
+import { KnowledgeService } from "../services/knowledge.service";
+import { AuditService } from "../services/audit.service";
+import { EscalationService } from "../services/escalation.service";
+import { CallService } from "../services/call.service";
 import { StaffService } from '../services/staff.service';
 import { ScheduleService } from '../services/schedule.service';
 import { LeaveService } from '../services/leave.service';
@@ -55,8 +58,8 @@ clinicRouter.get(
       const today = new Date().toISOString().split('T')[0];
       const doctorIdFilter = req.user?.role === 'DOCTOR' ? req.user.doctor_id : undefined;
 
-      const clinic = db.getClinicById(clinicId);
-      const allAppointments = db.getAppointments(clinicId, { date: today, doctor_id: doctorIdFilter });
+      const clinic = await ClinicService.getById(clinicId);
+      const allAppointments = await AppointmentService.list(clinicId, { date: today, doctor_id: doctorIdFilter });
       const confirmed = allAppointments.filter((a) => a.status === 'CONFIRMED');
       const completed = allAppointments.filter((a) => a.status === 'COMPLETED');
       const rescheduled = allAppointments.filter((a) => a.status === 'RESCHEDULED');
@@ -84,9 +87,9 @@ clinicRouter.get(
       const serviceMap = new Map(allServices.map(s => [s.id, s]));
 
       // Next upcoming appointments today with fully hydrated relations
-      const enrichedAppointments = allAppointments.map((apt) => {
-        const patient = apt.patient || patientMap.get(apt.patient_id) || db.getPatientById(clinicId, apt.patient_id);
-        const doctor = apt.doctor || doctorMapById.get(apt.doctor_id) || db.getDoctorById(clinicId, apt.doctor_id);
+      const enrichedAppointments = await Promise.all(allAppointments.map(async (apt) => {
+        const patient = apt.patient || patientMap.get(apt.patient_id) || await PatientService.getById(clinicId, apt.patient_id);
+        const doctor = apt.doctor || doctorMapById.get(apt.doctor_id) || await DoctorService.getById(clinicId, apt.doctor_id);
         const service = apt.service || serviceMap.get(apt.service_id);
         return {
           ...apt,
@@ -101,7 +104,7 @@ clinicRouter.get(
           service_fee: service?.fee || 0,
           service_duration: service?.duration_minutes || 30,
         };
-      });
+      }));
 
       const upcomingToday = enrichedAppointments
         .filter((a) => a.status !== 'CANCELLED')
@@ -110,7 +113,7 @@ clinicRouter.get(
       // -----------------------------------------------------------
       // Weekly Trends & Analytics Calculation (Past 7 Days - Pure Database Driven)
       // -----------------------------------------------------------
-      const rawAllAppointments = db.getAppointments(clinicId);
+      const rawAllAppointments = await AppointmentService.list(clinicId, );
       let rawAllCalls = await CallService.listCalls(clinicId);
       if (req.user?.role === 'DOCTOR') {
         rawAllCalls = rawAllCalls.filter(c => c.doctor_id === req.user.doctor_id);
@@ -545,20 +548,20 @@ clinicRouter.get(
   async (req: AuthenticatedRequest, res: Response) => {
     try {
       const clinicId = getAuthClinicId(req);
-      const clinic = db.getClinicById(clinicId);
+      const clinic = await ClinicService.getById(clinicId);
       const today = (req.query.date as string) || new Date().toISOString().split('T')[0];
       const doctorIdFilter = req.user?.role === 'DOCTOR' ? req.user.doctor_id : undefined;
 
-      const appointments = db.getAppointments(clinicId, { date: today, doctor_id: doctorIdFilter });
+      const appointments = await AppointmentService.list(clinicId, { date: today, doctor_id: doctorIdFilter });
       const allPatients = await PatientService.list(clinicId);
       const patientMap = new Map(allPatients.map(p => [p.id, p]));
       const allServices = await ServiceService.list(clinicId);
       const serviceLookupMap = new Map(allServices.map(s => [s.id, s]));
 
-      const items = appointments
-        .map((apt) => {
-          const patient = apt.patient || patientMap.get(apt.patient_id) || db.getPatientById(clinicId, apt.patient_id);
-          const doctor = apt.doctor || db.getDoctorById(clinicId, apt.doctor_id);
+      const items = (await Promise.all(appointments
+        .map(async (apt) => {
+          const patient = apt.patient || patientMap.get(apt.patient_id) || await PatientService.getById(clinicId, apt.patient_id);
+          const doctor = apt.doctor || await DoctorService.getById(clinicId, apt.doctor_id);
           const service = apt.service || serviceLookupMap.get(apt.service_id);
           const fee = Number(service?.fee) || 0;
 
@@ -582,7 +585,7 @@ clinicRouter.get(
             created_via: apt.created_via,
             created_at: apt.created_at,
           };
-        })
+        })))
         .sort((a, b) => a.start_time.localeCompare(b.start_time));
 
     let totalCollection = 0;
@@ -1192,7 +1195,7 @@ clinicRouter.get(
 
       let patients = await PatientService.list(clinicId, search);
       if (req.user?.role === 'DOCTOR') {
-        const myPatientIds = new Set(db.getAppointments(clinicId, { doctor_id: req.user.doctor_id }).map(a => a.patient_id));
+        const myPatientIds = new Set((await AppointmentService.list(clinicId, { doctor_id: req.user.doctor_id })).map(a => a.patient_id));
         patients = patients.filter(p => myPatientIds.has(p.id));
       }
       return res.json({ patients });
@@ -1216,7 +1219,7 @@ clinicRouter.get(
         return res.status(404).json({ error: 'Patient not found.' });
       }
 
-      const appointments = db.getAppointments(clinicId).filter((a) => a.patient_id === patientId);
+      const appointments = (await AppointmentService.list(clinicId, )).filter((a) => a.patient_id === patientId);
       const calls = (await CallService.listCalls(clinicId)).filter((c) => c.patient_id === patientId);
 
       return res.json({ patient, appointments, calls });
@@ -1312,7 +1315,7 @@ clinicRouter.get(
       status?: string;
     };
 
-    const appointments = db.getAppointments(clinicId, { date, doctor_id, status });
+    const appointments = await AppointmentService.list(clinicId, { date, doctor_id, status });
     return res.json({ appointments });
   }
 );
@@ -1495,7 +1498,7 @@ clinicRouter.put(
   async (req: AuthenticatedRequest, res: Response) => {
     try {
       const clinicId = getAuthClinicId(req);
-      const clinic = db.getClinicById(clinicId);
+      const clinic = await ClinicService.getById(clinicId);
       if (!clinic) {
         return res.status(404).json({ error: 'Clinic not found.' });
       }
@@ -1645,7 +1648,7 @@ clinicRouter.get(
     const clinicId = getAuthClinicId(req);
     const { status, category, search } = req.query;
 
-    const items = db.getClinicKnowledge(clinicId, {
+    const items = await KnowledgeService.listClinicKnowledge(clinicId, {
       status: status as string,
       category: category as string,
       search: search as string,

@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import initialFallbackJson from '../data/clinicfirst.json';
-import { syncToSupabase, fetchFromSupabase, setLastSyncedState } from './supabaseDiff';
+import { isOfflineMode } from './supabaseDiff';
+const initialFallbackJson: any = {};
+
 import {
   Clinic,
   User,
@@ -95,7 +96,7 @@ class DatabaseEngine {
   constructor() {
     this.ensureDirectory();
     this.data = this.loadDatabase();
-    setLastSyncedState(this.data);
+    // setLastSyncedState(this.data);
     this.ensureHydrated(true).catch((e) => console.warn('[DB] Supabase async hydration deferred:', e));
   }
 
@@ -107,7 +108,7 @@ class DatabaseEngine {
     if (this.isHydrating) return;
     this.isHydrating = true;
     try {
-      const supabaseData = await fetchFromSupabase();
+      const supabaseData = null; // Removed
       if (supabaseData) {
         const tables: (keyof DatabaseSchema)[] = [
           'clinics',
@@ -148,7 +149,7 @@ class DatabaseEngine {
           }
         }
         this.ensureSeedUsers(this.data);
-        setLastSyncedState(this.data);
+        // setLastSyncedState(this.data);
         this.isHydrated = true;
         this.lastHydrationTime = now;
       }
@@ -601,6 +602,7 @@ class DatabaseEngine {
       dbData = JSON.parse(JSON.stringify(initialFallbackJson));
     }
 
+    if (!isOfflineMode) return this.generateSeedData();
     if (IS_VERCEL && !fs.existsSync(DB_FILE) && fs.existsSync(SOURCE_DB_FILE)) {
       try {
         this.ensureDirectory();
@@ -642,7 +644,8 @@ class DatabaseEngine {
 
   private saveDatabase(dataToSave?: DatabaseSchema) {
     const payload = dataToSave || this.data;
-    syncToSupabase(payload);
+    // syncToSupabase(payload);
+    if (!isOfflineMode) return;
     try {
       this.ensureDirectory();
       fs.writeFileSync(DB_FILE, JSON.stringify(payload, null, 2), 'utf-8');

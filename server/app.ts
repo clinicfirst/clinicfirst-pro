@@ -31,7 +31,7 @@ app.use(['/api/voice/webhook/sarvam/*', '/voice/webhook/sarvam/*'], sarvamWebhoo
 // Ensure DB is hydrated from Supabase before processing requests
 app.use(async (req, res, next) => {
   try {
-    await db.ensureHydrated();
+    // await db.ensureHydrated();
   } catch (err) {
     console.warn('[Server] Supabase auto-hydration error:', err);
   }

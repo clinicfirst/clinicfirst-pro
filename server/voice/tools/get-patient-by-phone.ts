@@ -1,4 +1,6 @@
 import { db } from '../../db';
+import { ClinicService } from '../../services/clinic.service';
+import { AppointmentService } from '../../services/appointment.service';
 import { PatientService } from '../../services/patient.service';
 
 export async function getPatientByPhone(clinicId: string, phone: string) {
@@ -15,7 +17,7 @@ export async function getPatientByPhone(clinicId: string, phone: string) {
   }
 
   // Get active upcoming appointments
-  const allAppointments = db.getAppointments(clinicId);
+  const allAppointments = (await AppointmentService.list(clinicId));
   const patientAppointments = allAppointments
     .filter(
       (a) =>

@@ -1,5 +1,6 @@
 import { EscalationService } from "../../services/escalation.service";
 import { db } from '../../db';
+import { ClinicService } from '../../services/clinic.service';
 import { supabase } from '../../supabaseDiff';
 import { Appointment } from '../../../src/types';
 import { AppointmentService, AppointmentMutationSource } from '../../services/appointment.service';
@@ -110,7 +111,7 @@ export async function escalateToStaff(
     contextSummary: string;
   }
 ) {
-  const clinic = db.getClinicById(clinicId);
+  const clinic = (await ClinicService.getById(clinicId));
   const agent = await AiAgentService.getAgentByClinic(clinicId);
 
   const escalation = await EscalationService.createEscalation(clinicId, {

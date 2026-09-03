@@ -1,9 +1,12 @@
+import { KnowledgeService } from "../services/knowledge.service";
 import { CallService } from "../services/call.service";
 import { IVoiceProvider } from './voice-provider.interface';
 import { GeminiLiveVoiceProvider } from './providers/gemini-live.provider';
 import { SarvamVoiceProvider } from './providers/sarvam.provider';
 import { executeVoiceTool } from './tools';
 import { db } from '../db';
+import { ClinicService } from '../services/clinic.service';
+import { AppointmentService } from '../services/appointment.service';
 import { PatientService } from '../services/patient.service';
 import { DoctorService } from '../services/doctor.service';
 import { ServiceService } from '../services/service.service';
@@ -17,8 +20,8 @@ export async function buildHierarchicalSystemInstruction(
   clinicInstructionsNote?: string
 ): Promise<string> {
   const platformConfig = await AiConfigService.getPlatformAiConfig();
-  const knowledgeBase = db.getPlatformKnowledgeBase(true);
-  const clinic = db.getClinicById(clinicId);
+  const knowledgeBase = await KnowledgeService.listPlatformKnowledge(true);
+  const clinic = (await ClinicService.getById(clinicId));
   const doctors = await DoctorService.list(clinicId, { status: 'ACTIVE' });
   const services = await ServiceService.list(clinicId, { status: 'ACTIVE' });
 
@@ -109,7 +112,7 @@ ${
 }`;
 
   // 4.5 Clinic-Specific Published AI Rules (Tenant Scoped)
-  const clinicKnowledge = db.getClinicKnowledge(clinicId, { status: 'PUBLISHED' });
+  const clinicKnowledge = await KnowledgeService.listClinicKnowledge(clinicId, 'PUBLISHED');
   const clinicKnowledgeSection = `[PUBLISHED CLINIC-SPECIFIC AI RULES & POLICIES (TENANT SCOPED)]
 ${
   clinicKnowledge.length > 0
@@ -157,7 +160,7 @@ class VoiceEngineManager {
   }
 
   public async startCallSession(clinicId: string, callerPhone?: string) {
-    const clinic = db.getClinicById(clinicId);
+    const clinic = (await ClinicService.getById(clinicId));
     if (!clinic) throw new Error('Clinic not found');
 
     const agent = await AiAgentService.resolveAgentForClinic(clinicId, clinic.name);
@@ -211,7 +214,7 @@ class VoiceEngineManager {
 
     let audioBase64: string | undefined = undefined;
     try {
-      const apiKey = db.getRawPlatformAiApiKey();
+      const apiKey = process.env.GEMINI_API_KEY;
       if (apiKey) {
         const ai = new GoogleGenAI({ apiKey });
         const ttsResponse = await ai.models.generateContent({
@@ -331,21 +334,7 @@ class VoiceEngineManager {
     }
 
     if (result.usage && agent) {
-      db.logAiUsage({
-        id: `usage_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-        clinic_id: clinicId,
-        agent_id: agent.id,
-        session_id: sessionId,
-        call_id: callId,
-        provider: provider.providerId,
-        model: 'gemini-3.6-flash',
-        operation: 'LLM',
-        timestamp: new Date().toISOString(),
-        status: 'success',
-        prompt_tokens: result.usage.promptTokens,
-        completion_tokens: result.usage.completionTokens,
-        total_tokens: result.usage.totalTokens,
-      });
+      /* db.logAiUsage block removed */
     }
 
     return result;

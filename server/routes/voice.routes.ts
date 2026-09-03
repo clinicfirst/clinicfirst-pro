@@ -1,8 +1,11 @@
+import { ClinicService } from '../services/clinic.service';
+import { UserService } from '../services/user.service';
+import { AppointmentService } from '../services/appointment.service';
+import { PatientService } from '../services/patient.service';
+import { DoctorService } from '../services/doctor.service';
 import { Router } from 'express';
 import crypto from 'crypto';
 import { db } from '../db';
-import { PatientService } from '../services/patient.service';
-import { DoctorService } from '../services/doctor.service';
 import { ServiceService } from '../services/service.service';
 import { AiAgentService } from '../services/ai-agent.service';
 import { AiConfigService } from '../services/ai-config.service';
@@ -157,7 +160,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
 
       // Idempotency check
       // We check if THIS patient already has an appointment on this date & time for this service.
-      const existingAppt = db.data.appointments.find(a => 
+      const existingAppt = (await AppointmentService.list(clinic_id)).find(a => 
         a.clinic_id === clinic_id && 
         a.patient_id === patient!.id &&
         a.date === date && 
@@ -173,7 +176,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
            appointment_id: existingAppt.id,
            appointment_date: existingAppt.date,
            appointment_time: existingAppt.start_time,
-           doctor: db.getDoctorById(clinic_id, existingAppt.doctor_id)?.name,
+           doctor: (await DoctorService.getById(clinic_id, existingAppt.doctor_id))?.name,
            service: existingSrv?.name,
            message: "Appointment was already booked successfully."
          });
@@ -261,7 +264,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
       }
 
       // Find appointments for this patient + clinic
-      let allAppts = db.data.appointments.filter(a => 
+      let allAppts = (await AppointmentService.list(clinic_id)).filter(a => 
         a.clinic_id === clinic_id && 
         a.patient_id === patient.id
       );
@@ -307,12 +310,12 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
           error_code: "AMBIGUOUS_APPOINTMENT",
           message: "Multiple active appointments match the criteria. Please ask the patient to clarify which one to cancel.",
           requires_clarification: true,
-          matching_appointments: activeAppts.map(a => ({
+          matching_appointments: await Promise.all(activeAppts.map(async a => ({
             date: a.date,
             time: a.start_time,
-            doctor: db.getDoctorById(clinic_id, a.doctor_id)?.name,
+            doctor: (await DoctorService.getById(clinic_id, a.doctor_id))?.name,
             service: serviceMap.get(a.service_id)?.name
-          }))
+          }))),
         });
       }
 
@@ -373,7 +376,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
       }
 
       // 1. Idempotency Check: Did we already successfully reschedule this patient to this exact new date/time?
-      const alreadyRescheduled = db.data.appointments.find(a => 
+      const alreadyRescheduled = (await AppointmentService.list(clinic_id)).find(a => 
         a.clinic_id === clinic_id && 
         a.patient_id === patient.id &&
         a.date === new_date &&
@@ -392,7 +395,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
       }
 
       // 2. Find the old appointment to move
-      let allAppts = db.data.appointments.filter(a => 
+      let allAppts = (await AppointmentService.list(clinic_id)).filter(a => 
         a.clinic_id === clinic_id && 
         a.patient_id === patient.id
       );
@@ -419,12 +422,12 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
           error_code: "AMBIGUOUS_APPOINTMENT",
           message: "Multiple active appointments match the criteria. Please ask the patient to clarify which one to reschedule.",
           requires_clarification: true,
-          matching_appointments: activeAppts.map(a => ({
+          matching_appointments: await Promise.all(activeAppts.map(async a => ({
             date: a.date,
             time: a.start_time,
-            doctor: db.getDoctorById(clinic_id, a.doctor_id)?.name,
+            doctor: (await DoctorService.getById(clinic_id, a.doctor_id))?.name,
             service: serviceMap.get(a.service_id)?.name
-          }))
+          }))),
         });
       }
 
