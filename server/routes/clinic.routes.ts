@@ -1459,6 +1459,8 @@ clinicRouter.get(
       
       return res.json({
         enabled: true,
+        clinic_id: clinicId,
+        provider_agent_id: providerAgentId,
         appId: providerAgentId,
         orgId: orgId,
         workspaceId: workspaceId,
@@ -1513,6 +1515,8 @@ clinicRouter.put(
         status,
         escalation_contact,
         instructions_note,
+        provider_agent_id,
+        enabled,
       } = req.body;
 
       // Defense-in-depth validation for Receptionist Preferences & Instructions
@@ -1520,6 +1524,20 @@ clinicRouter.put(
         const valResult = validateReceptionistPreferences(instructions_note);
         if (!valResult.isValid) {
           return res.status(400).json({ error: valResult.error });
+        }
+      }
+
+      // Check cross-clinic uniqueness of provider_agent_id if specified
+      if (
+        provider_agent_id !== undefined &&
+        provider_agent_id !== null &&
+        typeof provider_agent_id === 'string' &&
+        provider_agent_id.trim().length > 0
+      ) {
+        const trimmedProviderId = provider_agent_id.trim();
+        const existingWithProvider = await AiAgentService.getAgentByProviderAgentId(trimmedProviderId);
+        if (existingWithProvider && existingWithProvider.clinic_id !== clinicId) {
+          return res.status(409).json({ error: 'This provider agent ID is already assigned to another clinic.' });
         }
       }
 
@@ -1547,11 +1565,16 @@ clinicRouter.put(
         voice_config: voice_config || current?.voice_config || {},
         languages: languages || current?.languages || ['English'],
         status: status || current?.status || 'ACTIVE',
+        enabled: enabled !== undefined ? Boolean(enabled) : (status ? status === 'ACTIVE' : (current?.enabled ?? true)),
         escalation_contact: escalation_contact || current?.escalation_contact || {},
         instructions_note:
           instructions_note !== undefined
             ? (typeof instructions_note === 'string' ? instructions_note.trim() : instructions_note)
             : current?.instructions_note,
+        provider_agent_id:
+          provider_agent_id !== undefined
+            ? (typeof provider_agent_id === 'string' ? provider_agent_id.trim() || undefined : undefined)
+            : current?.provider_agent_id,
       };
 
       const saved = await AiAgentService.updateAgent(clinicId, updatedAgentPayload);

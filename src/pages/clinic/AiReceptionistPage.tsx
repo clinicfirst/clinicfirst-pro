@@ -56,6 +56,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
     escalation_email: '',
     escalation_name: '',
     instructions_note: '',
+    provider_agent_id: '',
   });
 
   const [instructionsValidation, setInstructionsValidation] = useState<{ isValid: boolean; error?: string }>({
@@ -92,6 +93,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
           escalation_email: res.agent.escalation_contact?.email || clinic?.email || '',
           escalation_name: res.agent.escalation_contact?.name || 'Clinic Triage Staff',
           instructions_note: res.agent.instructions_note || '',
+          provider_agent_id: res.agent.provider_agent_id || '',
         });
 
         if (res.agent.instructions_note) {
@@ -149,6 +151,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
           name: form.escalation_name,
         },
         instructions_note: form.instructions_note,
+        provider_agent_id: form.provider_agent_id.trim() || undefined,
       };
 
       const res = await apiRequest<{ agent: AiAgent }>('/api/clinic/ai-agent', {
@@ -267,7 +270,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
           }
         >
           <div className="space-y-5 text-xs">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Input
                 label="AI Receptionist Name *"
                 required
@@ -286,6 +289,14 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
                   { value: 'ACTIVE', label: 'Active (Answering Calls)' },
                   { value: 'INACTIVE', label: 'Inactive (Disabled)' },
                 ]}
+              />
+
+              <Input
+                label="Sarvam Provider Agent ID"
+                disabled={!canConfigure}
+                value={form.provider_agent_id}
+                onChange={(e) => setForm({ ...form, provider_agent_id: e.target.value })}
+                placeholder="sarvam_agent_456"
               />
             </div>
 
