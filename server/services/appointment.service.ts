@@ -1,5 +1,11 @@
+import { AuditService } from "./audit.service";
 import { db } from '../db';
 import { supabase } from '../supabaseDiff';
+import { PatientService } from './patient.service';
+import { DoctorService } from './doctor.service';
+import { LeaveService } from './leave.service';
+import { ScheduleService } from './schedule.service';
+import { ServiceService } from './service.service';
 import { Appointment } from '../../src/types';
 
 export type AppointmentMutationSource = 
@@ -35,31 +41,41 @@ export class AppointmentService {
       return { success: false, error_code: 'VALIDATION_ERROR', error: 'Missing required parameters.' };
     }
 
-    const doctor = db.getDoctorById(clinicId, doctorId);
+    const doctor = await DoctorService.getById(clinicId, doctorId);
     if (!doctor || doctor.status !== 'ACTIVE') {
       return { success: false, error_code: 'DOCTOR_NOT_FOUND', error: 'Doctor not found or currently inactive.' };
     }
 
-    const service = db.getServiceById(clinicId, serviceId);
+    const service = await ServiceService.getById(clinicId, serviceId);
     if (!service || service.status !== 'ACTIVE') {
       return { success: false, error_code: 'SERVICE_NOT_FOUND', error: 'Service not found or currently inactive.' };
     }
 
-    const patient = db.getPatientById(clinicId, patientId);
+    const patient = await PatientService.getById(clinicId, patientId);
     if (!patient) {
       return { success: false, error_code: 'PATIENT_NOT_FOUND', error: 'Patient not found.' };
     }
 
-    // Leave check
-    const isOnLeave = db.data.doctor_leaves.find(
-      (l) =>
-        l.clinic_id === clinicId &&
-        l.doctor_id === doctorId &&
-        date >= l.start_date &&
-        date <= l.end_date
-    );
-    if (isOnLeave) {
-      return { success: false, error_code: 'VALIDATION_ERROR', error: `Doctor is on scheduled leave on ${date} (${isOnLeave.reason}).` };
+    // 1. Business Validation
+    const leaveCheck = await LeaveService.isDoctorOnLeave(clinicId, doctorId, date);
+    if (leaveCheck.onLeave) {
+      return {
+        success: false,
+        error_code: 'VALIDATION_ERROR',
+        error: `Doctor is on scheduled leave on ${date} (${leaveCheck.leave?.reason || 'Scheduled Leave'}).`,
+      };
+    }
+
+    // Working schedule check
+    const targetDateObj = new Date(date + 'T00:00:00Z');
+    const dayOfWeekIndex = targetDateObj.getUTCDay();
+    const docSchedule = await ScheduleService.getByDoctorAndDay(clinicId, doctorId, dayOfWeekIndex);
+    if (!docSchedule) {
+      return {
+        success: false,
+        error_code: 'VALIDATION_ERROR',
+        error: `Doctor does not have a working schedule configured for this day (${date}).`,
+      };
     }
 
     // Calculate end time
@@ -111,7 +127,7 @@ export class AppointmentService {
     db.flush();
 
     // Log audit
-    db.logAudit({
+    await AuditService.logAudit({
       clinic_id: clinicId,
       actor_user_id: source.type === 'AI' ? (source.agentId || 'ai_receptionist') : source.userId,
       actor_name: source.name,
@@ -151,7 +167,7 @@ export class AppointmentService {
       return { success: false, error_code: 'APPOINTMENT_NOT_FOUND', error: 'Appointment not found.' };
     }
 
-    const service = db.getServiceById(clinicId, existing.service_id);
+    const service = await ServiceService.getById(clinicId, existing.service_id);
     const duration = service?.duration_minutes || 30;
 
     const [h, m] = newStartTime.split(':').map(Number);
@@ -161,15 +177,25 @@ export class AppointmentService {
     const newEndTime = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
 
     // 1. Business Validation
-    const isOnLeave = db.data.doctor_leaves.find(
-      (l) =>
-        l.clinic_id === clinicId &&
-        l.doctor_id === existing.doctor_id &&
-        newDate >= l.start_date &&
-        newDate <= l.end_date
-    );
-    if (isOnLeave) {
-      return { success: false, error_code: 'VALIDATION_ERROR', error: `Doctor is on scheduled leave on ${newDate} (${isOnLeave.reason}).` };
+    const leaveCheck = await LeaveService.isDoctorOnLeave(clinicId, existing.doctor_id, newDate);
+    if (leaveCheck.onLeave) {
+      return {
+        success: false,
+        error_code: 'VALIDATION_ERROR',
+        error: `Doctor is on scheduled leave on ${newDate} (${leaveCheck.leave?.reason || 'Scheduled Leave'}).`,
+      };
+    }
+
+    // Working schedule check
+    const targetDateObj = new Date(newDate + 'T00:00:00Z');
+    const dayOfWeekIndex = targetDateObj.getUTCDay();
+    const docSchedule = await ScheduleService.getByDoctorAndDay(clinicId, existing.doctor_id, dayOfWeekIndex);
+    if (!docSchedule) {
+      return {
+        success: false,
+        error_code: 'VALIDATION_ERROR',
+        error: `Doctor does not have a working schedule configured for this day (${newDate}).`,
+      };
     }
 
     // 2. Authoritative PostgreSQL Mutation
@@ -218,7 +244,7 @@ export class AppointmentService {
       db.flush();
     }
 
-    db.logAudit({
+    await AuditService.logAudit({
       clinic_id: clinicId,
       actor_user_id: source.type === 'AI' ? (source.agentId || 'ai_receptionist') : source.userId,
       actor_name: source.name,
@@ -305,7 +331,7 @@ export class AppointmentService {
        actionLabel = 'APPOINTMENT_CANCELLED_BY_AI';
     }
 
-    db.logAudit({
+    await AuditService.logAudit({
       clinic_id: clinicId,
       actor_user_id: source.type === 'AI' ? (source.agentId || 'ai_receptionist') : source.userId,
       actor_name: source.name,

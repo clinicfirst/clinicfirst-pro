@@ -20,6 +20,7 @@ import { Input } from '../../components/common/Input';
 import { PlatformAiProviderConfig } from '../../components/platform/PlatformAiProviderConfig';
 import { PlatformAiInstructions } from '../../components/platform/PlatformAiInstructions';
 import { PlatformKnowledgeBase } from '../../components/platform/PlatformKnowledgeBase';
+import { PlatformClinicAiKnowledge } from '../../components/platform/PlatformClinicAiKnowledge';
 import { PlatformAiConfig } from '../../types';
 import { apiRequest } from '../../api';
 
@@ -38,7 +39,7 @@ interface PlatformSettingsState {
 
 export const PlatformSettings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'AI_ENGINE' | 'SECURITY_SYSTEM'>('AI_ENGINE');
-  const [aiSubTab, setAiSubTab] = useState<'PROVIDER' | 'INSTRUCTIONS' | 'KNOWLEDGE_BASE'>('PROVIDER');
+  const [aiSubTab, setAiSubTab] = useState<'PROVIDER' | 'INSTRUCTIONS' | 'KNOWLEDGE_BASE' | 'CLINIC_KNOWLEDGE'>('PROVIDER');
 
   const [settings, setSettings] = useState<PlatformSettingsState>({
     system_name: 'CLINICFIRST Platform Engine',
@@ -196,6 +197,18 @@ export const PlatformSettings: React.FC = () => {
               <BookOpen className="w-3.5 h-3.5" />
               Platform Knowledge Base
             </button>
+            <button
+              type="button"
+              onClick={() => setAiSubTab('CLINIC_KNOWLEDGE')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer border ${
+                aiSubTab === 'CLINIC_KNOWLEDGE'
+                  ? 'bg-[#0A2540] text-white border-[#0A2540]'
+                  : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+              }`}
+            >
+              <Shield className="w-3.5 h-3.5" />
+              Clinic AI Knowledge (Tenant Scoped)
+            </button>
           </div>
 
           {/* Sub-tab Views */}
@@ -214,6 +227,8 @@ export const PlatformSettings: React.FC = () => {
           )}
 
           {aiSubTab === 'KNOWLEDGE_BASE' && <PlatformKnowledgeBase />}
+
+          {aiSubTab === 'CLINIC_KNOWLEDGE' && <PlatformClinicAiKnowledge />}
         </div>
       )}
 

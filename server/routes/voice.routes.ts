@@ -1,13 +1,20 @@
 import { Router } from 'express';
 import crypto from 'crypto';
 import { db } from '../db';
+import { PatientService } from '../services/patient.service';
+import { DoctorService } from '../services/doctor.service';
+import { ServiceService } from '../services/service.service';
+import { AiAgentService } from '../services/ai-agent.service';
+import { AiConfigService } from '../services/ai-config.service';
 import { getAvailableSlots } from '../voice/tools/get-available-slots';
 import { createAppointment, cancelAppointment } from '../voice/tools/create-appointment';
 
 export const voiceRouter = Router();
 
 // Sarvam API Tool Authentication
-const CLINICFIRST_AI_TOOL_SECRET = process.env.CLINICFIRST_AI_TOOL_SECRET || '';
+function getToolSecret() {
+  return process.env.CLINICFIRST_AI_TOOL_SECRET || '';
+}
 
 // A simple fuzzy match helper for strings
 function fuzzyMatch(str1: string, str2: string) {
@@ -19,6 +26,7 @@ function fuzzyMatch(str1: string, str2: string) {
 voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
   try {
     const { provider_agent_id } = req.params;
+    const toolSecret = getToolSecret();
     
     // 1. Validate Secret
     const authHeader = req.headers.authorization;
@@ -27,13 +35,13 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
     }
     const token = authHeader.split(' ')[1];
     
-    if (!CLINICFIRST_AI_TOOL_SECRET) {
+    if (!toolSecret) {
       return res.status(403).json({ error: 'Tool secret is not configured' });
     }
 
     try {
       const tokenBuffer = Buffer.from(token);
-      const secretBuffer = Buffer.from(CLINICFIRST_AI_TOOL_SECRET);
+      const secretBuffer = Buffer.from(toolSecret);
       
       if (tokenBuffer.length !== secretBuffer.length || !crypto.timingSafeEqual(tokenBuffer, secretBuffer)) {
         return res.status(403).json({ error: 'Invalid tool secret' });
@@ -43,13 +51,13 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
     }
 
     // 2. Resolve Agent and Clinic
-    const agent = db.data.ai_agents.find(a => a.provider_agent_id === provider_agent_id);
+    const agent = await AiAgentService.getAgentByProviderAgentId(provider_agent_id);
     if (!agent) {
       return res.status(404).json({ error: 'Agent not found for this provider_agent_id' });
     }
     
-    const platformConfig = db.data.platform_ai_config;
-    if (platformConfig?.status === 'INACTIVE') {
+    const isPlatformEnabled = await AiConfigService.isPlatformAiEnabled();
+    if (!isPlatformEnabled) {
       return res.status(403).json({ error: 'Platform AI features are currently disabled.' });
     }
 
@@ -74,7 +82,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
 
     // Resolve service by name within the clinic
     if (service && typeof service === 'string') {
-      const services = db.getServices(clinic_id);
+      const services = await ServiceService.list(clinic_id, { status: 'ACTIVE' });
       const matches = services.filter(s => fuzzyMatch(s.name, service) && s.status === 'ACTIVE');
       if (matches.length === 1) {
         resolvedServiceId = matches[0].id;
@@ -87,7 +95,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
 
     // Resolve doctor by name within the clinic
     if (doctor && typeof doctor === 'string') {
-      const doctors = db.getDoctors(clinic_id);
+      const doctors = await DoctorService.list(clinic_id, { status: 'ACTIVE' });
       const matches = doctors.filter(d => fuzzyMatch(d.name, doctor) && d.status === 'ACTIVE');
       if (matches.length === 1) {
         resolvedDoctorId = matches[0].id;
@@ -130,17 +138,21 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
       }
 
       // Patient lookup/creation (do this first for idempotency)
-      let patient = db.getPatientByPhone(clinic_id, patient_phone);
+      let patient = await PatientService.getByPhone(clinic_id, patient_phone);
       if (!patient) {
-        patient = {
-          id: `pat_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-          clinic_id,
+        const createRes = await PatientService.create(clinic_id, {
           name: patient_name,
           phone: patient_phone,
           preferred_language: 'English',
-          created_at: new Date().toISOString()
-        };
-        db.createPatient(patient);
+        });
+        if (!createRes.success || !createRes.patient) {
+          return res.status(500).json({
+            success: false,
+            error_code: "PATIENT_CREATION_FAILED",
+            message: "Failed to register patient in database."
+          });
+        }
+        patient = createRes.patient;
       }
 
       // Idempotency check
@@ -155,13 +167,14 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
       );
 
       if (existingAppt) {
+         const existingSrv = existingAppt.service_id ? await ServiceService.getById(clinic_id, existingAppt.service_id) : null;
          return res.json({
            success: true,
            appointment_id: existingAppt.id,
            appointment_date: existingAppt.date,
            appointment_time: existingAppt.start_time,
            doctor: db.getDoctorById(clinic_id, existingAppt.doctor_id)?.name,
-           service: db.getServiceById(clinic_id, existingAppt.service_id)?.name,
+           service: existingSrv?.name,
            message: "Appointment was already booked successfully."
          });
       }
@@ -237,7 +250,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
         });
       }
 
-      const patient = db.getPatientByPhone(clinic_id, patient_phone);
+      const patient = await PatientService.getByPhone(clinic_id, patient_phone);
       if (!patient) {
         return res.json({
           success: false,
@@ -287,6 +300,8 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
       }
 
       if (activeAppts.length > 1) {
+        const allServices = await ServiceService.list(clinic_id);
+        const serviceMap = new Map(allServices.map(s => [s.id, s]));
         return res.json({
           success: false,
           error_code: "AMBIGUOUS_APPOINTMENT",
@@ -296,7 +311,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
             date: a.date,
             time: a.start_time,
             doctor: db.getDoctorById(clinic_id, a.doctor_id)?.name,
-            service: db.getServiceById(clinic_id, a.service_id)?.name
+            service: serviceMap.get(a.service_id)?.name
           }))
         });
       }
@@ -347,7 +362,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
         });
       }
 
-      const patient = db.getPatientByPhone(clinic_id, patient_phone);
+      const patient = await PatientService.getByPhone(clinic_id, patient_phone);
       if (!patient) {
         return res.json({
           success: false,
@@ -397,6 +412,8 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
       }
 
       if (activeAppts.length > 1) {
+        const allServices = await ServiceService.list(clinic_id);
+        const serviceMap = new Map(allServices.map(s => [s.id, s]));
         return res.json({
           success: false,
           error_code: "AMBIGUOUS_APPOINTMENT",
@@ -406,7 +423,7 @@ voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
             date: a.date,
             time: a.start_time,
             doctor: db.getDoctorById(clinic_id, a.doctor_id)?.name,
-            service: db.getServiceById(clinic_id, a.service_id)?.name
+            service: serviceMap.get(a.service_id)?.name
           }))
         });
       }

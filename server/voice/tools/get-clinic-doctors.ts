@@ -1,7 +1,9 @@
 import { db } from '../../db';
+import { DoctorService } from '../../services/doctor.service';
+import { ServiceService } from '../../services/service.service';
 
 export async function getClinicDoctors(clinicId: string, specialization?: string) {
-  let doctors = db.getDoctors(clinicId).filter((d) => d.status === 'ACTIVE');
+  let doctors = await DoctorService.list(clinicId, { status: 'ACTIVE' });
 
   if (specialization) {
     const spec = specialization.toLowerCase();
@@ -20,7 +22,7 @@ export async function getClinicDoctors(clinicId: string, specialization?: string
 }
 
 export async function getClinicServices(clinicId: string) {
-  const services = db.getServices(clinicId).filter((s) => s.status === 'ACTIVE');
+  const services = await ServiceService.list(clinicId, { status: 'ACTIVE' });
 
   return {
     services: services.map((s) => ({

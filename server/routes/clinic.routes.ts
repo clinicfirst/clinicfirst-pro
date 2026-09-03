@@ -1,4 +1,15 @@
+import { AuditService } from "../services/audit.service";
+import { EscalationService } from "../services/escalation.service";
+import { CallService } from "../services/call.service";
 import { AppointmentService } from '../services/appointment.service';
+import { PatientService } from '../services/patient.service';
+import { DoctorService } from '../services/doctor.service';
+import { StaffService } from '../services/staff.service';
+import { ScheduleService } from '../services/schedule.service';
+import { LeaveService } from '../services/leave.service';
+import { ServiceService } from '../services/service.service';
+import { AiAgentService } from '../services/ai-agent.service';
+import { AiConfigService } from '../services/ai-config.service';
 import { Router, Response } from 'express';
 import { db, hashPassword } from '../db';
 import { requireAuth, requireClinicPermission, AuthenticatedRequest } from '../auth';
@@ -13,6 +24,11 @@ import {
 } from '../../src/types';
 import { getAvailableSlots } from '../voice/tools/get-available-slots';
 import { isSarvamApiConfigured } from '../config/sarvam';
+import {
+  validateReceptionistPreferences,
+  generateSafeGreeting,
+  validateGreetingContent,
+} from '../services/aiValidator';
 
 export const clinicRouter = Router();
 
@@ -33,67 +49,72 @@ function getAuthClinicId(req: AuthenticatedRequest): string {
 clinicRouter.get(
   '/dashboard',
   requireClinicPermission('view_own_clinic_dashboard'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const today = new Date().toISOString().split('T')[0];
-    const doctorIdFilter = req.user?.role === 'DOCTOR' ? req.user.doctor_id : undefined;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const today = new Date().toISOString().split('T')[0];
+      const doctorIdFilter = req.user?.role === 'DOCTOR' ? req.user.doctor_id : undefined;
 
-    const clinic = db.getClinicById(clinicId);
-    const allAppointments = db.getAppointments(clinicId, { date: today, doctor_id: doctorIdFilter });
-    const confirmed = allAppointments.filter((a) => a.status === 'CONFIRMED');
-    const completed = allAppointments.filter((a) => a.status === 'COMPLETED');
-    const rescheduled = allAppointments.filter((a) => a.status === 'RESCHEDULED');
-    const cancelled = allAppointments.filter((a) => a.status === 'CANCELLED');
+      const clinic = db.getClinicById(clinicId);
+      const allAppointments = db.getAppointments(clinicId, { date: today, doctor_id: doctorIdFilter });
+      const confirmed = allAppointments.filter((a) => a.status === 'CONFIRMED');
+      const completed = allAppointments.filter((a) => a.status === 'COMPLETED');
+      const rescheduled = allAppointments.filter((a) => a.status === 'RESCHEDULED');
+      const cancelled = allAppointments.filter((a) => a.status === 'CANCELLED');
 
-    let allCalls = db.getCalls(clinicId);
-    if (req.user?.role === 'DOCTOR') {
-      allCalls = allCalls.filter(c => c.doctor_id === req.user.doctor_id);
-    }
-    const todayCalls = allCalls.filter((c) => c.created_at.startsWith(today));
-    const todayAiBooked = todayCalls.filter((c) => c.outcome === 'APPOINTMENT_BOOKED').length;
+      let allCalls = await CallService.listCalls(clinicId);
+      if (req.user?.role === 'DOCTOR') {
+        allCalls = allCalls.filter(c => c.doctor_id === req.user.doctor_id);
+      }
+      const todayCalls = allCalls.filter((c) => c.created_at.startsWith(today));
+      const todayAiBooked = todayCalls.filter((c) => c.outcome === 'APPOINTMENT_BOOKED').length;
 
-    let doctors = db.getDoctors(clinicId).filter((d) => d.status === 'ACTIVE');
-    if (req.user?.role === 'DOCTOR') {
-      doctors = doctors.filter(d => d.id === req.user.doctor_id);
-    }
-    const aiAgent = db.getAiAgent(clinicId);
-    const pendingEscalations = db
-      .getEscalations(clinicId)
-      .filter((e) => e.status === 'pending');
+      let doctors = (await DoctorService.list(clinicId, { status: 'ACTIVE' }));
+      if (req.user?.role === 'DOCTOR') {
+        doctors = doctors.filter(d => d.id === req.user.doctor_id);
+      }
+      const doctorMapById = new Map(doctors.map(d => [d.id, d]));
+      const aiAgent = await AiAgentService.getAgentByClinic(clinicId);
+      const pendingEscalations = (await EscalationService.listEscalations(clinicId))
+        .filter((e) => e.status === 'pending');
 
-    // Next upcoming appointments today with fully hydrated relations
-    const enrichedAppointments = allAppointments.map((apt) => {
-      const patient = apt.patient || db.getPatientById(clinicId, apt.patient_id);
-      const doctor = apt.doctor || db.getDoctorById(clinicId, apt.doctor_id);
-      const service = apt.service || db.getServiceById(clinicId, apt.service_id);
-      return {
-        ...apt,
-        patient,
-        doctor,
-        service,
-        patient_name: patient?.name || 'Registered Patient',
-        patient_phone: patient?.phone || '',
-        doctor_name: doctor?.name || 'Assigned Physician',
-        doctor_specialization: doctor?.specialization || 'General Practice',
-        service_name: service?.name || 'General Consultation',
-        service_fee: service?.fee || 0,
-        service_duration: service?.duration_minutes || 30,
-      };
-    });
+      const allPatients = await PatientService.list(clinicId);
+      const patientMap = new Map(allPatients.map(p => [p.id, p]));
+      const allServices = await ServiceService.list(clinicId);
+      const serviceMap = new Map(allServices.map(s => [s.id, s]));
 
-    const upcomingToday = enrichedAppointments
-      .filter((a) => a.status !== 'CANCELLED')
-      .sort((a, b) => a.start_time.localeCompare(b.start_time));
+      // Next upcoming appointments today with fully hydrated relations
+      const enrichedAppointments = allAppointments.map((apt) => {
+        const patient = apt.patient || patientMap.get(apt.patient_id) || db.getPatientById(clinicId, apt.patient_id);
+        const doctor = apt.doctor || doctorMapById.get(apt.doctor_id) || db.getDoctorById(clinicId, apt.doctor_id);
+        const service = apt.service || serviceMap.get(apt.service_id);
+        return {
+          ...apt,
+          patient,
+          doctor,
+          service,
+          patient_name: patient?.name || 'Registered Patient',
+          patient_phone: patient?.phone || '',
+          doctor_name: doctor?.name || 'Assigned Physician',
+          doctor_specialization: doctor?.specialization || 'General Practice',
+          service_name: service?.name || 'General Consultation',
+          service_fee: service?.fee || 0,
+          service_duration: service?.duration_minutes || 30,
+        };
+      });
 
-    // -----------------------------------------------------------
-    // Weekly Trends & Analytics Calculation (Past 7 Days - Pure Database Driven)
-    // -----------------------------------------------------------
-    const rawAllAppointments = db.getAppointments(clinicId);
-    const allPatients = db.getPatients(clinicId);
-    let rawAllCalls = db.getCalls(clinicId);
-    if (req.user?.role === 'DOCTOR') {
-      rawAllCalls = rawAllCalls.filter(c => c.doctor_id === req.user.doctor_id);
-    }
+      const upcomingToday = enrichedAppointments
+        .filter((a) => a.status !== 'CANCELLED')
+        .sort((a, b) => a.start_time.localeCompare(b.start_time));
+
+      // -----------------------------------------------------------
+      // Weekly Trends & Analytics Calculation (Past 7 Days - Pure Database Driven)
+      // -----------------------------------------------------------
+      const rawAllAppointments = db.getAppointments(clinicId);
+      let rawAllCalls = await CallService.listCalls(clinicId);
+      if (req.user?.role === 'DOCTOR') {
+        rawAllCalls = rawAllCalls.filter(c => c.doctor_id === req.user.doctor_id);
+      }
 
     const newPatientsToday = allPatients.filter(
       (p) => p.created_at && p.created_at.startsWith(today)
@@ -432,7 +453,7 @@ clinicRouter.get(
       appointmentByDoctor,
     };
 
-    const platformAiConfig = db.getPlatformAiConfig();
+    const platformAiConfig = await AiConfigService.getPlatformAiConfig();
     const isApiKeySet = Boolean(
       platformAiConfig?.api_key_configured ||
       process.env.GEMINI_API_KEY ||
@@ -508,7 +529,11 @@ clinicRouter.get(
       activeDoctors: doctors,
       weeklyAnalytics,
     });
+  } catch (err: any) {
+    console.error('[GET /dashboard] Error:', err);
+    return res.status(500).json({ error: 'Failed to load dashboard data.' });
   }
+}
 );
 
 // -------------------------------------------------------------
@@ -517,43 +542,48 @@ clinicRouter.get(
 clinicRouter.get(
   ['/daily-collection', '/finance/daily-collection'],
   requireClinicPermission('view_daily_collection'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const clinic = db.getClinicById(clinicId);
-    const today = (req.query.date as string) || new Date().toISOString().split('T')[0];
-    const doctorIdFilter = req.user?.role === 'DOCTOR' ? req.user.doctor_id : undefined;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const clinic = db.getClinicById(clinicId);
+      const today = (req.query.date as string) || new Date().toISOString().split('T')[0];
+      const doctorIdFilter = req.user?.role === 'DOCTOR' ? req.user.doctor_id : undefined;
 
-    const appointments = db.getAppointments(clinicId, { date: today, doctor_id: doctorIdFilter });
+      const appointments = db.getAppointments(clinicId, { date: today, doctor_id: doctorIdFilter });
+      const allPatients = await PatientService.list(clinicId);
+      const patientMap = new Map(allPatients.map(p => [p.id, p]));
+      const allServices = await ServiceService.list(clinicId);
+      const serviceLookupMap = new Map(allServices.map(s => [s.id, s]));
 
-    const items = appointments
-      .map((apt) => {
-        const patient = apt.patient || db.getPatientById(clinicId, apt.patient_id);
-        const doctor = apt.doctor || db.getDoctorById(clinicId, apt.doctor_id);
-        const service = apt.service || db.getServiceById(clinicId, apt.service_id);
-        const fee = Number(service?.fee) || 0;
+      const items = appointments
+        .map((apt) => {
+          const patient = apt.patient || patientMap.get(apt.patient_id) || db.getPatientById(clinicId, apt.patient_id);
+          const doctor = apt.doctor || db.getDoctorById(clinicId, apt.doctor_id);
+          const service = apt.service || serviceLookupMap.get(apt.service_id);
+          const fee = Number(service?.fee) || 0;
 
-        return {
-          appointment_id: apt.id,
-          patient_id: apt.patient_id,
-          patient_name: patient?.name || 'Registered Patient',
-          patient_phone: patient?.phone || '',
-          patient_email: patient?.email || '',
-          doctor_id: apt.doctor_id,
-          doctor_name: doctor?.name || 'Assigned Physician',
-          doctor_specialization: doctor?.specialization || 'General Practice',
-          service_id: apt.service_id,
-          service_name: service?.name || 'General Consultation',
-          service_duration: service?.duration_minutes || 30,
-          fee,
-          date: apt.date,
-          start_time: apt.start_time,
-          end_time: apt.end_time,
-          status: apt.status,
-          created_via: apt.created_via,
-          created_at: apt.created_at,
-        };
-      })
-      .sort((a, b) => a.start_time.localeCompare(b.start_time));
+          return {
+            appointment_id: apt.id,
+            patient_id: apt.patient_id,
+            patient_name: patient?.name || 'Registered Patient',
+            patient_phone: patient?.phone || '',
+            patient_email: patient?.email || '',
+            doctor_id: apt.doctor_id,
+            doctor_name: doctor?.name || 'Assigned Physician',
+            doctor_specialization: doctor?.specialization || 'General Practice',
+            service_id: apt.service_id,
+            service_name: service?.name || 'General Consultation',
+            service_duration: service?.duration_minutes || 30,
+            fee,
+            date: apt.date,
+            start_time: apt.start_time,
+            end_time: apt.end_time,
+            status: apt.status,
+            created_via: apt.created_via,
+            created_at: apt.created_at,
+          };
+        })
+        .sort((a, b) => a.start_time.localeCompare(b.start_time));
 
     let totalCollection = 0;
     let confirmedCompletedTotal = 0;
@@ -627,7 +657,11 @@ clinicRouter.get(
       by_service: Object.values(serviceMap),
       items,
     });
+  } catch (err: any) {
+    console.error('[GET /daily-collection] Error:', err);
+    return res.status(500).json({ error: 'Failed to load daily collection data.' });
   }
+}
 );
 
 // -------------------------------------------------------------
@@ -636,95 +670,96 @@ clinicRouter.get(
 clinicRouter.get(
   '/doctors',
   requireClinicPermission('view_doctors'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    let doctors = db.getDoctors(clinicId);
-    if (req.user?.role === 'DOCTOR') {
-      doctors = doctors.filter(d => d.id === req.user.doctor_id);
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      let doctors = await DoctorService.list(clinicId);
+      if (req.user?.role === 'DOCTOR') {
+        doctors = doctors.filter(d => d.id === req.user.doctor_id);
+      }
+      return res.json({ doctors });
+    } catch (err: any) {
+      console.error('[GET /doctors] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to fetch doctors.' });
     }
-    return res.json({ doctors });
   }
 );
 
 clinicRouter.post(
   '/doctors',
   requireClinicPermission('manage_doctors'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { name, specialization, qualification, phone, email, consultation_duration_minutes } = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const { name, specialization, qualification, phone, email, consultation_duration_minutes } = req.body;
 
-    if (!name || !specialization) {
-      return res.status(400).json({ error: 'Doctor name and specialization are required.' });
-    }
+      if (!name || !specialization) {
+        return res.status(400).json({ error: 'Doctor name and specialization are required.' });
+      }
 
-    const doctor: Doctor = {
-      id: `doc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      clinic_id: clinicId,
-      name: name.trim(),
-      specialization: specialization.trim(),
-      qualification: qualification?.trim() || '',
-      phone: phone?.trim() || '',
-      email: email?.trim() || '',
-      consultation_duration_minutes: Number(consultation_duration_minutes) || 30,
-      status: 'ACTIVE',
-      created_at: new Date().toISOString(),
-    };
-
-    db.createDoctor(doctor);
-
-    // Auto-create standard Mon-Fri 09:00-17:00 schedule for new doctor
-    for (let day = 1; day <= 5; day++) {
-      db.saveSchedule({
-        id: `sched_${doctor.id}_day_${day}`,
-        clinic_id: clinicId,
-        doctor_id: doctor.id,
-        day_of_week: day,
-        start_time: '09:00',
-        end_time: '17:00',
-        break_start: '13:00',
-        break_end: '14:00',
-        buffer_minutes: 5,
+      const result = await DoctorService.create(clinicId, {
+        name,
+        specialization,
+        qualification,
+        phone,
+        email,
+        consultation_duration_minutes,
+        status: 'ACTIVE',
       });
+
+      if (!result.success || !result.doctor) {
+        return res.status(400).json({ error: result.error || 'Failed to create doctor.' });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'DOCTOR_CREATED',
+        target_type: 'DOCTOR',
+        target_id: result.doctor.id,
+        metadata: { name: result.doctor.name, specialization: result.doctor.specialization },
+      });
+
+      return res.status(201).json({ doctor: result.doctor });
+    } catch (err: any) {
+      console.error('[POST /doctors] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to create doctor.' });
     }
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'DOCTOR_CREATED',
-      target_type: 'DOCTOR',
-      target_id: doctor.id,
-      metadata: { name: doctor.name, specialization: doctor.specialization },
-    });
-
-    return res.status(201).json({ doctor });
   }
 );
 
 clinicRouter.put(
   '/doctors/:id',
   requireClinicPermission('manage_doctors'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const doctorId = req.params.id;
-    const updates = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const doctorId = req.params.id;
+      const updates = req.body;
 
-    const updated = db.updateDoctor(clinicId, doctorId, updates);
-    if (!updated) {
-      return res.status(404).json({ error: 'Doctor not found.' });
+      const result = await DoctorService.update(clinicId, doctorId, updates);
+      if (!result.success || !result.doctor) {
+        return res
+          .status(result.error_code === 'DOCTOR_NOT_FOUND' ? 404 : 400)
+          .json({ error: result.error || 'Doctor not found.' });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: updates.status === 'INACTIVE' ? 'DOCTOR_DEACTIVATED' : 'DOCTOR_UPDATED',
+        target_type: 'DOCTOR',
+        target_id: doctorId,
+        metadata: updates,
+      });
+
+      return res.json({ doctor: result.doctor });
+    } catch (err: any) {
+      console.error('[PUT /doctors/:id] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to update doctor.' });
     }
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: updates.status === 'INACTIVE' ? 'DOCTOR_DEACTIVATED' : 'DOCTOR_UPDATED',
-      target_type: 'DOCTOR',
-      target_id: doctorId,
-      metadata: updates,
-    });
-
-    return res.json({ doctor: updated });
   }
 );
 
@@ -734,120 +769,136 @@ clinicRouter.put(
 clinicRouter.get(
   '/staff',
   requireClinicPermission('view_staff'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const staff = db.getUsers(clinicId).filter((u) => u.role === 'CLINIC_STAFF' || u.role === 'CLINIC_ADMIN');
-    return res.json({ staff });
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const staff = await StaffService.listStaff(clinicId);
+      return res.json({ staff });
+    } catch (err: any) {
+      console.error('[GET /staff] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to fetch staff.' });
+    }
   }
 );
 
 clinicRouter.post(
   '/staff',
   requireClinicPermission('manage_staff'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { name, email, phone, tempPassword } = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const { name, email, phone, tempPassword } = req.body;
 
-    if (!name || !email || !tempPassword) {
-      return res.status(400).json({ error: 'Staff name, email, and temporary password are required.' });
+      if (!name || !email || !tempPassword) {
+        return res.status(400).json({ error: 'Staff name, email, and temporary password are required.' });
+      }
+
+      const result = await StaffService.create(clinicId, {
+        role: 'CLINIC_STAFF',
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone?.trim(),
+        status: 'ACTIVE',
+        must_change_password: true,
+        password_hash: hashPassword(tempPassword),
+      });
+
+      if (!result.success || !result.user) {
+        return res.status(result.error_code === 'EMAIL_ALREADY_EXISTS' ? 400 : 500).json({
+          error: result.error || 'Failed to create staff member.',
+        });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'STAFF_CREATED',
+        target_type: 'USER',
+        target_id: result.user.id,
+        metadata: { name: result.user.name, email: result.user.email },
+      });
+
+      return res.status(201).json({ staff: result.user });
+    } catch (err: any) {
+      console.error('[POST /staff] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to create staff member.' });
     }
-
-    const existing = db.getUserByEmail(email);
-    if (existing) {
-      return res.status(400).json({ error: `A user with email ${email} already exists.` });
-    }
-
-    const newStaff = {
-      id: `usr_staff_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      clinic_id: clinicId,
-      role: 'CLINIC_STAFF' as const,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      phone: phone?.trim() || '',
-      status: 'ACTIVE' as const,
-      must_change_password: true,
-      created_at: new Date().toISOString(),
-      password_hash: hashPassword(tempPassword),
-    };
-
-    const created = db.createUser(newStaff);
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'STAFF_CREATED',
-      target_type: 'USER',
-      target_id: created.id,
-      metadata: { name: created.name, email: created.email },
-    });
-
-    return res.status(201).json({ staff: created });
   }
 );
 
 clinicRouter.put(
   '/staff/:id',
   requireClinicPermission('manage_staff'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const staffId = req.params.id;
-    const targetUser = db.getUserById(staffId);
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const staffId = req.params.id;
+      const updates = req.body;
 
-    if (!targetUser || targetUser.clinic_id !== clinicId) {
-      return res.status(404).json({ error: 'Staff member not found.' });
+      const result = await StaffService.update(staffId, updates, clinicId);
+      if (!result.success || !result.user) {
+        return res
+          .status(result.error_code === 'USER_NOT_FOUND' ? 404 : 400)
+          .json({ error: result.error || 'Staff member not found.' });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: updates.status === 'INACTIVE' ? 'STAFF_DEACTIVATED' : 'STAFF_UPDATED',
+        target_type: 'USER',
+        target_id: staffId,
+        metadata: updates,
+      });
+
+      return res.json({ staff: result.user });
+    } catch (err: any) {
+      console.error('[PUT /staff/:id] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to update staff member.' });
     }
-
-    const updates = req.body;
-    const updated = db.updateUser(staffId, updates);
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: updates.status === 'INACTIVE' ? 'STAFF_DEACTIVATED' : 'STAFF_UPDATED',
-      target_type: 'USER',
-      target_id: staffId,
-      metadata: updates,
-    });
-
-    return res.json({ staff: updated });
   }
 );
 
 clinicRouter.post(
   '/staff/:id/reset-password',
   requireClinicPermission('manage_staff'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const staffId = req.params.id;
-    const { newTempPassword } = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const staffId = req.params.id;
+      const { newTempPassword } = req.body;
 
-    if (!newTempPassword || newTempPassword.length < 8) {
-      return res.status(400).json({ error: 'Temporary password must be at least 8 characters long.' });
+      if (!newTempPassword || newTempPassword.length < 8) {
+        return res.status(400).json({ error: 'Temporary password must be at least 8 characters long.' });
+      }
+
+      const targetUser = await StaffService.getById(staffId, clinicId);
+      if (!targetUser) {
+        return res.status(404).json({ error: 'Staff member not found.' });
+      }
+
+      const result = await StaffService.resetPassword(staffId, hashPassword(newTempPassword), clinicId);
+      if (!result.success) {
+        return res.status(500).json({ error: result.error || 'Failed to reset password.' });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'STAFF_PASSWORD_RESET',
+        target_type: 'USER',
+        target_id: staffId,
+        metadata: { target_email: targetUser.email },
+      });
+
+      return res.json({ success: true, message: 'Temporary password reset successfully.' });
+    } catch (err: any) {
+      console.error('[POST /staff/:id/reset-password] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to reset password.' });
     }
-
-    const targetUser = db.getUserById(staffId);
-    if (!targetUser || targetUser.clinic_id !== clinicId) {
-      return res.status(404).json({ error: 'Staff member not found.' });
-    }
-
-    db.updateUser(staffId, {
-      password_hash: hashPassword(newTempPassword),
-      must_change_password: true,
-    });
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'STAFF_PASSWORD_RESET',
-      target_type: 'USER',
-      target_id: staffId,
-      metadata: { target_email: targetUser.email },
-    });
-
-    return res.json({ success: true, message: 'Temporary password reset successfully.' });
   }
 );
 
@@ -857,77 +908,93 @@ clinicRouter.post(
 clinicRouter.get(
   '/services',
   requireClinicPermission('view_services'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    let services = db.getServices(clinicId);
-    if (req.user?.role === 'DOCTOR') {
-      services = services.filter(s => !s.assigned_doctor_ids || s.assigned_doctor_ids.length === 0 || s.assigned_doctor_ids.includes(req.user.doctor_id || ''));
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const doctorId = req.user?.role === 'DOCTOR' ? req.user.doctor_id : undefined;
+      const services = await ServiceService.list(clinicId, { doctorId });
+      return res.json({ services });
+    } catch (err: any) {
+      console.error('[GET /api/clinic/services] Error:', err);
+      return res.status(500).json({ error: err.message || 'Failed to fetch services.' });
     }
-    return res.json({ services });
   }
 );
 
 clinicRouter.post(
   '/services',
   requireClinicPermission('manage_services'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { name, duration_minutes, fee, assigned_doctor_ids } = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const { name, duration_minutes, fee, assigned_doctor_ids, status } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ error: 'Service name is required.' });
+      const result = await ServiceService.create(clinicId, {
+        name,
+        duration_minutes,
+        fee,
+        assigned_doctor_ids,
+        status,
+      });
+
+      if (!result.success || !result.service) {
+        const statusCode = result.error_code === 'VALIDATION_ERROR' ? 400 : 500;
+        return res.status(statusCode).json({ error: result.error || 'Failed to create service.' });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'SERVICE_CREATED',
+        target_type: 'SERVICE',
+        target_id: result.service.id,
+        metadata: { name: result.service.name, fee: result.service.fee },
+      });
+
+      return res.status(201).json({ service: result.service });
+    } catch (err: any) {
+      console.error('[POST /api/clinic/services] Error:', err);
+      return res.status(500).json({ error: err.message || 'Failed to create service.' });
     }
-
-    const service: Service = {
-      id: `srv_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      clinic_id: clinicId,
-      name: name.trim(),
-      duration_minutes: Number(duration_minutes) || 30,
-      fee: Number(fee) || 0,
-      status: 'ACTIVE',
-      assigned_doctor_ids: assigned_doctor_ids || [],
-    };
-
-    db.createService(service);
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'SERVICE_CREATED',
-      target_type: 'SERVICE',
-      target_id: service.id,
-      metadata: { name: service.name, fee: service.fee },
-    });
-
-    return res.status(201).json({ service });
   }
 );
 
 clinicRouter.put(
   '/services/:id',
   requireClinicPermission('manage_services'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const serviceId = req.params.id;
-    const updates = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const serviceId = req.params.id;
+      const updates = req.body;
 
-    const updated = db.updateService(clinicId, serviceId, updates);
-    if (!updated) {
-      return res.status(404).json({ error: 'Service not found.' });
+      const result = await ServiceService.update(clinicId, serviceId, updates);
+      if (!result.success || !result.service) {
+        const statusCode =
+          result.error_code === 'SERVICE_NOT_FOUND'
+            ? 404
+            : result.error_code === 'VALIDATION_ERROR'
+            ? 400
+            : 500;
+        return res.status(statusCode).json({ error: result.error || 'Failed to update service.' });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: updates.status === 'INACTIVE' ? 'SERVICE_DEACTIVATED' : 'SERVICE_UPDATED',
+        target_type: 'SERVICE',
+        target_id: serviceId,
+        metadata: updates,
+      });
+
+      return res.json({ service: result.service });
+    } catch (err: any) {
+      console.error('[PUT /api/clinic/services/:id] Error:', err);
+      return res.status(500).json({ error: err.message || 'Failed to update service.' });
     }
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'SERVICE_UPDATED',
-      target_type: 'SERVICE',
-      target_id: serviceId,
-      metadata: updates,
-    });
-
-    return res.json({ service: updated });
   }
 );
 
@@ -937,133 +1004,178 @@ clinicRouter.put(
 clinicRouter.get(
   '/schedules',
   requireClinicPermission('view_schedules'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const doctorId = req.user?.role === 'DOCTOR' ? req.user.doctor_id : (req.query.doctor_id as string | undefined);
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const doctorId = req.user?.role === 'DOCTOR' ? req.user.doctor_id : (req.query.doctor_id as string | undefined);
 
-    const schedules = db.getSchedules(clinicId, doctorId);
-    const leaves = db.getLeaves(clinicId, doctorId);
+      const [schedules, leaves] = await Promise.all([
+        ScheduleService.list(clinicId, doctorId),
+        LeaveService.list(clinicId, doctorId),
+      ]);
 
-    return res.json({ schedules, leaves });
+      return res.json({ schedules, leaves });
+    } catch (err: any) {
+      console.error('[GET /schedules] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to retrieve schedules and leaves.' });
+    }
   }
 );
 
 clinicRouter.post(
   '/schedules',
   requireClinicPermission('manage_schedules'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { doctor_id, day_of_week, start_time, end_time, break_start, break_end, buffer_minutes } = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const { doctor_id, day_of_week, start_time, end_time, break_start, break_end, buffer_minutes } = req.body;
 
-    if (!doctor_id || day_of_week === undefined || !start_time || !end_time) {
-      return res.status(400).json({ error: 'doctor_id, day_of_week, start_time, and end_time are required.' });
+      if (!doctor_id || day_of_week === undefined || !start_time || !end_time) {
+        return res.status(400).json({ error: 'doctor_id, day_of_week, start_time, and end_time are required.' });
+      }
+
+      const result = await ScheduleService.save(clinicId, {
+        doctor_id,
+        day_of_week: Number(day_of_week),
+        start_time,
+        end_time,
+        break_start,
+        break_end,
+        buffer_minutes: buffer_minutes !== undefined ? Number(buffer_minutes) : 5,
+      });
+
+      if (!result.success || !result.schedule) {
+        return res.status(result.error_code === 'DOCTOR_NOT_FOUND' ? 404 : 400).json({
+          error: result.error || 'Failed to save schedule.',
+        });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'SCHEDULE_UPDATED',
+        target_type: 'SCHEDULE',
+        target_id: result.schedule.id,
+        metadata: result.schedule,
+      });
+
+      return res.json({ schedule: result.schedule });
+    } catch (err: any) {
+      console.error('[POST /schedules] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to save schedule.' });
     }
-
-    const schedule: DoctorSchedule = {
-      id: `sched_${doctor_id}_day_${day_of_week}`,
-      clinic_id: clinicId,
-      doctor_id,
-      day_of_week: Number(day_of_week),
-      start_time,
-      end_time,
-      break_start,
-      break_end,
-      buffer_minutes: Number(buffer_minutes) || 5,
-    };
-
-    const saved = db.saveSchedule(schedule);
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'SCHEDULE_UPDATED',
-      target_type: 'SCHEDULE',
-      target_id: saved.id,
-      metadata: schedule,
-    });
-
-    return res.json({ schedule: saved });
   }
 );
 
 clinicRouter.delete(
   '/schedules',
   requireClinicPermission('manage_schedules'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const doctorId = req.query.doctor_id as string;
-    const dayOfWeek = req.query.day_of_week as string;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const doctorId = req.query.doctor_id as string;
+      const dayOfWeek = req.query.day_of_week as string;
 
-    if (!doctorId || dayOfWeek === undefined) {
-      return res.status(400).json({ error: 'doctor_id and day_of_week are required.' });
+      if (!doctorId || dayOfWeek === undefined) {
+        return res.status(400).json({ error: 'doctor_id and day_of_week are required.' });
+      }
+
+      const result = await ScheduleService.delete(clinicId, doctorId, Number(dayOfWeek));
+      if (!result.success) {
+        return res.status(500).json({ error: result.error || 'Failed to delete schedule.' });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'SCHEDULE_DELETED',
+        target_type: 'SCHEDULE',
+        target_id: `sched_${doctorId}_day_${dayOfWeek}`,
+        metadata: { doctor_id: doctorId, day_of_week: Number(dayOfWeek) },
+      });
+
+      return res.json({ success: true });
+    } catch (err: any) {
+      console.error('[DELETE /schedules] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to delete schedule.' });
     }
-
-    db.deleteSchedule(clinicId, doctorId, Number(dayOfWeek));
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'SCHEDULE_DELETED',
-      target_type: 'SCHEDULE',
-      target_id: `sched_${doctorId}_day_${dayOfWeek}`,
-      metadata: { doctor_id: doctorId, day_of_week: Number(dayOfWeek) },
-    });
-
-    return res.json({ success: true });
   }
 );
 
 clinicRouter.post(
   '/leaves',
   requireClinicPermission('manage_schedules'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { doctor_id, start_date, end_date, reason } = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const { doctor_id, start_date, end_date, reason } = req.body;
 
-    if (!doctor_id || !start_date || !end_date) {
-      return res.status(400).json({ error: 'doctor_id, start_date, and end_date are required.' });
+      if (!doctor_id || !start_date || !end_date) {
+        return res.status(400).json({ error: 'doctor_id, start_date, and end_date are required.' });
+      }
+
+      const result = await LeaveService.create(clinicId, {
+        doctor_id,
+        start_date,
+        end_date,
+        reason: reason || 'Scheduled Leave',
+      });
+
+      if (!result.success || !result.leave) {
+        return res.status(result.error_code === 'DOCTOR_NOT_FOUND' ? 404 : 400).json({
+          error: result.error || 'Failed to create leave.',
+        });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'DOCTOR_LEAVE_LOGGED',
+        target_type: 'LEAVE',
+        target_id: result.leave.id,
+        metadata: result.leave,
+      });
+
+      return res.status(201).json({ leave: result.leave });
+    } catch (err: any) {
+      console.error('[POST /leaves] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to create leave record.' });
     }
-
-    const leave: DoctorLeave = {
-      id: `leave_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      clinic_id: clinicId,
-      doctor_id,
-      start_date,
-      end_date,
-      reason: reason || 'Scheduled Leave',
-    };
-
-    const created = db.createLeave(leave);
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'DOCTOR_LEAVE_LOGGED',
-      target_type: 'LEAVE',
-      target_id: created.id,
-      metadata: leave,
-    });
-
-    return res.status(201).json({ leave: created });
   }
 );
 
 clinicRouter.delete(
   '/leaves/:id',
   requireClinicPermission('manage_schedules'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const leaveId = req.params.id;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const leaveId = req.params.id;
 
-    const deleted = db.deleteLeave(clinicId, leaveId);
-    if (!deleted) {
-      return res.status(404).json({ error: 'Leave record not found.' });
+      const result = await LeaveService.delete(clinicId, leaveId);
+      if (!result.success) {
+        return res.status(result.error_code === 'LEAVE_NOT_FOUND' ? 404 : 500).json({
+          error: result.error || 'Leave record not found.',
+        });
+      }
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'DOCTOR_LEAVE_CANCELLED',
+        target_type: 'LEAVE',
+        target_id: leaveId,
+      });
+
+      return res.json({ success: true });
+    } catch (err: any) {
+      console.error('[DELETE /leaves/:id] Error:', err);
+      return res.status(500).json({ error: err?.message || 'Failed to delete leave record.' });
     }
-
-    return res.json({ success: true });
   }
 );
 
@@ -1073,92 +1185,116 @@ clinicRouter.delete(
 clinicRouter.get(
   '/patients',
   requireClinicPermission('view_patients'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const search = req.query.search as string | undefined;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const search = req.query.search as string | undefined;
 
-    let patients = db.getPatients(clinicId, search);
-    if (req.user?.role === 'DOCTOR') {
-      const myPatientIds = new Set(db.getAppointments(clinicId, { doctor_id: req.user.doctor_id }).map(a => a.patient_id));
-      patients = patients.filter(p => myPatientIds.has(p.id));
+      let patients = await PatientService.list(clinicId, search);
+      if (req.user?.role === 'DOCTOR') {
+        const myPatientIds = new Set(db.getAppointments(clinicId, { doctor_id: req.user.doctor_id }).map(a => a.patient_id));
+        patients = patients.filter(p => myPatientIds.has(p.id));
+      }
+      return res.json({ patients });
+    } catch (err: any) {
+      console.error('[GET /patients] Error:', err);
+      return res.status(500).json({ error: 'Failed to retrieve patients.' });
     }
-    return res.json({ patients });
   }
 );
 
 clinicRouter.get(
   '/patients/:id',
   requireClinicPermission('view_patients'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const patientId = req.params.id;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const patientId = req.params.id;
 
-    const patient = db.getPatientById(clinicId, patientId);
-    if (!patient) {
-      return res.status(404).json({ error: 'Patient not found.' });
+      const patient = await PatientService.getById(clinicId, patientId);
+      if (!patient) {
+        return res.status(404).json({ error: 'Patient not found.' });
+      }
+
+      const appointments = db.getAppointments(clinicId).filter((a) => a.patient_id === patientId);
+      const calls = (await CallService.listCalls(clinicId)).filter((c) => c.patient_id === patientId);
+
+      return res.json({ patient, appointments, calls });
+    } catch (err: any) {
+      console.error('[GET /patients/:id] Error:', err);
+      return res.status(500).json({ error: 'Failed to retrieve patient details.' });
     }
-
-    const appointments = db.getAppointments(clinicId).filter((a) => a.patient_id === patientId);
-    const calls = db.getCalls(clinicId).filter((c) => c.patient_id === patientId);
-
-    return res.json({ patient, appointments, calls });
   }
 );
 
 clinicRouter.post(
   '/patients',
   requireClinicPermission('manage_patients'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { name, phone, email, dob, gender, preferred_language, notes } = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const { name, phone, email, dob, gender, preferred_language, notes } = req.body;
 
-    if (!name || !phone) {
-      return res.status(400).json({ error: 'Patient name and phone number are required.' });
+      if (!name || !phone) {
+        return res.status(400).json({ error: 'Patient name and phone number are required.' });
+      }
+
+      const result = await PatientService.create(clinicId, {
+        name: name.trim(),
+        phone: phone.trim(),
+        email: email?.trim() || '',
+        dob: dob || '',
+        gender: gender || 'Prefer not to say',
+        preferred_language: preferred_language || 'English',
+        notes: notes || '',
+      });
+
+      if (!result.success || !result.patient) {
+        return res.status(500).json({ error: result.error || 'Failed to create patient.' });
+      }
+
+      const created = result.patient;
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'PATIENT_CREATED',
+        target_type: 'PATIENT',
+        target_id: created.id,
+        metadata: { name: created.name, phone: created.phone },
+      });
+
+      return res.status(201).json({ patient: created });
+    } catch (err: any) {
+      console.error('[POST /patients] Error:', err);
+      return res.status(500).json({ error: 'Failed to create patient.' });
     }
-
-    const patient: Patient = {
-      id: `pat_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      clinic_id: clinicId,
-      name: name.trim(),
-      phone: phone.trim(),
-      email: email?.trim() || '',
-      dob: dob || '',
-      gender: gender || 'Prefer not to say',
-      preferred_language: preferred_language || 'English',
-      notes: notes || '',
-      created_at: new Date().toISOString(),
-    };
-
-    const created = db.createPatient(patient);
-
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'PATIENT_CREATED',
-      target_type: 'PATIENT',
-      target_id: created.id,
-      metadata: { name: created.name, phone: created.phone },
-    });
-
-    return res.status(201).json({ patient: created });
   }
 );
 
 clinicRouter.put(
   '/patients/:id',
   requireClinicPermission('manage_patients'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const patientId = req.params.id;
-    const updates = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const patientId = req.params.id;
+      const updates = req.body;
 
-    const updated = db.updatePatient(clinicId, patientId, updates);
-    if (!updated) {
-      return res.status(404).json({ error: 'Patient not found.' });
+      const result = await PatientService.update(clinicId, patientId, updates);
+      if (!result.success || !result.patient) {
+        if (result.error_code === 'PATIENT_NOT_FOUND') {
+          return res.status(404).json({ error: 'Patient not found.' });
+        }
+        return res.status(500).json({ error: result.error || 'Failed to update patient.' });
+      }
+
+      return res.json({ patient: result.patient });
+    } catch (err: any) {
+      console.error('[PUT /patients/:id] Error:', err);
+      return res.status(500).json({ error: 'Failed to update patient.' });
     }
-
-    return res.json({ patient: updated });
   }
 );
 
@@ -1168,7 +1304,7 @@ clinicRouter.put(
 clinicRouter.get(
   '/appointments',
   requireClinicPermission('view_appointments'),
-  (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const { date, doctor_id, status } = req.query as {
       date?: string;
@@ -1287,98 +1423,151 @@ clinicRouter.post(
 // -------------------------------------------------------------
 clinicRouter.get(
   '/me/ai-widget-config',
-  (req: AuthenticatedRequest, res: Response) => {
-    // 1. Authenticated user exists & clinic membership is valid
-    const clinicId = req.user?.clinic_id;
-    if (!clinicId) {
-      return res.status(403).json({ error: 'User does not belong to a valid clinic' });
-    }
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      // 1. Authenticated user exists & clinic membership is valid
+      const clinicId = req.user?.clinic_id;
+      if (!clinicId) {
+        return res.status(403).json({ error: 'User does not belong to a valid clinic' });
+      }
 
-    // 2. Platform AI is enabled
-    const platformConfig = db.getPlatformAiConfig();
-    if (platformConfig.status !== 'ACTIVE') {
-      return res.status(403).json({ error: 'Platform AI features are currently disabled.' });
-    }
+      // 2. Platform AI is enabled
+      const isPlatformEnabled = await AiConfigService.isPlatformAiEnabled();
+      if (!isPlatformEnabled) {
+        return res.status(403).json({ error: 'Platform AI features are currently disabled.' });
+      }
 
-    // 3. Clinic AI agent exists and is enabled
-    const agent = db.getAiAgent(clinicId);
-    if (!agent || agent.status !== 'ACTIVE') {
-      return res.status(403).json({ error: 'AI Receptionist is not enabled for this clinic.' });
-    }
+      // 3. Clinic AI agent exists and is enabled
+      const agent = await AiAgentService.getAgentByClinic(clinicId);
+      if (!agent || agent.status !== 'ACTIVE' || !agent.enabled) {
+        return res.status(403).json({ error: 'AI Receptionist is not enabled for this clinic.' });
+      }
 
-    // 4. Provider agent ID is configured
-    const providerAgentId = agent.provider_agent_id;
-    if (!providerAgentId) {
-      return res.status(404).json({ error: 'AI Receptionist provider agent is not configured for this clinic.' });
-    }
+      // 4. Provider agent ID is configured
+      const providerAgentId = agent.provider_agent_id;
+      if (!providerAgentId) {
+        return res.status(404).json({ error: 'AI Receptionist provider agent is not configured for this clinic.' });
+      }
 
-    // 5. Return browser-safe configuration required by the Sarvam Embed
-    const orgId = process.env.VITE_SARVAM_ORG_ID || 'demo-org-id';
-    const workspaceId = process.env.VITE_SARVAM_WORKSPACE_ID || 'demo-workspace-id';
-    const embedKey = process.env.VITE_SARVAM_EMBED_KEY || 'demo-embed-key';
-    
-    // If we want to strictly require them, we could return a 404, 
-    // but returning demo keys prevents the widget from crashing React.
-    return res.json({
-      enabled: true,
-      appId: providerAgentId,
-      orgId: orgId,
-      workspaceId: workspaceId,
-      embedKey: embedKey,
-    });
+      // 5. Return browser-safe configuration required by the Sarvam Embed
+      const orgId = process.env.VITE_SARVAM_ORG_ID || 'demo-org-id';
+      const workspaceId = process.env.VITE_SARVAM_WORKSPACE_ID || 'demo-workspace-id';
+      const embedKey = process.env.VITE_SARVAM_EMBED_KEY || 'demo-embed-key';
+      
+      return res.json({
+        enabled: true,
+        appId: providerAgentId,
+        orgId: orgId,
+        workspaceId: workspaceId,
+        embedKey: embedKey,
+      });
+    } catch (err: any) {
+      console.error('[GET /me/ai-widget-config] Error:', err);
+      return res.status(500).json({ error: 'Failed to retrieve AI widget configuration.' });
+    }
   }
 );
 
 clinicRouter.get(
   '/ai-agent',
   requireClinicPermission('view_calls'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const agent = db.getAiAgent(clinicId);
-    const today = new Date().toISOString().split('T')[0];
-    const callsToday = db.getCalls(clinicId).filter((c) => c.created_at.startsWith(today)).length;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const agent = await AiAgentService.getAgentByClinic(clinicId);
+      const today = new Date().toISOString().split('T')[0];
+      const callsToday = (await CallService.listCalls(clinicId)).filter((c) => c.created_at.startsWith(today)).length;
 
-    return res.json({
-      agent,
-      callsTodayCount: callsToday,
-    });
+      return res.json({
+        agent,
+        callsTodayCount: callsToday,
+      });
+    } catch (err: any) {
+      console.error('[GET /ai-agent] Error:', err);
+      return res.status(500).json({ error: 'Failed to load AI Receptionist configuration.' });
+    }
   }
 );
 
 clinicRouter.put(
   '/ai-agent',
   requireClinicPermission('configure_ai_receptionist'),
-  (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { name, greeting, voice_provider, voice_config, languages, status, escalation_contact, instructions_note } = req.body;
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const clinicId = getAuthClinicId(req);
+      const clinic = db.getClinicById(clinicId);
+      if (!clinic) {
+        return res.status(404).json({ error: 'Clinic not found.' });
+      }
 
-    const current = db.getAiAgent(clinicId);
-    const updatedAgent: AiAgent = {
-      id: current?.id || `agent_${clinicId}`,
-      clinic_id: clinicId,
-      name: name?.trim() || current?.name || 'AI Receptionist',
-      greeting: greeting !== undefined ? greeting.trim() : (current?.greeting || 'Thank you for calling.'),
-      voice_provider: voice_provider || current?.voice_provider || 'gemini_live',
-      voice_config: voice_config || current?.voice_config || {},
-      languages: languages || current?.languages || ['English'],
-      status: status || current?.status || 'ACTIVE',
-      escalation_contact: escalation_contact || current?.escalation_contact || {},
-      instructions_note: instructions_note !== undefined ? (typeof instructions_note === 'string' ? instructions_note.trim() : instructions_note) : current?.instructions_note,
-    };
+      const {
+        name,
+        greeting,
+        greeting_style,
+        voice_provider,
+        voice_config,
+        languages,
+        status,
+        escalation_contact,
+        instructions_note,
+      } = req.body;
 
-    const saved = db.saveAiAgent(updatedAgent);
+      // Defense-in-depth validation for Receptionist Preferences & Instructions
+      if (instructions_note !== undefined && instructions_note !== null) {
+        const valResult = validateReceptionistPreferences(instructions_note);
+        if (!valResult.isValid) {
+          return res.status(400).json({ error: valResult.error });
+        }
+      }
 
-    db.logAudit({
-      clinic_id: clinicId,
-      actor_user_id: req.user!.id,
-      actor_name: req.user!.name,
-      action: 'AI_RECEPTIONIST_CONFIG_UPDATED',
-      target_type: 'AI_AGENT',
-      target_id: saved.id,
-      metadata: { voice_provider: saved.voice_provider, status: saved.status },
-    });
+      const current = await AiAgentService.getAgentByClinic(clinicId);
 
-    return res.json({ agent: saved });
+      // Resolve AI Greeting safely from template/style + authoritative clinic name
+      let resolvedGreeting = current?.greeting;
+      if (greeting !== undefined || greeting_style !== undefined) {
+        const templateOrStyle = greeting_style || greeting;
+        resolvedGreeting = generateSafeGreeting(clinic.name, templateOrStyle);
+        const greetingVal = validateGreetingContent(resolvedGreeting);
+        if (!greetingVal.isValid) {
+          return res.status(400).json({ error: greetingVal.error });
+        }
+      }
+
+      if (!resolvedGreeting) {
+        resolvedGreeting = generateSafeGreeting(clinic.name);
+      }
+
+      const updatedAgentPayload: Partial<AiAgent> = {
+        name: name?.trim() || current?.name || 'AI Receptionist',
+        greeting: resolvedGreeting,
+        voice_provider: voice_provider || current?.voice_provider || 'gemini_live',
+        voice_config: voice_config || current?.voice_config || {},
+        languages: languages || current?.languages || ['English'],
+        status: status || current?.status || 'ACTIVE',
+        escalation_contact: escalation_contact || current?.escalation_contact || {},
+        instructions_note:
+          instructions_note !== undefined
+            ? (typeof instructions_note === 'string' ? instructions_note.trim() : instructions_note)
+            : current?.instructions_note,
+      };
+
+      const saved = await AiAgentService.updateAgent(clinicId, updatedAgentPayload);
+
+      await AuditService.logAudit({
+        clinic_id: clinicId,
+        actor_user_id: req.user!.id,
+        actor_name: req.user!.name,
+        action: 'AI_RECEPTIONIST_CONFIG_UPDATED',
+        target_type: 'AI_AGENT',
+        target_id: saved.id,
+        metadata: { voice_provider: saved.voice_provider, status: saved.status },
+      });
+
+      return res.json({ agent: saved });
+    } catch (err: any) {
+      console.error('[PUT /ai-agent] Error:', err);
+      return res.status(500).json({ error: 'Failed to update AI Receptionist configuration.' });
+    }
   }
 );
 
@@ -1388,9 +1577,9 @@ clinicRouter.put(
 clinicRouter.get(
   '/calls',
   requireClinicPermission('view_calls'),
-  (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
-    let calls = db.getCalls(clinicId);
+    let calls = await CallService.listCalls(clinicId);
     if (req.user?.role === 'DOCTOR') {
       calls = calls.filter(c => c.doctor_id === req.user.doctor_id);
     }
@@ -1401,9 +1590,9 @@ clinicRouter.get(
 clinicRouter.get(
   '/escalations',
   requireClinicPermission('view_calls'),
-  (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
-    const escalations = db.getEscalations(clinicId);
+    const escalations = await EscalationService.listEscalations(clinicId);
     return res.json({ escalations });
   }
 );
@@ -1411,16 +1600,16 @@ clinicRouter.get(
 clinicRouter.put(
   '/escalations/:id/resolve',
   requireClinicPermission('manage_appointments'),
-  (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const escalationId = req.params.id;
 
-    const resolved = db.resolveEscalation(clinicId, escalationId, req.user!.name);
+    const resolved = await EscalationService.resolveEscalation(clinicId, escalationId, req.user!.name);
     if (!resolved) {
       return res.status(404).json({ error: 'Escalation not found.' });
     }
 
-    db.logAudit({
+    await AuditService.logAudit({
       clinic_id: clinicId,
       actor_user_id: req.user!.id,
       actor_name: req.user!.name,
@@ -1439,9 +1628,70 @@ clinicRouter.put(
 clinicRouter.get(
   '/audit-logs',
   requireClinicPermission('view_audit_logs'),
-  (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
-    const logs = db.getAuditLogs(clinicId);
+    const logs = await AuditService.listAuditLogs(clinicId);
     return res.json({ logs });
   }
 );
+
+// -------------------------------------------------------------
+// 11. Clinic AI Knowledge (Read-only for Clinic Users, Governed by Platform Admin)
+// -------------------------------------------------------------
+clinicRouter.get(
+  ['/ai-knowledge', '/me/ai-knowledge'],
+  requireClinicPermission('view_ai_receptionist'),
+  async (req: AuthenticatedRequest, res: Response) => {
+    const clinicId = getAuthClinicId(req);
+    const { status, category, search } = req.query;
+
+    const items = db.getClinicKnowledge(clinicId, {
+      status: status as string,
+      category: category as string,
+      search: search as string,
+    });
+
+    return res.json({
+      clinic_id: clinicId,
+      items,
+      total: items.length,
+    });
+  }
+);
+
+clinicRouter.post(
+  '/ai-knowledge',
+  async (req: AuthenticatedRequest, res: Response) => {
+    return res.status(403).json({
+      error: 'Clinic AI Rules & Knowledge are governed exclusively by the Platform Administrator. To add or modify clinic rules, please contact your Platform Administrator.',
+    });
+  }
+);
+
+clinicRouter.put(
+  '/ai-knowledge/:id',
+  async (req: AuthenticatedRequest, res: Response) => {
+    return res.status(403).json({
+      error: 'Clinic AI Rules & Knowledge are governed exclusively by the Platform Administrator. To edit clinic rules, please contact your Platform Administrator.',
+    });
+  }
+);
+
+clinicRouter.delete(
+  '/ai-knowledge/:id',
+  async (req: AuthenticatedRequest, res: Response) => {
+    return res.status(403).json({
+      error: 'Clinic AI Rules & Knowledge are governed exclusively by the Platform Administrator. To delete clinic rules, please contact your Platform Administrator.',
+    });
+  }
+);
+
+clinicRouter.post(
+  '/ai-knowledge/publish',
+  async (req: AuthenticatedRequest, res: Response) => {
+    return res.status(403).json({
+      error: 'Clinic AI Knowledge publishing is restricted to the Platform Administrator.',
+    });
+  }
+);
+

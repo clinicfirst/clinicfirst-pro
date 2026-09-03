@@ -1,11 +1,16 @@
+import { AuditService } from "../services/audit.service";
+import { CallService } from "../services/call.service";
 import { Router, Request, Response } from 'express';
 import { db, verifyPassword, hashPassword } from '../db';
 import { generateToken, requireAuth, AuthenticatedRequest } from '../auth';
+import { DoctorService } from '../services/doctor.service';
+import { ServiceService } from '../services/service.service';
+import { AiAgentService } from '../services/ai-agent.service';
 
 export const authRouter = Router();
 
 // Public System Statistics (Real live data from database)
-authRouter.get('/stats', (req: Request, res: Response) => {
+authRouter.get('/stats', async (req: Request, res: Response) => {
   try {
     const clinics = db.getClinics();
     const activeClinics = clinics.filter((c) => c.status === 'ACTIVE').length;
@@ -20,27 +25,31 @@ authRouter.get('/stats', (req: Request, res: Response) => {
     let activeAiAgents = 0;
 
     for (const c of clinics) {
-      const doctors = db.getDoctors(c.id).filter((d) => d.status === 'ACTIVE');
+      const doctors = await DoctorService.list(c.id, { status: 'ACTIVE' });
       totalDoctors += doctors.length;
 
-      const services = db.getServices(c.id).filter((s) => s.status === 'ACTIVE');
+      const services = await ServiceService.list(c.id, { status: 'ACTIVE' });
       totalServices += services.length;
 
       const apts = db.getAppointments(c.id);
       totalAppointments += apts.length;
       todayAppointments += apts.filter((a) => a.date === today).length;
 
-      const calls = db.getCalls(c.id);
+      const calls = await CallService.listCalls(c.id);
       totalCalls += calls.length;
       todayCalls += calls.filter((call) => call.created_at.startsWith(today)).length;
 
-      const agent = db.getAiAgent(c.id);
+      const agent = await AiAgentService.getAgentByClinic(c.id);
       if (agent && agent.status === 'ACTIVE') {
         activeAiAgents += 1;
       }
     }
 
     const firstClinic = clinics[0];
+    const firstClinicDoctors = firstClinic ? await DoctorService.list(firstClinic.id, { status: 'ACTIVE' }) : [];
+    const firstClinicServices = firstClinic ? await ServiceService.list(firstClinic.id, { status: 'ACTIVE' }) : [];
+    const firstClinicAgent = firstClinic ? await AiAgentService.getAgentByClinic(firstClinic.id) : null;
+
     return res.json({
       totalClinics: clinics.length,
       activeClinics,
@@ -55,10 +64,10 @@ authRouter.get('/stats', (req: Request, res: Response) => {
         ? {
             id: firstClinic.id,
             name: firstClinic.name,
-            doctorsCount: db.getDoctors(firstClinic.id).filter((d) => d.status === 'ACTIVE').length,
-            servicesCount: db.getServices(firstClinic.id).filter((s) => s.status === 'ACTIVE').length,
+            doctorsCount: firstClinicDoctors.length,
+            servicesCount: firstClinicServices.length,
             todayAppointmentsCount: db.getAppointments(firstClinic.id, { date: today }).length,
-            agentName: db.getAiAgent(firstClinic.id)?.name || 'Ava AI',
+            agentName: firstClinicAgent?.name || 'Ava AI',
             phone: firstClinic.phone,
           }
         : null,
@@ -72,7 +81,7 @@ authRouter.get('/stats', (req: Request, res: Response) => {
 
 
 // Platform Admin Login (/platform/login)
-authRouter.post('/platform/login', (req: Request, res: Response) => {
+authRouter.post('/platform/login', async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body || {};
     if (!email || !password) {
@@ -96,7 +105,7 @@ authRouter.post('/platform/login', (req: Request, res: Response) => {
     const token = generateToken(cleanUser);
 
     try {
-      db.logAudit({
+      await AuditService.logAudit({
         clinic_id: null,
         actor_user_id: user.id,
         actor_name: user.name,
@@ -119,7 +128,7 @@ authRouter.post('/platform/login', (req: Request, res: Response) => {
 });
 
 // Clinic Login (/login) - shared by Clinic Admin and Clinic Staff
-authRouter.post('/login', (req: Request, res: Response) => {
+authRouter.post('/login', async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body || {};
     if (!email || !password) {
@@ -166,7 +175,7 @@ authRouter.post('/login', (req: Request, res: Response) => {
     const token = generateToken(cleanUser);
 
     try {
-      db.logAudit({
+      await AuditService.logAudit({
         clinic_id: user.clinic_id,
         actor_user_id: user.id,
         actor_name: user.name,
@@ -190,7 +199,7 @@ authRouter.post('/login', (req: Request, res: Response) => {
 });
 
 // Current User & Session Refresh
-authRouter.get('/me', requireAuth, (req: AuthenticatedRequest, res: Response) => {
+authRouter.get('/me', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const user = req.user!;
     let clinic = undefined;
@@ -209,7 +218,7 @@ authRouter.get('/me', requireAuth, (req: AuthenticatedRequest, res: Response) =>
 });
 
 // Force Password Change / Reset
-authRouter.post('/change-password', requireAuth, (req: AuthenticatedRequest, res: Response) => {
+authRouter.post('/change-password', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { currentPassword, newPassword } = req.body || {};
     if (!newPassword || newPassword.length < 8) {
@@ -235,7 +244,7 @@ authRouter.post('/change-password', requireAuth, (req: AuthenticatedRequest, res
     });
 
     try {
-      db.logAudit({
+      await AuditService.logAudit({
         clinic_id: user.clinic_id,
         actor_user_id: user.id,
         actor_name: user.name,

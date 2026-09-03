@@ -1,11 +1,12 @@
 import { db } from '../../db';
+import { PatientService } from '../../services/patient.service';
 
 export async function getPatientByPhone(clinicId: string, phone: string) {
   if (!phone) {
     return { error: 'Phone number is required to search for patient.' };
   }
 
-  const patient = db.getPatientByPhone(clinicId, phone);
+  const patient = await PatientService.getByPhone(clinicId, phone);
   if (!patient) {
     return {
       found: false,
@@ -58,7 +59,7 @@ export async function createPatient(
     return { error: 'Patient name and phone number are required.' };
   }
 
-  const existing = db.getPatientByPhone(clinicId, params.phone);
+  const existing = await PatientService.getByPhone(clinicId, params.phone);
   if (existing) {
     return {
       success: true,
@@ -69,9 +70,7 @@ export async function createPatient(
     };
   }
 
-  const newPatient = db.createPatient({
-    id: `pat_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-    clinic_id: clinicId,
+  const result = await PatientService.create(clinicId, {
     name: params.name.trim(),
     phone: params.phone.trim(),
     email: params.email?.trim(),
@@ -79,14 +78,19 @@ export async function createPatient(
     gender: params.gender || 'Prefer not to say',
     preferred_language: params.preferred_language || 'English',
     notes: 'Registered via AI Receptionist voice call',
-    created_at: new Date().toISOString(),
   });
+
+  if (!result.success || !result.patient) {
+    return {
+      error: result.error || 'Failed to create patient record.',
+    };
+  }
 
   return {
     success: true,
-    patient_id: newPatient.id,
-    name: newPatient.name,
-    phone: newPatient.phone,
+    patient_id: result.patient.id,
+    name: result.patient.name,
+    phone: result.patient.phone,
     message: 'New patient record successfully created.',
   };
 }

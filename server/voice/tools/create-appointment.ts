@@ -1,7 +1,9 @@
+import { EscalationService } from "../../services/escalation.service";
 import { db } from '../../db';
 import { supabase } from '../../supabaseDiff';
 import { Appointment } from '../../../src/types';
 import { AppointmentService, AppointmentMutationSource } from '../../services/appointment.service';
+import { AiAgentService } from '../../services/ai-agent.service';
 
 export async function createAppointment(
   clinicId: string,
@@ -109,9 +111,9 @@ export async function escalateToStaff(
   }
 ) {
   const clinic = db.getClinicById(clinicId);
-  const agent = db.getAiAgent(clinicId);
+  const agent = await AiAgentService.getAgentByClinic(clinicId);
 
-  const escalation = db.createEscalation({
+  const escalation = await EscalationService.createEscalation(clinicId, {
     id: `esc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
     clinic_id: clinicId,
     call_id: params.callId || 'call_direct',

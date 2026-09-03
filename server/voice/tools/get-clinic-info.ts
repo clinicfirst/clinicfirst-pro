@@ -1,4 +1,5 @@
 import { db } from '../../db';
+import { ServiceService } from '../../services/service.service';
 
 export async function getClinicInfo(clinicId: string) {
   const clinic = db.getClinicById(clinicId);
@@ -6,7 +7,7 @@ export async function getClinicInfo(clinicId: string) {
     return { error: 'Clinic not found' };
   }
 
-  const services = db.getServices(clinicId).filter((s) => s.status === 'ACTIVE');
+  const services = await ServiceService.list(clinicId, { status: 'ACTIVE' });
 
   return {
     clinic_name: clinic.name,

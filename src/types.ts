@@ -508,16 +508,31 @@ export interface ClinicAiRule {
   updated_at?: string;
 }
 
+export type ClinicKnowledgeCategory =
+  | 'CLINIC_POLICY'
+  | 'WORKFLOW'
+  | 'ESCALATION'
+  | 'COMMUNICATION'
+  | 'ARRIVAL'
+  | 'PAYMENT'
+  | 'CANCELLATION'
+  | 'REGISTRATION'
+  | 'OTHER_APPROVED_CLINIC_RULE';
+
 export interface ClinicKnowledgeItem {
   id: string;
   clinic_id: string;
   title: string;
+  category: ClinicKnowledgeCategory | string;
   content: string;
-  category?: string;
-  status?: string;
-  version?: string;
+  status: 'DRAFT' | 'VALIDATED' | 'PUBLISHED' | string;
+  version?: number | string;
   created_at?: string;
   updated_at?: string;
+  created_by?: string;
+  updated_by?: string;
+  published_at?: string;
+  published_by?: string;
 }
 
 export interface ClinicAiTool {

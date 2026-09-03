@@ -38,9 +38,6 @@ interface DatabaseSchema {
   appointments: Appointment[];
   ai_agents: AiAgent[];
   ai_usage_events: AiUsageEvent[];
-  calls: Call[];
-  escalations: Escalation[];
-  audit_logs: AuditLog[];
   platform_ai_config?: PlatformAiConfig & { internal_api_key?: string };
   platform_knowledge_base?: PlatformKnowledgeItem[];
   clinic_ai_rules?: ClinicAiRule[];
@@ -123,8 +120,6 @@ class DatabaseEngine {
           'patients',
           'appointments',
           'ai_agents',
-          'calls',
-          'audit_logs',
           'platform_knowledge_base',
           'clinic_ai_rules',
           'clinic_knowledge_base',
@@ -356,8 +351,8 @@ class DatabaseEngine {
       dbData.clinic_ai_rules = [];
     }
 
-    if (!dbData.clinic_knowledge_base) {
-      dbData.clinic_knowledge_base = [];
+    if (!dbData.clinic_knowledge_base || dbData.clinic_knowledge_base.length === 0) {
+      dbData.clinic_knowledge_base = this.getDefaultClinicKnowledgeBase();
     }
 
     if (!dbData.clinic_ai_tools) {
@@ -466,6 +461,135 @@ class DatabaseEngine {
         is_active: true,
         created_at: now,
         updated_at: now,
+      },
+    ];
+  }
+
+  private getDefaultClinicKnowledgeBase(): ClinicKnowledgeItem[] {
+    const now = new Date().toISOString();
+    return [
+      // Sanjeevani Multispeciality Clinic (clinic_1787923240249_cqgw)
+      {
+        id: 'ckb_sanjeevani_arrival_1',
+        clinic_id: 'clinic_1787923240249_cqgw',
+        category: 'ARRIVAL',
+        title: 'Patient Arrival & Check-In Protocol',
+        content: 'Patients are requested to arrive at least 15 minutes before their scheduled appointment time with a valid government ID and any prior medical reports or prescription history.',
+        status: 'PUBLISHED',
+        version: 1,
+        created_at: now,
+        updated_at: now,
+        created_by: 'system',
+        updated_by: 'system',
+        published_at: now,
+        published_by: 'system',
+      },
+      {
+        id: 'ckb_sanjeevani_payment_1',
+        clinic_id: 'clinic_1787923240249_cqgw',
+        category: 'PAYMENT',
+        title: 'Consultation Fee Payment Modes',
+        content: 'Consultation charges can be settled via UPI, credit/debit card, or cash at the reception desk upon check-in. Digital payment receipts are generated automatically.',
+        status: 'PUBLISHED',
+        version: 1,
+        created_at: now,
+        updated_at: now,
+        created_by: 'system',
+        updated_by: 'system',
+        published_at: now,
+        published_by: 'system',
+      },
+      {
+        id: 'ckb_sanjeevani_cancellation_1',
+        clinic_id: 'clinic_1787923240249_cqgw',
+        category: 'CANCELLATION',
+        title: 'Cancellation & Rescheduling Policy',
+        content: 'Appointments may be rescheduled or cancelled up to 2 hours prior to the scheduled slot with no fee. For sudden same-day emergency cancellations, please notify the reception triage desk.',
+        status: 'PUBLISHED',
+        version: 1,
+        created_at: now,
+        updated_at: now,
+        created_by: 'system',
+        updated_by: 'system',
+        published_at: now,
+        published_by: 'system',
+      },
+      {
+        id: 'ckb_sanjeevani_registration_1',
+        clinic_id: 'clinic_1787923240249_cqgw',
+        category: 'REGISTRATION',
+        title: 'New Patient Registration Requirement',
+        content: 'New patients must provide their full name, mobile contact number, and age during booking for seamless profile registration in our verified clinical management system.',
+        status: 'PUBLISHED',
+        version: 1,
+        created_at: now,
+        updated_at: now,
+        created_by: 'system',
+        updated_by: 'system',
+        published_at: now,
+        published_by: 'system',
+      },
+      {
+        id: 'ckb_sanjeevani_workflow_1',
+        clinic_id: 'clinic_1787923240249_cqgw',
+        category: 'WORKFLOW',
+        title: 'Specialty Consultation Preparation Workflow',
+        content: 'For pediatric consultations with Dr. Raj Patel, parents should bring the child\'s immunization record book. For cardiology visits with Dr. Meera Joshi, patients should bring any recent ECG, echo, or blood pressure tracking reports.',
+        status: 'PUBLISHED',
+        version: 1,
+        created_at: now,
+        updated_at: now,
+        created_by: 'system',
+        updated_by: 'system',
+        published_at: now,
+        published_by: 'system',
+      },
+      // Apex Cardiology & Family Medicine (clinic_apex_101)
+      {
+        id: 'ckb_apex_arrival_1',
+        clinic_id: 'clinic_apex_101',
+        category: 'ARRIVAL',
+        title: 'Cardiac Evaluation Arrival Guidance',
+        content: 'Cardiac evaluation patients should arrive 15 minutes prior to appointment and bring all current heart medication bottles and previous diagnostic reports.',
+        status: 'PUBLISHED',
+        version: 1,
+        created_at: now,
+        updated_at: now,
+        created_by: 'system',
+        updated_by: 'system',
+        published_at: now,
+        published_by: 'system',
+      },
+      {
+        id: 'ckb_apex_payment_1',
+        clinic_id: 'clinic_apex_101',
+        category: 'PAYMENT',
+        title: 'Insurance Copayment & Billing',
+        content: 'Insurance copayments and standard consultation charges are collected upon arrival at the reception desk.',
+        status: 'PUBLISHED',
+        version: 1,
+        created_at: now,
+        updated_at: now,
+        created_by: 'system',
+        updated_by: 'system',
+        published_at: now,
+        published_by: 'system',
+      },
+      // Metro Clinic (clinic_1788105657689_d85c)
+      {
+        id: 'ckb_metro_arrival_1',
+        clinic_id: 'clinic_1788105657689_d85c',
+        category: 'ARRIVAL',
+        title: 'Metro Clinic General Arrival Policy',
+        content: 'Patients are requested to check in at the second-floor reception counter 10 minutes prior to appointment.',
+        status: 'PUBLISHED',
+        version: 1,
+        created_at: now,
+        updated_at: now,
+        created_by: 'system',
+        updated_by: 'system',
+        published_at: now,
+        published_by: 'system',
       },
     ];
   }
@@ -790,7 +914,7 @@ class DatabaseEngine {
       id: 'agent_apex_1',
       clinic_id: 'clinic_apex_101',
       name: 'Ava',
-      greeting: 'Thank you for calling Apex Cardiology & Family Medicine. My name is Ava, the clinic AI receptionist. How may I assist you with booking, rescheduling, or clinic information today?',
+      greeting: 'Hello, thank you for calling Apex Cardiology & Family Medicine. I am the AI receptionist. How may I assist you today?',
       voice_provider: "gemini_live" as const,
       voice_config: {
         voice_name: 'Zephyr',
@@ -803,59 +927,10 @@ class DatabaseEngine {
         phone: '+1-555-019-2099',
         email: 'urgent@apexclinic.com',
       },
-      instructions_note: 'Apex Cardiology is open Mon-Fri 8:30 AM to 5:30 PM. For chest pain or sudden shortness of breath, immediately advise dialing 911 or escalate. Do not prescribe medications.',
+      instructions_note: 'Please keep responses concise and clear, speak politely, and verify patient details before confirming.',
     };
 
-    const call1: Call = {
-      id: 'call_seed_1',
-      clinic_id: 'clinic_apex_101',
-      patient_id: 'pat_miller_1',
-      agent_id: 'agent_apex_1',
-      doctor_id: 'doc_elena_1',
-      service_id: 'srv_cardiac_eval_1',
-      appointment_id: 'apt_seed_1',
-      direction: 'inbound',
-      start_time: now,
-      duration_seconds: 114,
-      status: 'completed',
-      summary: 'Patient Jonathan Miller called to book a cardiac follow-up with Dr. Elena Vance. AI identified patient by phone, verified availability, offered slots, and booked for today at 10:00 AM.',
-      outcome: 'APPOINTMENT_BOOKED',
-      transcript: [
-        { speaker: 'ai', text: 'Thank you for calling Apex Cardiology. My name is Ava. How can I assist you today?', timestamp: '00:00' },
-        { speaker: 'patient', text: 'Hi Ava, I need to book a cardiac follow-up with Dr. Elena Vance.', timestamp: '00:06' },
-        { speaker: 'ai', text: 'I would be happy to help with that. May I have your registered phone number or full name?', timestamp: '00:12' },
-        { speaker: 'patient', text: 'My name is Jonathan Miller, phone 555-019-2834.', timestamp: '00:19' },
-        { speaker: 'ai', text: 'Thank you, Mr. Miller. I see you in our records. Dr. Elena Vance has an opening today at 10:00 AM or tomorrow at 2:00 PM for a Comprehensive Cardiac Evaluation. Would 10:00 AM today suit you?', timestamp: '00:26' },
-        { speaker: 'patient', text: 'Yes, 10:00 AM today works great.', timestamp: '00:39' },
-        { speaker: 'ai', text: 'Splendid! I have confirmed your appointment with Dr. Elena Vance for today at 10:00 AM. We look forward to seeing you.', timestamp: '00:44' },
-      ],
-      language_detected: 'English',
-      created_at: now,
-    };
 
-    const auditLogs: AuditLog[] = [
-      {
-        id: 'audit_init_1',
-        clinic_id: null,
-        actor_user_id: 'usr_platform_admin_1',
-        actor_name: 'System Owner',
-        action: 'PLATFORM_INITIALIZED',
-        target_type: 'SYSTEM',
-        metadata: { version: '1.0.0' },
-        created_at: now,
-      },
-      {
-        id: 'audit_clinic_1',
-        clinic_id: 'clinic_apex_101',
-        actor_user_id: 'usr_platform_admin_1',
-        actor_name: 'System Owner',
-        action: 'CLINIC_CREATED',
-        target_type: 'CLINIC',
-        target_id: 'clinic_apex_101',
-        metadata: { clinic_name: 'Apex Cardiology & Family Medicine' },
-        created_at: now,
-      },
-    ];
 
     return {
       clinics: [clinic1],
@@ -869,9 +944,6 @@ class DatabaseEngine {
       appointments,
       ai_agents: [aiAgent],
       ai_usage_events: [],
-      calls: [call1],
-      escalations: [],
-      audit_logs: auditLogs,
     };
   }
 
@@ -975,6 +1047,18 @@ class DatabaseEngine {
     return clean;
   }
 
+  public createUserInMemory(user: User & { password_hash: string }): void {
+    if (!this.data.users) {
+      this.data.users = [];
+    }
+    const idx = this.data.users.findIndex((u) => u.id === user.id);
+    if (idx >= 0) {
+      this.data.users[idx] = user;
+    } else {
+      this.data.users.push(user);
+    }
+  }
+
   public updateUser(id: string, updates: Partial<User & { password_hash?: string }>) {
     const idx = this.data.users.findIndex((u) => u.id === id);
     if (idx === -1) return null;
@@ -982,6 +1066,14 @@ class DatabaseEngine {
     this.flush();
     const { password_hash, ...clean } = this.data.users[idx];
     return clean;
+  }
+
+  public updateUserInMemory(id: string, updates: Partial<User & { password_hash?: string }>): void {
+    if (!this.data.users) return;
+    const idx = this.data.users.findIndex((u) => u.id === id);
+    if (idx >= 0) {
+      this.data.users[idx] = { ...this.data.users[idx], ...updates };
+    }
   }
 
   // Doctors
@@ -1018,12 +1110,32 @@ class DatabaseEngine {
     return doctor;
   }
 
+  public createDoctorInMemory(doctor: Doctor): void {
+    if (!this.data.doctors) {
+      this.data.doctors = [];
+    }
+    const idx = this.data.doctors.findIndex((d) => d.id === doctor.id);
+    if (idx >= 0) {
+      this.data.doctors[idx] = doctor;
+    } else {
+      this.data.doctors.push(doctor);
+    }
+  }
+
   public updateDoctor(clinic_id: string, id: string, updates: Partial<Doctor>) {
     const idx = this.data.doctors.findIndex((d) => d.clinic_id === clinic_id && d.id === id);
     if (idx === -1) return null;
     this.data.doctors[idx] = { ...this.data.doctors[idx], ...updates };
     this.flush();
     return this.data.doctors[idx];
+  }
+
+  public updateDoctorInMemory(clinic_id: string, id: string, updates: Partial<Doctor>): void {
+    if (!this.data.doctors) return;
+    const idx = this.data.doctors.findIndex((d) => d.clinic_id === clinic_id && d.id === id);
+    if (idx >= 0) {
+      this.data.doctors[idx] = { ...this.data.doctors[idx], ...updates };
+    }
   }
 
   // Schedules
@@ -1090,12 +1202,28 @@ class DatabaseEngine {
     return service;
   }
 
+  public createServiceInMemory(service: Service): void {
+    const idx = this.data.services.findIndex((s) => s.clinic_id === service.clinic_id && s.id === service.id);
+    if (idx >= 0) {
+      this.data.services[idx] = service;
+    } else {
+      this.data.services.push(service);
+    }
+  }
+
   public updateService(clinic_id: string, id: string, updates: Partial<Service>) {
     const idx = this.data.services.findIndex((s) => s.clinic_id === clinic_id && s.id === id);
     if (idx === -1) return null;
     this.data.services[idx] = { ...this.data.services[idx], ...updates };
     this.flush();
     return this.data.services[idx];
+  }
+
+  public updateServiceInMemory(clinic_id: string, id: string, updates: Partial<Service>): void {
+    const idx = this.data.services.findIndex((s) => s.clinic_id === clinic_id && s.id === id);
+    if (idx >= 0) {
+      this.data.services[idx] = { ...this.data.services[idx], ...updates };
+    }
   }
 
   // Patients
@@ -1130,12 +1258,32 @@ class DatabaseEngine {
     return patient;
   }
 
+  public createPatientInMemory(patient: Patient): void {
+    if (!this.data.patients) {
+      this.data.patients = [];
+    }
+    const idx = this.data.patients.findIndex((p) => p.id === patient.id);
+    if (idx >= 0) {
+      this.data.patients[idx] = patient;
+    } else {
+      this.data.patients.push(patient);
+    }
+  }
+
   public updatePatient(clinic_id: string, id: string, updates: Partial<Patient>) {
     const idx = this.data.patients.findIndex((p) => p.clinic_id === clinic_id && p.id === id);
     if (idx === -1) return null;
     this.data.patients[idx] = { ...this.data.patients[idx], ...updates };
     this.flush();
     return this.data.patients[idx];
+  }
+
+  public updatePatientInMemory(clinic_id: string, id: string, updates: Partial<Patient>): void {
+    if (!this.data.patients) return;
+    const idx = this.data.patients.findIndex((p) => p.clinic_id === clinic_id && p.id === id);
+    if (idx >= 0) {
+      this.data.patients[idx] = { ...this.data.patients[idx], ...updates };
+    }
   }
 
   // Appointments (Strict double-booking prevention)
@@ -1219,73 +1367,14 @@ class DatabaseEngine {
   }
 
   // Calls
-  public getCalls(clinic_id: string) {
-    return this.data.calls
-      .filter((c) => c.clinic_id === clinic_id)
-      .map((call) => ({
-        ...call,
-        patient: call.patient_id ? this.data.patients.find((p) => p.id === call.patient_id) : undefined,
-        doctor: call.doctor_id ? this.data.doctors.find((d) => d.id === call.doctor_id) : undefined,
-        service: call.service_id ? this.data.services.find((s) => s.id === call.service_id) : undefined,
-      }))
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }
 
-  public createCall(call: Call) {
-    this.data.calls.push(call);
-    this.flush();
-    return call;
-  }
 
-  public updateCall(clinic_id: string, id: string, updates: Partial<Call>) {
-    const idx = this.data.calls.findIndex((c) => c.clinic_id === clinic_id && c.id === id);
-    if (idx === -1) return null;
-    this.data.calls[idx] = { ...this.data.calls[idx], ...updates };
-    this.flush();
-    return this.data.calls[idx];
-  }
 
-  // Escalations
-  public getEscalations(clinic_id: string) {
-    return this.data.escalations
-      .filter((e) => e.clinic_id === clinic_id)
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }
 
-  public createEscalation(escalation: Escalation) {
-    this.data.escalations.push(escalation);
-    this.flush();
-    return escalation;
-  }
 
-  public resolveEscalation(clinic_id: string, id: string, resolvedBy: string) {
-    const idx = this.data.escalations.findIndex((e) => e.clinic_id === clinic_id && e.id === id);
-    if (idx === -1) return null;
-    this.data.escalations[idx].status = 'resolved';
-    this.data.escalations[idx].resolved_by = resolvedBy;
-    this.data.escalations[idx].resolved_at = new Date().toISOString();
-    this.flush();
-    return this.data.escalations[idx];
-  }
 
   // Audit Logs
-  public logAudit(log: Omit<AuditLog, 'id' | 'created_at'>) {
-    const entry: AuditLog = {
-      ...log,
-      id: `audit_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-      created_at: new Date().toISOString(),
-    };
-    this.data.audit_logs.push(entry);
-    this.flush();
-    return entry;
-  }
 
-  public getAuditLogs(clinic_id?: string | null) {
-    const logs = clinic_id === undefined
-      ? this.data.audit_logs
-      : this.data.audit_logs.filter((l) => l.clinic_id === clinic_id);
-    return logs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }
 
   // Platform AI Configuration
   public getPlatformAiConfig() {
@@ -1393,6 +1482,137 @@ class DatabaseEngine {
     const deleted = this.data.platform_knowledge_base.length < initialLen;
     if (deleted) this.flush();
     return deleted;
+  }
+
+  // =========================================================================
+  // Clinic AI Knowledge Management (Tenant-Scoped, Platform-Governed)
+  // =========================================================================
+  public getClinicKnowledge(
+    clinicId: string,
+    options?: { status?: string; category?: string; search?: string }
+  ): ClinicKnowledgeItem[] {
+    if (!this.data.clinic_knowledge_base || this.data.clinic_knowledge_base.length === 0) {
+      this.data.clinic_knowledge_base = this.getDefaultClinicKnowledgeBase();
+      this.flush();
+    }
+
+    let items = (this.data.clinic_knowledge_base || []).filter((k) => k.clinic_id === clinicId);
+
+    if (options?.status && options.status !== 'ALL') {
+      items = items.filter((k) => k.status === options.status);
+    }
+
+    if (options?.category && options.category !== 'ALL') {
+      items = items.filter((k) => k.category === options.category);
+    }
+
+    if (options?.search && typeof options.search === 'string' && options.search.trim().length > 0) {
+      const q = options.search.toLowerCase().trim();
+      items = items.filter(
+        (k) =>
+          k.title?.toLowerCase().includes(q) ||
+          k.content?.toLowerCase().includes(q) ||
+          k.category?.toLowerCase().includes(q)
+      );
+    }
+
+    return items.sort(
+      (a, b) =>
+        new Date(b.updated_at || b.created_at || 0).getTime() -
+        new Date(a.updated_at || a.created_at || 0).getTime()
+    );
+  }
+
+  public getClinicKnowledgeItemById(id: string, clinicId?: string): ClinicKnowledgeItem | null {
+    if (!this.data.clinic_knowledge_base) return null;
+    const item = this.data.clinic_knowledge_base.find((k) => {
+      if (clinicId) {
+        return k.id === id && k.clinic_id === clinicId;
+      }
+      return k.id === id;
+    });
+    return item || null;
+  }
+
+  public createClinicKnowledgeItem(
+    item: Omit<ClinicKnowledgeItem, 'id' | 'created_at' | 'updated_at'>
+  ): ClinicKnowledgeItem {
+    if (!this.data.clinic_knowledge_base) {
+      this.data.clinic_knowledge_base = [];
+    }
+    const now = new Date().toISOString();
+    const newItem: ClinicKnowledgeItem = {
+      ...item,
+      id: `ckb_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      status: item.status || 'DRAFT',
+      version: item.version || 1,
+      created_at: now,
+      updated_at: now,
+    };
+    this.data.clinic_knowledge_base.unshift(newItem);
+    this.flush();
+    return newItem;
+  }
+
+  public updateClinicKnowledgeItem(
+    id: string,
+    clinicId: string,
+    updates: Partial<ClinicKnowledgeItem>
+  ): ClinicKnowledgeItem | null {
+    if (!this.data.clinic_knowledge_base) return null;
+    const idx = this.data.clinic_knowledge_base.findIndex(
+      (k) => k.id === id && k.clinic_id === clinicId
+    );
+    if (idx === -1) return null;
+
+    const current = this.data.clinic_knowledge_base[idx];
+    const now = new Date().toISOString();
+    const currentVersion = typeof current.version === 'number' ? current.version : parseInt(String(current.version || '1'), 10) || 1;
+    
+    this.data.clinic_knowledge_base[idx] = {
+      ...current,
+      ...updates,
+      clinic_id: clinicId, // Immutable tenant boundary
+      version: updates.version !== undefined ? updates.version : currentVersion + 1,
+      updated_at: now,
+    };
+    this.flush();
+    return this.data.clinic_knowledge_base[idx];
+  }
+
+  public deleteClinicKnowledgeItem(id: string, clinicId: string): boolean {
+    if (!this.data.clinic_knowledge_base) return false;
+    const initialLen = this.data.clinic_knowledge_base.length;
+    this.data.clinic_knowledge_base = this.data.clinic_knowledge_base.filter(
+      (k) => !(k.id === id && k.clinic_id === clinicId)
+    );
+    const deleted = this.data.clinic_knowledge_base.length < initialLen;
+    if (deleted) this.flush();
+    return deleted;
+  }
+
+  public publishClinicKnowledge(clinicId: string, actorUserId?: string): ClinicKnowledgeItem[] {
+    if (!this.data.clinic_knowledge_base) return [];
+    const now = new Date().toISOString();
+    const updatedItems: ClinicKnowledgeItem[] = [];
+
+    this.data.clinic_knowledge_base = this.data.clinic_knowledge_base.map((k) => {
+      if (k.clinic_id === clinicId) {
+        const updated: ClinicKnowledgeItem = {
+          ...k,
+          status: 'PUBLISHED',
+          published_at: now,
+          published_by: actorUserId || 'platform_admin',
+          updated_at: now,
+        };
+        updatedItems.push(updated);
+        return updated;
+      }
+      return k;
+    });
+
+    this.flush();
+    return updatedItems;
   }
 }
 

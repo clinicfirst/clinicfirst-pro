@@ -1,3 +1,4 @@
+import { CallService } from "../services/call.service";
 import { Router, Request, Response } from 'express';
 import { requireAuth, requirePlatformAdmin, AuthenticatedRequest } from '../auth';
 import { isSarvamApiConfigured } from '../config/sarvam';
@@ -84,7 +85,7 @@ aiRouter.get(
 );
 
 // Get Call Details
-aiRouter.get('/call/:callId', (req: Request, res: Response) => {
+aiRouter.get('/call/:callId', async (req: Request, res: Response) => {
   const { callId } = req.params;
   const clinicId = req.query.clinicId as string;
 
@@ -92,7 +93,7 @@ aiRouter.get('/call/:callId', (req: Request, res: Response) => {
     return res.status(400).json({ error: 'clinicId query param is required.' });
   }
 
-  const call = db.getCalls(clinicId).find((c) => c.id === callId);
+  const call = await CallService.getCallById(clinicId, callId);
   if (!call) {
     return res.status(404).json({ error: 'Call not found.' });
   }

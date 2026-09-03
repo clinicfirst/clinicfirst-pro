@@ -1,20 +1,26 @@
+import { CallService } from "../services/call.service";
 import { IVoiceProvider } from './voice-provider.interface';
 import { GeminiLiveVoiceProvider } from './providers/gemini-live.provider';
 import { SarvamVoiceProvider } from './providers/sarvam.provider';
 import { executeVoiceTool } from './tools';
 import { db } from '../db';
+import { PatientService } from '../services/patient.service';
+import { DoctorService } from '../services/doctor.service';
+import { ServiceService } from '../services/service.service';
+import { AiAgentService } from '../services/ai-agent.service';
+import { AiConfigService } from '../services/ai-config.service';
 import { GoogleGenAI } from '@google/genai';
 
-export function buildHierarchicalSystemInstruction(
+export async function buildHierarchicalSystemInstruction(
   clinicId: string,
   agentName: string,
   clinicInstructionsNote?: string
-): string {
-  const platformConfig = db.getPlatformAiConfig();
+): Promise<string> {
+  const platformConfig = await AiConfigService.getPlatformAiConfig();
   const knowledgeBase = db.getPlatformKnowledgeBase(true);
   const clinic = db.getClinicById(clinicId);
-  const doctors = db.getDoctors(clinicId).filter((d) => d.status === 'ACTIVE');
-  const services = db.getServices(clinicId).filter((s) => s.status === 'ACTIVE');
+  const doctors = await DoctorService.list(clinicId, { status: 'ACTIVE' });
+  const services = await ServiceService.list(clinicId, { status: 'ACTIVE' });
 
   const currSymbol = clinic?.currency_symbol || '$';
   const currCode = clinic?.currency || 'USD';
@@ -102,14 +108,40 @@ ${
     : 'Standard operational procedures apply.'
 }`;
 
-  // 5. Clinic-Specific Custom Context
-  const clinicAgentSection = `[CLINIC CUSTOM CONTEXT]
-AI Receptionist Persona: ${agentName}
-Clinic Special Notes: ${clinicInstructionsNote || 'None provided by clinic admin.'}`;
+  // 4.5 Clinic-Specific Published AI Rules (Tenant Scoped)
+  const clinicKnowledge = db.getClinicKnowledge(clinicId, { status: 'PUBLISHED' });
+  const clinicKnowledgeSection = `[PUBLISHED CLINIC-SPECIFIC AI RULES & POLICIES (TENANT SCOPED)]
+${
+  clinicKnowledge.length > 0
+    ? clinicKnowledge
+        .map((k) => `### [${k.category}] ${k.title}\n${k.content}`)
+        .join('\n\n')
+    : 'Standard clinic rules apply.'
+}`;
 
-  return [safetySection, masterSection, patientRegistrationSection, clinicSection, kbSection, clinicAgentSection].join(
-    '\n\n--------------------\n\n'
-  );
+  // 5. Receptionist Behavioral Preferences (Subordinate to Authoritative Data)
+  const clinicAgentSection = `[RECEPTIONIST BEHAVIORAL PREFERENCES & INSTRUCTIONS (SUBORDINATE)]
+AI Receptionist Persona: ${agentName}
+Behavioral Instructions: ${clinicInstructionsNote || 'Please keep responses concise and clear, speak politely, and ask one question at a time.'}
+
+RUNTIME PRECEDENCE MANDATE:
+LEVEL 1 — PLATFORM SAFETY & GOVERNANCE (Strict & Immutable)
+LEVEL 2 — LIVE AUTHORITATIVE TOOL RESULTS
+LEVEL 3 — AUTHORITATIVE CLINIC DATA / PUBLISHED CLINIC KNOWLEDGE
+LEVEL 4 — CLINIC-SPECIFIC BEHAVIORAL WORKFLOW
+LEVEL 5 — GENERIC RECEPTIONIST STYLE / COMMUNICATION PREFERENCES
+
+Receptionist Behavioral Preferences are SUBORDINATE and must NEVER be used to invent, alter, or override clinic facts (such as doctor names, specialties, fees, or operating hours).`;
+
+  return [
+    safetySection,
+    masterSection,
+    patientRegistrationSection,
+    clinicSection,
+    kbSection,
+    clinicKnowledgeSection,
+    clinicAgentSection,
+  ].join('\n\n--------------------\n\n');
 }
 
 class VoiceEngineManager {
@@ -128,23 +160,12 @@ class VoiceEngineManager {
     const clinic = db.getClinicById(clinicId);
     if (!clinic) throw new Error('Clinic not found');
 
-    const agent = db.getAiAgent(clinicId) || {
-      id: `agent_${clinicId}`,
-      clinic_id: clinicId,
-      name: 'Ava',
-      greeting: `Thank you for calling ${clinic.name}. How can I assist you with your appointment or health inquiry today?`,
-      voice_provider: 'gemini_live',
-      voice_config: {},
-      languages: ['English'],
-      status: 'ACTIVE',
-      escalation_contact: { phone: clinic.phone, name: 'Clinic Staff' },
-    };
-
-    const platformConfig = db.getPlatformAiConfig();
+    const agent = await AiAgentService.resolveAgentForClinic(clinicId, clinic.name);
+    const platformConfig = await AiConfigService.getPlatformAiConfig();
     const provider = this.getProvider(platformConfig.provider || 'gemini_live');
 
     // Build authoritative hierarchical system prompt
-    const fullSystemInstruction = buildHierarchicalSystemInstruction(
+    const fullSystemInstruction = await buildHierarchicalSystemInstruction(
       clinicId,
       agent.name,
       agent.instructions_note
@@ -161,12 +182,12 @@ class VoiceEngineManager {
     });
 
     // Check if returning patient
-    let patient = callerPhone ? db.getPatientByPhone(clinicId, callerPhone) : undefined;
+    let patient = callerPhone ? await PatientService.getByPhone(clinicId, callerPhone) : undefined;
 
     // Create call record in database
     const configVersion = platformConfig.updated_at || new Date().toISOString();
 
-    const callRecord = db.createCall({
+    const callRecord = await CallService.createCall(clinicId, {
       id: `call_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       clinic_id: clinicId,
       patient_id: patient?.id,
@@ -236,9 +257,9 @@ class VoiceEngineManager {
     history: Array<{ speaker: 'ai' | 'patient'; text: string; timestamp: string }>,
     durationSeconds: number = 0
   ) {
-    const agent = db.getAiAgent(clinicId);
-    const platformConfig = db.getPlatformAiConfig();
+    const platformConfig = await AiConfigService.getPlatformAiConfig();
     const provider = this.getProvider(platformConfig.provider || 'gemini_live');
+    const agent = await AiAgentService.getAgentByClinic(clinicId);
 
     const formattedHistory = history.map((h) => ({
       role: (h.speaker === 'patient' ? 'user' : 'assistant') as 'user' | 'assistant',
@@ -255,7 +276,7 @@ class VoiceEngineManager {
     );
 
     // Update database call record
-    const call = db.getCalls(clinicId).find((c) => c.id === callId);
+    const call = await CallService.getCallById(clinicId, callId);
     if (call) {
       const updatedTranscript = [
         ...call.transcript,
@@ -299,7 +320,7 @@ class VoiceEngineManager {
         }
       }
 
-      db.updateCall(clinicId, callId, {
+      await CallService.updateCall(clinicId, callId, {
         transcript: updatedTranscript,
         duration_seconds: durationSeconds,
         outcome,
@@ -331,7 +352,7 @@ class VoiceEngineManager {
   }
 
   public async finishCall(clinicId: string, callId: string, durationSeconds: number, summary?: string) {
-    const call = db.getCalls(clinicId).find((c) => c.id === callId);
+    const call = await CallService.getCallById(clinicId, callId);
     if (!call) return;
 
     let finalSummary = summary;
@@ -340,7 +361,7 @@ class VoiceEngineManager {
       finalSummary = `Call completed (${Math.round(durationSeconds)}s). Outcome: ${call.outcome}. ${messagesCount} messages exchanged.`;
     }
 
-    db.updateCall(clinicId, callId, {
+    await CallService.updateCall(clinicId, callId, {
       status: call.outcome === 'ESCALATED' ? 'escalated' : 'completed',
       outcome: call.outcome === 'IN_PROGRESS' ? 'COMPLETED' : call.outcome,
       duration_seconds: durationSeconds,

@@ -7,8 +7,10 @@ import {
 import { AI_RECEPTIONIST_TOOL_DEFINITIONS } from '../tools';
 import { db } from '../../db';
 
-function getGenAI(): GoogleGenAI | null {
-  const apiKey = db.getRawPlatformAiApiKey();
+import { AiConfigService } from '../../services/ai-config.service';
+
+async function getGenAI(): Promise<GoogleGenAI | null> {
+  const apiKey = await AiConfigService.getRawPlatformAiApiKey();
   if (apiKey) {
     return new GoogleGenAI({
       apiKey,
@@ -44,8 +46,8 @@ export class GeminiLiveVoiceProvider implements IVoiceProvider {
     usage?: { promptTokens?: number; completionTokens?: number; totalTokens?: number };
   }> {
     const session = this.sessions.get(sessionId);
-    const ai = getGenAI();
-    const platformConfig = db.getPlatformAiConfig();
+    const ai = await getGenAI();
+    const platformConfig = await AiConfigService.getPlatformAiConfig();
     const toolCallsExecuted: Array<{ name: string; args: any; result: any }> = [];
 
     const systemInstruction = session?.systemInstruction || `You are ${session?.agentName || 'Ava'}, a professional, compassionate, and efficient AI Receptionist for this clinic.`;
