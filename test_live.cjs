@@ -1,24 +1,55 @@
 const https = require('https');
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfMTc4NzkyMzI0MDI1MF9pcnVyIiwiZW1haWwiOiJhZG1pbkBjbGluaWMuY29tIiwicm9sZSI6IkNMSU5JQ19BRE1JTiIsImNsaW5pY19pZCI6ImNsaW5pY18xNzg3OTIzMjQwMjQ5X2NxZ3ciLCJuYW1lIjoiRHIuIFVqd2FsYSBNYXNrZSIsImlhdCI6MTc4ODQ0MDQxNywiZXhwIjoxNzg4NTI2ODE3fQ.lB2Uqz1WscxCFBUL-NPkW1IMl9GQa1h-r75Uu_ccr54';
+const token = process.env.SANJEEVANI_TOKEN;
 
-const options = {
-  hostname: 'clinicfirst.vercel.app',
-  port: 443,
-  path: '/api/clinic/me/ai-widget-config',
-  method: 'GET',
-  headers: { 'Authorization': `Bearer ${token}` }
-};
+function makeRequest(path, method = 'GET', body = null) {
+  return new Promise((resolve) => {
+    const options = {
+      hostname: 'clinicfirst.vercel.app',
+      port: 443,
+      path,
+      method,
+      headers: { 'Authorization': `Bearer ${token}` }
+    };
+    if (body) {
+      options.headers['Content-Type'] = 'application/json';
+      options.headers['Content-Length'] = Buffer.byteLength(body);
+    }
+    const req = https.request(options, res => {
+      let data = '';
+      res.on('data', c => data+=c);
+      res.on('end', () => resolve({ status: res.statusCode, data }));
+    });
+    if (body) req.write(body);
+    req.end();
+  });
+}
 
-const req = https.request(options, res => {
-  let data = '';
-  res.on('data', c => data+=c);
-  res.on('end', () => console.log('Live AI Widget Config:', res.statusCode, data));
-});
-req.end();
-
-const req2 = https.request({ ...options, path: '/api/clinic/appointments' }, res => {
-  let data = '';
-  res.on('data', c => data+=c);
-  res.on('end', () => console.log('Live Appointments:', res.statusCode, data.substring(0, 100)));
-});
-req2.end();
+async function run() {
+  console.log("4. Check appointment booking availability (Concurrent test):");
+  const futureDate = "2026-09-05"; // Saturday
+  
+  const p1 = makeRequest('/api/clinic/appointments', 'POST', JSON.stringify({
+    patient_id: "pat_1788000052066_oyox", // existing patient
+    doctor_id: "doc_1787923357367_643s",
+    service_id: "srv_1787923389642_o9t1",
+    date: futureDate,
+    start_time: "14:00",
+    end_time: "14:30",
+    created_via: "ai_receptionist"
+  }));
+  
+  const p2 = makeRequest('/api/clinic/appointments', 'POST', JSON.stringify({
+    patient_id: "pat_1788000080756_vurm", // different patient
+    doctor_id: "doc_1787923357367_643s",
+    service_id: "srv_1787923389642_o9t1",
+    date: futureDate,
+    start_time: "14:00",
+    end_time: "14:30",
+    created_via: "ai_receptionist"
+  }));
+  
+  const [res1, res2] = await Promise.all([p1, p2]);
+  console.log("Concurrent Booking 1:", res1);
+  console.log("Concurrent Booking 2:", res2);
+}
+run().catch(console.error);
