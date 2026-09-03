@@ -215,7 +215,7 @@
       "phone": "+1-555-010-0001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "4568a42c46ecafa1a7e6ab4031ebbc3f:12f3cf8c89f26de23e84298ffbf67701131ef16f24cec2811332051952c80faf0d96c9abc90982758684e99a36941157c079ccaa024283209c8ebcb09de5ecac",
+      "password_hash": "54a11640bec7680f785f4e7d48c3a7aa:787db4450a73d808074e4c9a954070de5cf4817a7b82dd450364e8382cbafc1413c11ee00613911e89639eac5a33718c1e33bdec4251ce850070b7a74e59b3d9",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -227,7 +227,7 @@
       "phone": "+1-555-010-0002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "20526486974069474e1a4f7f3c840208:c97b66921f87472922f05d413483a157bfaac507cb5a92e261a5bf7a408d71e1f9804c07bf76011d1c9bbe6877f5f4bc32a52d10c9137eafdf6183fa5d29940d",
+      "password_hash": "0f47a30ea7720907e64c71b0bf07ed07:6b660b4b5d5095cb80bdddea88b91b9f56f385c82d6a8891647553f597640bbaf70eeb80f6d6d4d7301bd7020136f7b4d7cf8f55f471b273f4a544008f6c1619",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -239,7 +239,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "4e8ce765a74b2e7f28129d73f59d490b:368dd33c8fe101de2ba9839e07e4f5c5278f9d1ff3d7c3883fa6d72cc9d495d4c86d90217ef60778d60bf5b641bb619adacee0ff1e3a1cf96d09fb13048f58de",
+      "password_hash": "e3551b67ffabf2f615488e05e09bddfc:db7f8f79da7e08cb001c791860095336bb61499c24238f7d1c3b2dfaa7516e96a7d80a5980e863b802083b6935a166a57a045063816954fe1af4750263793cc8",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -251,7 +251,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "2fbfefeaa8444fa967ae7e3d375665bf:25bc3659f502019bb4b4de2b96b8331ebac6888f844875e0c3eae8b26eb3397cbfcfc185fe10a202487f4852f3dfaa31c75ae40745e1ac9b1a583a370e7ff7ac",
+      "password_hash": "bdf84d7eb00cc0cfba63b706767f4a49:174f3c5f06fd851142897b9973dba8775e5a6311528a3d26f5266879abac87a502401b1595585451d1a458d22faa7a94127d1d2b5c87973b576d7c8008d11475",
       "created_at": "2026-08-19T14:29:15.848+00:00"
     },
     {
@@ -263,7 +263,7 @@
       "phone": "+1-555-019-2001",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "ef2257d4a4a779fa31feac21102c8a21:085ca9ececa49649b2e563c446d8e8aa675f1e7fab82be61ed56993d77b21016d8089b6dd2eccc5898381d058a834b8752e95a9bbdf910f68e957f39e596c308",
+      "password_hash": "385cc8fc1ab3aa63c18bcb33f87a0cf1:2f00b789d11cfbb993d2eae956741abf83582496146bdf09f9805d057cf410f7c11c9288ca078f842fad11cdc8709eee2d39d0e5661ee5847fab31de0b4dbf22",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -275,7 +275,7 @@
       "phone": "+1-555-019-2002",
       "status": "ACTIVE",
       "must_change_password": false,
-      "password_hash": "6f2fb55ffba922cd8adc20a7ff58b360:68e844275aaf52b5e6efa2d3eaea0e0d7ce35de1c1397d99c77ae21c0051c15b0a1b8ca1535274ea61d2937761cf2dcc8a8e1160f0fd51c4de734d1325f018e4",
+      "password_hash": "078877ef0adeb1b58d8894429c544796:c6eb0997bdf70989a0288bbf589ea5e554384f218faad34601da75c35553a56cce5b45fc83c1e80c2cbbd8ff33b17e441dc04d152db0db7338066aaaa1007a74",
       "created_at": "2026-08-19T14:29:16.062+00:00"
     },
     {
@@ -3495,6 +3495,56 @@
       "target_id": "usr_apex_admin_legacy",
       "id": "audit_1788360898343_1vwpn",
       "created_at": "2026-09-02T14:54:58.343Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_legacy",
+      "id": "audit_1788365301338_pwx35",
+      "created_at": "2026-09-02T16:08:21.338Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_legacy",
+      "id": "audit_1788365378979_q63w5",
+      "created_at": "2026-09-02T16:09:38.979Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_legacy",
+      "id": "audit_1788415536359_wagxv",
+      "created_at": "2026-09-03T06:05:36.359Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_legacy",
+      "id": "audit_1788416172249_nqget",
+      "created_at": "2026-09-03T06:16:12.249Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_legacy",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_legacy",
+      "id": "audit_1788418941063_aoizo",
+      "created_at": "2026-09-03T07:02:21.063Z"
     }
   ],
   "platform_ai_config": {

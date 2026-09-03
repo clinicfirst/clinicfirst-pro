@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { requireAuth } from '../auth';
+import { requireAuth, requirePlatformAdmin, AuthenticatedRequest } from '../auth';
 import { isSarvamApiConfigured } from '../config/sarvam';
+import { sarvamClient } from '../integrations/sarvam/SarvamClient';
 import { voiceEngine } from '../voice/voice-engine';
 import { db } from '../db';
 
@@ -70,6 +71,17 @@ aiRouter.get('/sarvam/status', requireAuth, (req: Request, res: Response) => {
     provider: 'sarvam'
   });
 });
+
+// Sarvam API Connectivity Test (Platform Admin only)
+aiRouter.get(
+  '/sarvam/test',
+  requireAuth,
+  requirePlatformAdmin,
+  async (req: AuthenticatedRequest, res: Response) => {
+    const result = await sarvamClient.testConnectivity();
+    return res.json(result);
+  }
+);
 
 // Get Call Details
 aiRouter.get('/call/:callId', (req: Request, res: Response) => {
