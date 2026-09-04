@@ -1484,19 +1484,43 @@ clinicRouter.get(
         return res.status(404).json({ error: 'AI Receptionist provider agent is not configured for this clinic.' });
       }
 
-      // 5. Return browser-safe configuration required by the Sarvam Embed
-      const orgId = process.env.VITE_SARVAM_ORG_ID || 'demo-org-id';
-      const workspaceId = process.env.VITE_SARVAM_WORKSPACE_ID || 'demo-workspace-id';
-      const embedKey = process.env.VITE_SARVAM_EMBED_KEY || 'demo-embed-key';
+      // 5. Return browser-safe configuration required by the Sarvam Embed.
+      // In production, do NOT silently substitute demo/placeholder values.
+      // Demo fallbacks are strictly isolated to offline development mode.
+      const isOffline = process.env.OFFLINE_MODE === 'true';
+
+      const orgId = 
+        process.env.VITE_SARVAM_ORG_ID || 
+        process.env.SARVAM_ORG_ID || 
+        (isOffline ? 'demo-org-id' : '');
+
+      const workspaceId = 
+        process.env.VITE_SARVAM_WORKSPACE_ID || 
+        process.env.SARVAM_WORKSPACE_ID || 
+        (isOffline ? 'demo-workspace-id' : '');
+
+      const embedKey = 
+        process.env.VITE_SARVAM_EMBED_KEY || 
+        process.env.SARVAM_EMBED_KEY || 
+        (isOffline ? 'demo-embed-key' : '');
       
+      const isConfigured = Boolean(
+        embedKey && 
+        orgId && 
+        workspaceId && 
+        !embedKey.startsWith('demo-') &&
+        embedKey !== 'YOUR_SARVAM_EMBED_KEY'
+      );
+
       return res.json({
         enabled: true,
         clinic_id: clinicId,
         provider_agent_id: providerAgentId,
         appId: providerAgentId,
-        orgId: orgId,
-        workspaceId: workspaceId,
-        embedKey: embedKey,
+        orgId: orgId || null,
+        workspaceId: workspaceId || null,
+        embedKey: embedKey || null,
+        configured: isConfigured,
       });
     } catch (err: any) {
       console.error('[GET /me/ai-widget-config] Error:', err);

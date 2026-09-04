@@ -152,11 +152,21 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
     );
   }
 
-  const effectiveAppId = config?.provider_agent_id || config?.appId || 'sarvam_agent_456';
-  const effectiveEmbedKey = config?.embedKey || (import.meta.env.VITE_SARVAM_EMBED_KEY as string) || 'demo-embed-key';
-  const effectiveOrgId = config?.orgId || (import.meta.env.VITE_SARVAM_ORG_ID as string) || 'demo-org-id';
-  const effectiveWorkspaceId = config?.workspaceId || (import.meta.env.VITE_SARVAM_WORKSPACE_ID as string) || 'demo-workspace-id';
-  const isDemoKey = effectiveEmbedKey === 'demo-embed-key';
+  const effectiveAppId = config?.provider_agent_id || config?.appId || '';
+  const effectiveEmbedKey = config?.embedKey || (import.meta.env.VITE_SARVAM_EMBED_KEY as string) || '';
+  const effectiveOrgId = config?.orgId || (import.meta.env.VITE_SARVAM_ORG_ID as string) || '';
+  const effectiveWorkspaceId = config?.workspaceId || (import.meta.env.VITE_SARVAM_WORKSPACE_ID as string) || '';
+
+  // Valid production configuration requires all three browser-safe keys to be non-empty and non-demo/placeholder
+  const isValidConfig = Boolean(
+    effectiveEmbedKey &&
+    effectiveOrgId &&
+    effectiveWorkspaceId &&
+    !effectiveEmbedKey.startsWith('demo-') &&
+    effectiveEmbedKey !== 'YOUR_SARVAM_EMBED_KEY' &&
+    effectiveOrgId !== 'YOUR_SARVAM_ORG_ID' &&
+    effectiveWorkspaceId !== 'YOUR_SARVAM_WORKSPACE_ID'
+  );
 
   return (
     <div className={`flex flex-col items-center justify-center ${compact ? 'p-4' : 'p-6'} bg-white border border-gray-200 rounded-2xl relative shadow-xs`}>
@@ -171,24 +181,29 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
           Talk to the clinic AI receptionist using high-quality browser voice. Real database availability and bookings are enforced server-side.
         </p>
         <div className="flex items-center justify-center gap-2 pt-1 text-[11px] text-gray-500">
-          <span>Agent ID: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 font-mono text-[10px]">{effectiveAppId}</code></span>
+          <span>Agent ID: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 font-mono text-[10px]">{effectiveAppId || 'Unassigned'}</code></span>
           <span>•</span>
           <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Active
+            <span className={`w-1.5 h-1.5 rounded-full ${isValidConfig ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+            {isValidConfig ? 'Active' : 'Configuration Pending'}
           </span>
         </div>
       </div>
 
-      {/* Deployment Note if demo key is active */}
-      {isDemoKey && (
-        <div className="w-full mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-left">
-          <div className="flex items-start gap-2">
+      {/* Status or Configuration Notice */}
+      {isValidConfig ? (
+        <div className="w-full mb-3 py-1.5 px-3 bg-emerald-50/70 border border-emerald-100 rounded-lg flex items-center justify-center gap-1.5 text-[11px] text-emerald-800 font-medium">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+          <span>Ready for browser voice testing.</span>
+        </div>
+      ) : (
+        <div className="w-full mb-4 p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-left">
+          <div className="flex items-start gap-2.5">
             <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-            <div className="text-xs text-amber-800 space-y-1">
-              <p className="font-semibold">Vercel Deployment Notice</p>
+            <div className="text-xs text-amber-900 space-y-1">
+              <p className="font-semibold">Browser Voice Configuration Required</p>
               <p className="text-[11px] leading-relaxed text-amber-700">
-                To connect live carrier calls with Sarvam AI, set <code className="font-mono bg-amber-100 px-1 py-0.5 rounded">VITE_SARVAM_EMBED_KEY</code>, <code className="font-mono bg-amber-100 px-1 py-0.5 rounded">VITE_SARVAM_ORG_ID</code>, and <code className="font-mono bg-amber-100 px-1 py-0.5 rounded">VITE_SARVAM_WORKSPACE_ID</code> in Vercel environment settings.
+                To connect browser voice calls with Sarvam AI, set <code className="font-mono bg-amber-100 px-1 py-0.5 rounded">VITE_SARVAM_EMBED_KEY</code>, <code className="font-mono bg-amber-100 px-1 py-0.5 rounded">VITE_SARVAM_ORG_ID</code>, and <code className="font-mono bg-amber-100 px-1 py-0.5 rounded">VITE_SARVAM_WORKSPACE_ID</code> in deployment environment settings.
               </p>
             </div>
           </div>
@@ -197,9 +212,31 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
 
       {/* Sarvam Web Component Render Area */}
       <div className="w-full flex flex-col items-center justify-center py-2 min-h-[80px]">
-        {!scriptLoaded ? (
+        {!effectiveAppId ? (
+          <div className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-center">
+            <p className="text-xs font-semibold text-gray-800">No Sarvam Agent ID Configured</p>
+            <p className="text-[11px] text-gray-500 mt-1">
+              This clinic does not have an assigned Sarvam voice agent ID. Update the Agent ID in the AI Receptionist settings tab.
+            </p>
+          </div>
+        ) : !isValidConfig ? (
+          <div className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-center space-y-2">
+            <p className="text-xs text-gray-600">
+              Sarvam managed voice widget will activate as soon as production environment credentials are provided.
+            </p>
+            {onOpenDiagnosticSimulator && (
+              <button
+                onClick={onOpenDiagnosticSimulator}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+              >
+                <Terminal className="w-3.5 h-3.5 text-gray-500" />
+                <span>Open Diagnostic Simulator (Dev/Offline)</span>
+              </button>
+            )}
+          </div>
+        ) : !scriptLoaded ? (
           <div className="flex items-center gap-2 text-xs text-gray-500 font-medium py-3">
-            <div className="w-3.5 h-3.5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+            <div className="w-3.5 h-3.5 border-2 border-[#0052FF] border-t-transparent rounded-full animate-spin" />
             <span>Initializing Sarvam voice engine...</span>
           </div>
         ) : (
