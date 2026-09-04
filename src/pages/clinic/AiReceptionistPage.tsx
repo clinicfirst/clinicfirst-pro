@@ -29,6 +29,7 @@ import { can } from '../../lib/permissions';
 import {
   GREETING_STYLES,
   generateSafeGreeting,
+  validateGreetingContent,
   validateReceptionistPreferences,
 } from '../../lib/aiValidator';
 
@@ -45,7 +46,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   // Form State
-  const [greetingStyle, setGreetingStyle] = useState<string>('professional');
+  const [greetingStyle, setGreetingStyle] = useState<string>('warm');
   const [form, setForm] = useState({
     name: 'Ava',
     greeting: '',
@@ -62,6 +63,9 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
   const [instructionsValidation, setInstructionsValidation] = useState<{ isValid: boolean; error?: string }>({
     isValid: true,
   });
+  const [greetingValidation, setGreetingValidation] = useState<{ isValid: boolean; error?: string }>({
+    isValid: true,
+  });
 
   const fetchAgent = async () => {
     try {
@@ -71,20 +75,22 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
         setAgent(res.agent);
 
         const clinicName = clinic?.name || 'our clinic';
-        const initialGreeting = res.agent.greeting || generateSafeGreeting(clinicName, 'professional');
+        const agentName = res.agent.name || 'Ava';
+        const initialGreeting = res.agent.greeting || generateSafeGreeting(clinicName, 'warm', agentName);
 
         // Detect matching style if possible
-        let matchedStyle = 'professional';
-        for (const [key, val] of Object.entries(GREETING_STYLES)) {
-          if (generateSafeGreeting(clinicName, key) === initialGreeting) {
+        let matchedStyle = 'custom';
+        for (const [key] of Object.entries(GREETING_STYLES)) {
+          if (generateSafeGreeting(clinicName, key, agentName) === initialGreeting) {
             matchedStyle = key;
             break;
           }
         }
         setGreetingStyle(matchedStyle);
+        setGreetingValidation(validateGreetingContent(initialGreeting));
 
         setForm({
-          name: res.agent.name || 'Ava',
+          name: agentName,
           greeting: initialGreeting,
           voice_provider: res.agent.voice_provider || 'gemini_live',
           status: res.agent.status || 'ACTIVE',
@@ -112,11 +118,64 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
     fetchAgent();
   }, [clinic?.id]);
 
+  const handleNameChange = (newName: string) => {
+    const clinicName = clinic?.name || 'our clinic';
+    const oldName = form.name;
+
+    setForm((prev) => {
+      let updatedGreeting = prev.greeting;
+
+      // If user is on a standard preset style, auto-generate with the new name
+      if (greetingStyle !== 'custom' && GREETING_STYLES[greetingStyle]) {
+        updatedGreeting = generateSafeGreeting(clinicName, greetingStyle, newName);
+      } else if (oldName.trim() && updatedGreeting.includes(oldName.trim())) {
+        // If customized but includes previous name, update it seamlessly
+        updatedGreeting = updatedGreeting.split(oldName.trim()).join(newName.trim() || 'your AI receptionist');
+      }
+
+      setGreetingValidation(validateGreetingContent(updatedGreeting));
+      return {
+        ...prev,
+        name: newName,
+        greeting: updatedGreeting,
+      };
+    });
+  };
+
   const handleStyleChange = (styleKey: string) => {
     setGreetingStyle(styleKey);
     const clinicName = clinic?.name || 'our clinic';
-    const newGreeting = generateSafeGreeting(clinicName, styleKey);
+    const newGreeting = generateSafeGreeting(clinicName, styleKey, form.name);
     setForm((prev) => ({ ...prev, greeting: newGreeting }));
+    setGreetingValidation(validateGreetingContent(newGreeting));
+  };
+
+  const handleGreetingChange = (val: string) => {
+    const clinicName = clinic?.name || 'our clinic';
+    setForm((prev) => ({ ...prev, greeting: val }));
+
+    const valResult = validateGreetingContent(val);
+    setGreetingValidation(valResult);
+
+    // Detect if text matches any preset
+    let matched = 'custom';
+    for (const [key] of Object.entries(GREETING_STYLES)) {
+      if (generateSafeGreeting(clinicName, key, form.name).toLowerCase() === val.trim().toLowerCase()) {
+        matched = key;
+        break;
+      }
+    }
+    setGreetingStyle(matched);
+  };
+
+  const handleInsertPlaceholder = (type: 'name' | 'clinic') => {
+    const textToInsert = type === 'name'
+      ? (form.name.trim() || 'your AI receptionist')
+      : (clinic?.name || 'our clinic');
+
+    const current = form.greeting.trim();
+    const updated = current ? `${current} ${textToInsert}` : textToInsert;
+    handleGreetingChange(updated);
   };
 
   const handleInstructionsChange = (val: string) => {
@@ -134,13 +193,30 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
       return;
     }
 
+    // Validate greeting
+    const greetingVal = validateGreetingContent(form.greeting);
+    if (!greetingVal.isValid) {
+      showToast(greetingVal.error || 'Please resolve greeting errors before saving.', 'error');
+      return;
+    }
+
+    if (!form.name.trim()) {
+      showToast('AI Receptionist name is required.', 'error');
+      return;
+    }
+
+    if (!form.greeting.trim()) {
+      showToast('AI greeting text cannot be empty.', 'error');
+      return;
+    }
+
     setSaving(true);
     setSavedSuccess(false);
 
     try {
       const payload = {
-        name: form.name,
-        greeting: form.greeting,
+        name: form.name.trim(),
+        greeting: form.greeting.trim(),
         greeting_style: greetingStyle,
         voice_provider: form.voice_provider,
         status: form.status,
@@ -260,7 +336,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
                 variant="primary"
                 size="sm"
                 type="submit"
-                disabled={!instructionsValidation.isValid}
+                disabled={!instructionsValidation.isValid || !greetingValidation.isValid || !form.name.trim() || !form.greeting.trim()}
                 loading={saving}
                 icon={savedSuccess ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
               >
@@ -276,7 +352,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
                 required
                 disabled={!canConfigure}
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                onChange={(e) => handleNameChange(e.target.value)}
                 placeholder="Ava"
               />
 
@@ -308,10 +384,16 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
                     AI Greeting
                   </label>
                   <p className="text-[11px] text-gray-500 mt-0.5">
-                    Select the tone and style for the opening greeting spoken when a patient call connects.
+                    Opening greeting spoken when a patient call connects. Changes to AI Receptionist Name update this automatically.
                   </p>
                 </div>
-                <Badge status="ACTIVE" label="Template Resolved" />
+                {greetingStyle === 'custom' ? (
+                  <span className="px-2 py-0.5 text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 rounded">
+                    Custom Greeting
+                  </span>
+                ) : (
+                  <Badge status="ACTIVE" label={`Template: ${GREETING_STYLES[greetingStyle]?.label || 'Resolved'}`} />
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-1">
@@ -332,17 +414,78 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
                 ))}
               </div>
 
-              <div className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded text-xs text-gray-800 leading-relaxed font-sans">
-                <span className="font-semibold text-gray-600 block text-[10px] uppercase tracking-wider mb-1">
-                  Active Greeting Output
-                </span>
-                "{form.greeting || generateSafeGreeting(clinic?.name || 'our clinic', greetingStyle)}"
+              {/* Directly Editable Spoken Greeting Textarea */}
+              <div className="space-y-1.5 pt-1">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="ai-greeting-editor" className="block text-[11px] font-semibold uppercase tracking-wider text-gray-700">
+                    Active Spoken Greeting (Editable)
+                  </label>
+                  <span className="text-[10px] text-gray-400 font-mono">
+                    {form.greeting.length} characters
+                  </span>
+                </div>
+
+                <textarea
+                  id="ai-greeting-editor"
+                  rows={3}
+                  disabled={!canConfigure}
+                  value={form.greeting}
+                  onChange={(e) => handleGreetingChange(e.target.value)}
+                  placeholder={`Hello, thank you for calling ${clinic?.name || 'our clinic'}! I'm ${form.name || 'your AI receptionist'}...`}
+                  className={`w-full p-3 border rounded-lg text-xs leading-relaxed transition-colors font-sans focus:outline-none ${
+                    !greetingValidation.isValid
+                      ? 'border-red-500 bg-red-50/20 focus:border-red-600'
+                      : 'border-gray-200 bg-white focus:border-[#0A2540] focus:ring-1 focus:ring-[#0A2540]'
+                  }`}
+                />
+
+                {!greetingValidation.isValid && greetingValidation.error && (
+                  <div className="text-[11px] text-red-600 flex items-start gap-1 bg-red-50 border border-red-200 p-2 rounded">
+                    <AlertTriangle className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
+                    <span>{greetingValidation.error}</span>
+                  </div>
+                )}
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                  <div className="flex items-center gap-1.5 text-[11px] text-gray-500">
+                    <span className="font-medium text-gray-600">Quick insert:</span>
+                    <button
+                      type="button"
+                      disabled={!canConfigure}
+                      onClick={() => handleInsertPlaceholder('name')}
+                      className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded text-[10px] font-medium border border-gray-200 transition-colors"
+                      title="Insert receptionist name into greeting"
+                    >
+                      + Receptionist Name ({form.name || 'Ava'})
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!canConfigure}
+                      onClick={() => handleInsertPlaceholder('clinic')}
+                      className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded text-[10px] font-medium border border-gray-200 transition-colors"
+                      title="Insert clinic name into greeting"
+                    >
+                      + Clinic Name ({clinic?.name || 'Clinic'})
+                    </button>
+                  </div>
+
+                  {greetingStyle === 'custom' && (
+                    <button
+                      type="button"
+                      disabled={!canConfigure}
+                      onClick={() => handleStyleChange('warm')}
+                      className="text-[10px] text-blue-600 hover:text-blue-800 font-medium underline transition-colors"
+                    >
+                      Reset to Warm & Friendly preset
+                    </button>
+                  )}
+                </div>
               </div>
 
               <p className="text-[11px] text-gray-500 flex items-center gap-1">
                 <Info className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                 <span>
-                  The clinic name is automatically resolved from your verified clinic profile. Greeting templates cannot contain hardcoded doctor or service facts.
+                  The clinic name and receptionist name are automatically merged. You can customize the greeting above, or click any tone preset to generate a fresh greeting using your current receptionist name.
                 </span>
               </p>
             </div>

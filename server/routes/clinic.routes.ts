@@ -1575,11 +1575,21 @@ clinicRouter.put(
 
       const current = await AiAgentService.getAgentByClinic(clinicId);
 
-      // Resolve AI Greeting safely from template/style + authoritative clinic name
+      // Resolve AI Greeting safely from user greeting / style template + authoritative clinic name + receptionist name
       let resolvedGreeting = current?.greeting;
-      if (greeting !== undefined || greeting_style !== undefined) {
-        const templateOrStyle = greeting_style || greeting;
-        resolvedGreeting = generateSafeGreeting(clinic.name, templateOrStyle);
+      const receptionistName = name?.trim() || current?.name || 'AI Receptionist';
+
+      if (greeting !== undefined && typeof greeting === 'string' && greeting.trim().length > 0) {
+        const customGreeting = greeting.trim();
+        const greetingVal = validateGreetingContent(customGreeting);
+        if (!greetingVal.isValid) {
+          return res.status(400).json({ error: greetingVal.error });
+        }
+        resolvedGreeting = customGreeting
+          .replace(/\{\{clinic_name\}\}/g, clinic.name)
+          .replace(/\{\{receptionist_name\}\}/g, receptionistName);
+      } else if (greeting_style !== undefined) {
+        resolvedGreeting = generateSafeGreeting(clinic.name, greeting_style, receptionistName);
         const greetingVal = validateGreetingContent(resolvedGreeting);
         if (!greetingVal.isValid) {
           return res.status(400).json({ error: greetingVal.error });
@@ -1587,7 +1597,7 @@ clinicRouter.put(
       }
 
       if (!resolvedGreeting) {
-        resolvedGreeting = generateSafeGreeting(clinic.name);
+        resolvedGreeting = generateSafeGreeting(clinic.name, 'warm', receptionistName);
       }
 
       const updatedAgentPayload: Partial<AiAgent> = {
