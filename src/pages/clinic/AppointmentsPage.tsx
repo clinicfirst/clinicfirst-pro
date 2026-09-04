@@ -27,6 +27,25 @@ import { Appointment, Doctor, Service, Patient } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { can } from '../../lib/permissions';
 
+// ISO Week (Monday to Sunday)
+const getCurrentWeekDates = () => {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0 is Sun, 1 is Mon...
+  const distanceToMon = (currentDay + 6) % 7; // distance from Monday
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - distanceToMon);
+
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+
+  return {
+    start: monday.toISOString().split('T')[0],
+    end: sunday.toISOString().split('T')[0],
+  };
+};
+
+const getTodayDate = () => new Date().toISOString().split('T')[0];
+
 export const AppointmentsPage: React.FC = () => {
   const { user } = useAuth();
   const canManage = can(user, 'manage_appointments');
@@ -37,12 +56,12 @@ export const AppointmentsPage: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Filters
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
+  // Filters (Default: current week, Booked & Rescheduled, not Completed)
+  const initialWeek = getCurrentWeekDates();
+  const [startDate, setStartDate] = useState<string>(initialWeek.start);
+  const [endDate, setEndDate] = useState<string>(initialWeek.end);
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('booked_or_rescheduled');
 
   // Modals
   const [bookModalOpen, setBookModalOpen] = useState(false);
@@ -97,11 +116,16 @@ export const AppointmentsPage: React.FC = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      const queryParams = new URLSearchParams({
+        start_date: startDate,
+        end_date: endDate,
+        ...(selectedDoctorId !== 'all' ? { doctor_id: selectedDoctorId } : {}),
+        ...(selectedStatus !== 'all' ? { status: selectedStatus } : {}),
+      });
+
       const [aptsRes, docsRes, srvsRes, patsRes] = await Promise.all([
         apiRequest<{ appointments: Appointment[] }>(
-          `/api/clinic/appointments?date=${selectedDate}${
-            selectedDoctorId !== 'all' ? `&doctor_id=${selectedDoctorId}` : ''
-          }${selectedStatus !== 'all' ? `&status=${selectedStatus}` : ''}`
+          `/api/clinic/appointments?${queryParams.toString()}`
         ),
         apiRequest<{ doctors: Doctor[] }>('/api/clinic/doctors'),
         apiRequest<{ services: Service[] }>('/api/clinic/services'),
@@ -126,7 +150,7 @@ export const AppointmentsPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [selectedDate, selectedDoctorId, selectedStatus]);
+  }, [startDate, endDate, selectedDoctorId, selectedStatus]);
 
   // Query Available Slots when booking fields change
   useEffect(() => {
@@ -328,16 +352,69 @@ export const AppointmentsPage: React.FC = () => {
     }
   };
 
-  // Date Navigation Helpers
-  const shiftDate = (days: number) => {
-    const d = new Date(selectedDate);
-    d.setDate(d.getDate() + days);
-    setSelectedDate(d.toISOString().split('T')[0]);
+  // Date Range Navigation Helpers
+  const currentWeek = getCurrentWeekDates();
+  const isCurrentWeekSelected = startDate === currentWeek.start && endDate === currentWeek.end;
+  const todayStr = getTodayDate();
+  const isTodaySelected = startDate === todayStr && endDate === todayStr;
+
+  const shiftRange = (direction: number) => {
+    const s = new Date(startDate);
+    const e = new Date(endDate);
+    const diffTime = Math.abs(e.getTime() - s.getTime());
+    const diffDays = Math.max(1, Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1);
+
+    s.setDate(s.getDate() + direction * diffDays);
+    e.setDate(e.getDate() + direction * diffDays);
+
+    setStartDate(s.toISOString().split('T')[0]);
+    setEndDate(e.toISOString().split('T')[0]);
+  };
+
+  const setCurrentWeek = () => {
+    const cw = getCurrentWeekDates();
+    setStartDate(cw.start);
+    setEndDate(cw.end);
   };
 
   const setToday = () => {
-    setSelectedDate(new Date().toISOString().split('T')[0]);
+    const t = getTodayDate();
+    setStartDate(t);
+    setEndDate(t);
   };
+
+  // Safe client filtering & chronological sorting
+  const displayedAppointments = appointments
+    .filter((apt) => {
+      if (selectedStatus === 'booked_or_rescheduled') {
+        return (
+          apt.status === 'CONFIRMED' ||
+          apt.status === 'RESCHEDULED' ||
+          apt.status === 'REQUESTED'
+        );
+      }
+      if (selectedStatus !== 'all') {
+        return apt.status === selectedStatus;
+      }
+      return true;
+    })
+    .filter((apt) => {
+      if (selectedDoctorId !== 'all') {
+        return apt.doctor_id === selectedDoctorId;
+      }
+      return true;
+    })
+    .filter((apt) => {
+      if (startDate && apt.date < startDate) return false;
+      if (endDate && apt.date > endDate) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (a.date !== b.date) {
+        return a.date.localeCompare(b.date);
+      }
+      return a.start_time.localeCompare(b.start_time);
+    });
 
   return (
     <div className="space-y-6">
@@ -363,26 +440,56 @@ export const AppointmentsPage: React.FC = () => {
       </div>
 
       {/* Date Navigation & Filters Bar */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4 bg-white p-3.5 sm:p-4 border border-gray-200 rounded-lg">
-        {/* Date Navigator */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4 bg-white p-3.5 sm:p-4 border border-gray-200 rounded-lg">
+        {/* Date Range Navigator */}
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="secondary" size="sm" onClick={() => shiftDate(-1)}>
+          <Button variant="secondary" size="sm" onClick={() => shiftRange(-1)} title="Previous Period">
             <ChevronLeft className="w-4 h-4" />
           </Button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-xs text-gray-600">
             <input
               type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-2.5 sm:px-3 py-1.5 text-xs font-mono font-semibold border border-gray-300 rounded focus:border-[#0A2540] focus:ring-1 focus:ring-[#0A2540]"
+              value={startDate}
+              onChange={(e) => {
+                const val = e.target.value;
+                setStartDate(val);
+                if (val > endDate) setEndDate(val);
+              }}
+              className="px-2.5 sm:px-3 py-1.5 text-xs font-mono font-semibold border border-gray-300 rounded focus:border-[#0A2540] focus:ring-1 focus:ring-[#0A2540] bg-white text-[#0A0A0A]"
+              title="Start Date"
             />
-            <Button variant="outline" size="sm" onClick={setToday}>
-              Today
-            </Button>
+            <span className="text-gray-400 text-xs font-medium px-0.5">to</span>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => {
+                const val = e.target.value;
+                setEndDate(val);
+                if (val < startDate) setStartDate(val);
+              }}
+              className="px-2.5 sm:px-3 py-1.5 text-xs font-mono font-semibold border border-gray-300 rounded focus:border-[#0A2540] focus:ring-1 focus:ring-[#0A2540] bg-white text-[#0A0A0A]"
+              title="End Date"
+            />
           </div>
 
-          <Button variant="secondary" size="sm" onClick={() => shiftDate(1)}>
+          <Button
+            variant={isCurrentWeekSelected ? "primary" : "outline"}
+            size="sm"
+            onClick={setCurrentWeek}
+          >
+            This Week
+          </Button>
+
+          <Button
+            variant={isTodaySelected ? "primary" : "outline"}
+            size="sm"
+            onClick={setToday}
+          >
+            Today
+          </Button>
+
+          <Button variant="secondary" size="sm" onClick={() => shiftRange(1)} title="Next Period">
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
@@ -393,7 +500,7 @@ export const AppointmentsPage: React.FC = () => {
             <select
               value={selectedDoctorId}
               onChange={(e) => setSelectedDoctorId(e.target.value)}
-              className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:border-[#0A2540] bg-white"
+              className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:border-[#0A2540] bg-white text-[#0A0A0A]"
             >
               <option value="all">All Doctors</option>
               {doctors.map((d) => (
@@ -404,16 +511,17 @@ export const AppointmentsPage: React.FC = () => {
             </select>
           </div>
 
-          <div className="w-full sm:w-36">
+          <div className="w-full sm:w-48">
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:border-[#0A2540] bg-white"
+              className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:border-[#0A2540] bg-white text-[#0A0A0A] font-medium"
             >
+              <option value="booked_or_rescheduled">Booked & Rescheduled</option>
               <option value="all">All Statuses</option>
               <option value="CONFIRMED">Confirmed</option>
-              <option value="COMPLETED">Completed</option>
               <option value="RESCHEDULED">Rescheduled</option>
+              <option value="COMPLETED">Completed</option>
               <option value="CANCELLED">Cancelled</option>
               <option value="NO_SHOW">No Show</option>
             </select>
@@ -432,17 +540,23 @@ export const AppointmentsPage: React.FC = () => {
 
       {/* Appointments List / Table */}
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        {appointments.length === 0 ? (
+        {displayedAppointments.length === 0 ? (
           <div className="py-16 text-center text-xs text-gray-400">
             <CalendarIcon className="w-8 h-8 mx-auto text-gray-300 mb-2" />
-            No appointments found for {selectedDate}.
+            {selectedStatus === 'booked_or_rescheduled'
+              ? `No booked or rescheduled appointments found for ${
+                  startDate === endDate ? startDate : `${startDate} to ${endDate}`
+                }.`
+              : `No appointments found for ${
+                  startDate === endDate ? startDate : `${startDate} to ${endDate}`
+                }.`}
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-gray-50/75 border-b border-gray-200 text-gray-700 uppercase font-semibold text-[11px] tracking-wider">
                 <tr>
-                  <th className="px-6 py-3.5">Time Slot</th>
+                  <th className="px-6 py-3.5">Date & Time Slot</th>
                   <th className="px-6 py-3.5">Patient</th>
                   <th className="px-6 py-3.5">Doctor & Service</th>
                   <th className="px-6 py-3.5">Channel</th>
@@ -451,10 +565,17 @@ export const AppointmentsPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 font-normal">
-                {appointments.map((apt) => (
-                  <tr key={apt.id} className="group hover:bg-[#F8FAFC] transition-colors duration-200 transition-colors">
-                    {/* Time Slot */}
+                {displayedAppointments.map((apt) => (
+                  <tr key={apt.id} className="group hover:bg-[#F8FAFC] transition-colors duration-200">
+                    {/* Date & Time Slot */}
                     <td className="px-6 py-4 font-mono">
+                      <div className="text-[11px] font-semibold text-gray-700 mb-0.5">
+                        {new Date(apt.date + 'T00:00:00').toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </div>
                       <div className="font-bold text-[#0A0A0A]">{apt.start_time}</div>
                       <div className="text-[10px] text-gray-400">to {apt.end_time}</div>
                     </td>
@@ -487,7 +608,7 @@ export const AppointmentsPage: React.FC = () => {
 
                     {/* Actions */}
                     <td className="px-6 py-4 text-right space-x-1.5 whitespace-nowrap opacity-80 group-hover:opacity-100 transition-opacity duration-200">
-                      {apt.status === 'CONFIRMED' && canManage && (
+                      {(apt.status === 'CONFIRMED' || apt.status === 'RESCHEDULED') && canManage && (
                         <>
                           <button
                             onClick={() => setConfirmCompleteId(apt.id)}
@@ -519,15 +640,15 @@ export const AppointmentsPage: React.FC = () => {
                         </>
                       )}
 
-                      {apt.status === 'CONFIRMED' && !canManage && (
+                      {(apt.status === 'CONFIRMED' || apt.status === 'RESCHEDULED') && !canManage && (
                         <span className="text-[11px] text-gray-400 font-mono">
-                          Confirmed
+                          {apt.status === 'CONFIRMED' ? 'Confirmed' : 'Rescheduled'}
                         </span>
                       )}
 
-                      {apt.status === 'RESCHEDULED' && (
+                      {apt.status !== 'CONFIRMED' && apt.status !== 'RESCHEDULED' && (
                         <span className="text-[11px] text-gray-400 font-mono italic">
-                          Rescheduled
+                          {apt.status}
                         </span>
                       )}
                     </td>

@@ -1308,15 +1308,47 @@ clinicRouter.get(
   '/appointments',
   requireClinicPermission('view_appointments'),
   async (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { date, doctor_id, status } = req.query as {
-      date?: string;
-      doctor_id?: string;
-      status?: string;
-    };
+    try {
+      const clinicId = getAuthClinicId(req);
+      const { date, start_date, end_date, doctor_id, status } = req.query as {
+        date?: string;
+        start_date?: string;
+        end_date?: string;
+        doctor_id?: string;
+        status?: string;
+      };
 
-    const appointments = await AppointmentService.list(clinicId, { date, doctor_id, status });
-    return res.json({ appointments });
+      const filterDoctorId = req.user?.role === 'DOCTOR' ? req.user.doctor_id : doctor_id;
+
+      let appointments = await AppointmentService.list(clinicId, {
+        date,
+        start_date,
+        end_date,
+        doctor_id: filterDoctorId,
+        status,
+      });
+
+      const [allPatients, allDoctors, allServices] = await Promise.all([
+        PatientService.list(clinicId),
+        DoctorService.list(clinicId),
+        ServiceService.list(clinicId),
+      ]);
+      const patientMap = new Map(allPatients.map(p => [p.id, p]));
+      const doctorMap = new Map(allDoctors.map(d => [d.id, d]));
+      const serviceMap = new Map(allServices.map(s => [s.id, s]));
+
+      appointments = appointments.map(apt => ({
+        ...apt,
+        patient: apt.patient || patientMap.get(apt.patient_id) || undefined,
+        doctor: apt.doctor || doctorMap.get(apt.doctor_id) || undefined,
+        service: apt.service || serviceMap.get(apt.service_id) || undefined,
+      }));
+
+      return res.json({ appointments });
+    } catch (err: any) {
+      console.error('[GET /appointments] Error:', err);
+      return res.status(500).json({ error: 'Failed to retrieve appointments.' });
+    }
   }
 );
 

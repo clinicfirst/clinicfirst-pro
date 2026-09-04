@@ -33,18 +33,34 @@ export type StatusParams = {
 };
 
 export class AppointmentService {
-  static async list(clinicId: string, filters?: { date?: string; doctor_id?: string; status?: string }): Promise<Appointment[]> {
+  static async list(clinicId: string, filters?: { date?: string; start_date?: string; end_date?: string; doctor_id?: string; status?: string }): Promise<Appointment[]> {
     if (!supabase) {
       let items = ((db.data as any).appointments || []).filter((a: any) => a.clinic_id === clinicId);
       if (filters?.date) items = items.filter((a: any) => a.date === filters.date);
+      if (filters?.start_date) items = items.filter((a: any) => a.date >= filters.start_date);
+      if (filters?.end_date) items = items.filter((a: any) => a.date <= filters.end_date);
       if (filters?.doctor_id) items = items.filter((a: any) => a.doctor_id === filters.doctor_id);
-      if (filters?.status) items = items.filter((a: any) => a.status === filters.status);
+      if (filters?.status) {
+        if (filters.status === 'booked_or_rescheduled') {
+          items = items.filter((a: any) => (a.status === 'CONFIRMED' || a.status === 'RESCHEDULED' || a.status === 'REQUESTED') && a.status !== 'COMPLETED' && a.status !== 'CANCELLED');
+        } else if (filters.status !== 'all') {
+          items = items.filter((a: any) => a.status === filters.status);
+        }
+      }
       return items;
     }
     let query = supabase.from('appointments').select('*').eq('clinic_id', clinicId);
     if (filters?.date) query = query.eq('date', filters.date);
+    if (filters?.start_date) query = query.gte('date', filters.start_date);
+    if (filters?.end_date) query = query.lte('date', filters.end_date);
     if (filters?.doctor_id) query = query.eq('doctor_id', filters.doctor_id);
-    if (filters?.status) query = query.eq('status', filters.status);
+    if (filters?.status) {
+      if (filters.status === 'booked_or_rescheduled') {
+        query = query.in('status', ['CONFIRMED', 'RESCHEDULED', 'REQUESTED']);
+      } else if (filters.status !== 'all') {
+        query = query.eq('status', filters.status);
+      }
+    }
     const { data, error } = await query;
     if (error) throw new Error('Failed to list appointments: ' + error.message);
     return data || [];
