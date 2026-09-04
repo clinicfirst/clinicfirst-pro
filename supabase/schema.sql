@@ -280,7 +280,7 @@ CREATE POLICY "Allow public access for migration" ON platform_knowledge_base FOR
 
 -- PHASE 15 MIGRATION: clinic_knowledge_releases
 CREATE TABLE clinic_knowledge_releases (
-  id TEXT PRIMARY KEY,
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   clinic_id TEXT REFERENCES clinics(id),
   version INTEGER NOT NULL,
   document_hash TEXT NOT NULL,

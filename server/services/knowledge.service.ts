@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { supabase } from '../supabaseDiff';
 import { db } from '../db';
 import { PlatformKnowledgeItem, ClinicKnowledgeItem, ClinicKnowledgeRelease } from '../../src/types';
@@ -265,13 +266,20 @@ export class KnowledgeService {
     if (!clinicId) throw new Error('clinicId is required to list knowledge releases');
 
     if (!supabase) {
-      return ((db.data as any).clinic_knowledge_releases || []).filter((r: ClinicKnowledgeRelease) => r.clinic_id === clinicId);
+      return ((db.data as any).clinic_knowledge_releases || [])
+        .filter((r: ClinicKnowledgeRelease) => r.clinic_id === clinicId)
+        .sort((a: ClinicKnowledgeRelease, b: ClinicKnowledgeRelease) => b.version - a.version);
     }
 
     const { data, error } = await supabase.from('clinic_knowledge_releases').select('*').eq('clinic_id', clinicId).order('version', { ascending: false });
     if (error) {
-      console.error('[KnowledgeService.listKnowledgeReleases] Supabase error:', error);
-      throw new Error('Failed to retrieve knowledge releases from database.');
+      console.error('[KnowledgeService.listKnowledgeReleases] Supabase error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      });
+      throw new Error(`Failed to retrieve knowledge releases from database: [${error.code}] ${error.message}`);
     }
     return data as ClinicKnowledgeRelease[];
   }
@@ -283,36 +291,54 @@ export class KnowledgeService {
       return ((db.data as any).clinic_knowledge_releases || []).find((r: ClinicKnowledgeRelease) => r.id === id && r.clinic_id === clinicId) || null;
     }
 
-    const { data, error } = await supabase.from('clinic_knowledge_releases').select('*').eq('clinic_id', clinicId).eq('id', id).single();
+    const { data, error } = await supabase.from('clinic_knowledge_releases').select('*').eq('clinic_id', clinicId).eq('id', id).maybeSingle();
     if (error && error.code !== 'PGRST116') {
-      console.error('[KnowledgeService.getKnowledgeRelease] Supabase error:', error);
-      throw new Error('Failed to retrieve knowledge release from database.');
+      console.error('[KnowledgeService.getKnowledgeRelease] Supabase error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      });
+      throw new Error(`Failed to retrieve knowledge release from database: [${error.code}] ${error.message}`);
     }
     return data as ClinicKnowledgeRelease | null;
   }
 
-  static async getLatestKnowledgeRelease(clinicId: string): Promise<ClinicKnowledgeRelease | null> {
+  static async getLatestKnowledgeRelease(clinicId: string, status?: 'COMPILED' | 'PUBLISHED' | 'PUBLISH_FAILED'): Promise<ClinicKnowledgeRelease | null> {
     if (!clinicId) throw new Error('clinicId is required');
 
     if (!supabase) {
-      const releases = ((db.data as any).clinic_knowledge_releases || [])
-        .filter((r: ClinicKnowledgeRelease) => r.clinic_id === clinicId && r.status === 'PUBLISHED')
-        .sort((a: ClinicKnowledgeRelease, b: ClinicKnowledgeRelease) => b.version - a.version);
+      let releases = ((db.data as any).clinic_knowledge_releases || [])
+        .filter((r: ClinicKnowledgeRelease) => r.clinic_id === clinicId);
+      if (status) {
+        releases = releases.filter((r: ClinicKnowledgeRelease) => r.status === status);
+      }
+      releases.sort((a: ClinicKnowledgeRelease, b: ClinicKnowledgeRelease) => b.version - a.version);
       return releases.length > 0 ? releases[0] : null;
     }
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('clinic_knowledge_releases')
       .select('*')
-      .eq('clinic_id', clinicId)
-      .eq('status', 'PUBLISHED')
+      .eq('clinic_id', clinicId);
+
+    if (status) {
+      query = query.eq('status', status);
+    }
+
+    const { data, error } = await query
       .order('version', { ascending: false })
       .limit(1)
-      .single();
+      .maybeSingle();
 
     if (error && error.code !== 'PGRST116') {
-      console.error('[KnowledgeService.getLatestKnowledgeRelease] Supabase error:', error);
-      throw new Error('Failed to retrieve latest knowledge release from database.');
+      console.error('[KnowledgeService.getLatestKnowledgeRelease] Supabase error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      });
+      throw new Error(`Failed to retrieve latest knowledge release from database: [${error.code}] ${error.message}`);
     }
     return data as ClinicKnowledgeRelease | null;
   }
@@ -320,8 +346,11 @@ export class KnowledgeService {
   static async createKnowledgeRelease(clinicId: string, release: Omit<ClinicKnowledgeRelease, 'clinic_id'>): Promise<ClinicKnowledgeRelease> {
     if (!clinicId) throw new Error('clinicId is required');
 
-    const newRelease = {
+    const id = (release as any).id || crypto.randomUUID();
+
+    const newRelease: ClinicKnowledgeRelease = {
       ...release,
+      id,
       clinic_id: clinicId
     };
 
@@ -334,8 +363,13 @@ export class KnowledgeService {
 
     const { data, error } = await supabase.from('clinic_knowledge_releases').insert(newRelease).select().single();
     if (error) {
-      console.error('[KnowledgeService.createKnowledgeRelease] Supabase error:', error);
-      throw new Error('Failed to create knowledge release in database.');
+      console.error('[KnowledgeService.createKnowledgeRelease] Supabase error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      });
+      throw new Error(`Failed to create knowledge release in database: [${error.code}] ${error.message}`);
     }
     return data as ClinicKnowledgeRelease;
   }
@@ -362,8 +396,13 @@ export class KnowledgeService {
 
     const { data, error } = await supabase.from('clinic_knowledge_releases').update(updates).eq('clinic_id', clinicId).eq('id', id).select().single();
     if (error) {
-      console.error('[KnowledgeService.updateKnowledgeReleaseStatus] Supabase error:', error);
-      throw new Error('Failed to update knowledge release status in database.');
+      console.error('[KnowledgeService.updateKnowledgeReleaseStatus] Supabase error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      });
+      throw new Error(`Failed to update knowledge release status in database: [${error.code}] ${error.message}`);
     }
     return data as ClinicKnowledgeRelease;
   }

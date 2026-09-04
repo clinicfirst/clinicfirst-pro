@@ -280,9 +280,10 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
         .replace('{TIMESTAMP_PLACEHOLDER}', compiledAt);
         
       newRelease = {
+        id: crypto.randomUUID(),
         version: nextVersion,
         document_hash: hash,
-        status: 'COMPILED',
+        status: 'COMPILED' as const,
         compiled_content: mdWithVersion,
         compiled_at: compiledAt
       };
@@ -290,8 +291,8 @@ knowledgeCompilerRouter.post('/:clinic_id/compile', requireAuth, requireClinicPe
       try {
         newRelease = await KnowledgeService.createKnowledgeRelease(clinic_id, newRelease);
         successInsert = true;
-      } catch (e) {
-        if (e.message && e.message.includes('duplicate key value violates unique constraint')) {
+      } catch (e: any) {
+        if (e.message && (e.message.includes('duplicate key value') || e.message.includes('23505'))) {
           // Re-fetch latest
           const retryData = await KnowledgeService.listKnowledgeReleases(clinic_id);
           const topRetry = retryData[0];

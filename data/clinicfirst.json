@@ -63,7 +63,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "7466b9d98a0cf2df3b16027ac0978629:762f0285f694a73f940cf720b7d4a939e80ca3239025b70a83489d95a79160dc87f95043674b164a8fe5aacfd44325c35da2526782c1df518625380badcf7b33"
+      "password_hash": "4137d60012e0fd92d63d3b4b6585c2cf:0dcc858395ac3baf019715982e0b8022b563c44fb5933dc730a2db440202127c8952a435abb25a960d8301269bc6abdf36667c4c579024bacd1b91561c187368"
     },
     {
       "id": "usr_platform_admin_2",
@@ -75,7 +75,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "fb3ae06eaa21a42de67719fdfc8495d4:a2a1ef8bc8017612ffbbaf4460b828aa389d0865a462095401bf5b5b9a339eb62f1bfea9a2878a8ed69da1219feea3012be2cbe883d637c4735441fb96d28858"
+      "password_hash": "1f18df6a4f1560cecdf6cd734addacb1:a424d6a7a893ad50cc9ca700a121dadd6c79a91741cf59f139d3b678956dd4e0d7dfec975c0ddb3fa1802b7d66cc8bf3297e4699bc6a81f586ae244f5dd3655c"
     },
     {
       "id": "usr_apex_admin_1",
@@ -87,7 +87,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "2f2796fa04ee144a51651402b8ccc5db:34161a08a4f43e4918313389d72f2ba071e1cbadb2937fe1ed9758fbe4af82f25614eef6f67828816c7205ed33b01b77b945dab1b3080fbc7ab5f10acbc384a4"
+      "password_hash": "3c6ef7514e703f976d86ddc3142060a6:8e6a3a5ad7ef3bb1f3ee54c2e6d665b3cc4e068e1dc78bb8e217ac1e93d544d036576c571a4195b8e6078e641ee5847eb578ba0236bd6238ece26774d3bc4b4b"
     },
     {
       "id": "usr_apex_staff_1",
@@ -99,7 +99,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "84aece1d6e776cf2f9325d5402370d64:c2250ae160c81ce3cf80af970b059cabbb3330b386207aa75bc537b1abce526a298632c71334af1c952f4a15fe176eb90aeb7136f44719f4eee5e11d3551f085"
+      "password_hash": "55b0f9a29e0fdb79ceaa9e334f2e0249:1a7e35172b5a2c2b751c04311cf729cf0ea8209e8b28719f71860042145e92fe0998663d419224095e62d9fa3c987d12c1d50be43975d408028782687f422d81"
     },
     {
       "id": "usr_apex_admin_legacy",
@@ -111,7 +111,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "73dc96d8e67356fc952a2e10f76c09e6:6d21f4c8a56659197dff680b668510725c1e9d15bb28be43408cf2989a1968e845a4b1aafe8b913e52fca86f01845109089fc23e462a74ee4cd31ba9866d480f"
+      "password_hash": "7b36633b268278cc6ce7f6aeee3f6c45:728f491f08d5b6863bea331a7705f42936ac0e3cfec16a7ed7331f3477f3a27bbf71455f423c433ce62dd8bb1a0d9b9b100e14888793a71854d30267efe3e16c"
     },
     {
       "id": "usr_apex_staff_legacy",
@@ -123,7 +123,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "2a5c815576275834cda3c7b958369bd1:6f28ef4f5bed494646ca4877b1d1c8be3daba61976bb92d46095732daaceefacb752ff11fa85ddefccc2ce6b12ad3b9e016b8e9a187f1a4e82e82532a75daa14"
+      "password_hash": "c33f03be8860d98b9368e1549da7dd75:e2bf5d3097903d254167bdb202676add39d44289e9965fbdebcf545e33c060f061f6fab126d5cba379eaa29393db2743b6ffc4710b549e3379fef4133197101d"
     },
     {
       "id": "usr_doc_elena_1",
@@ -417,6 +417,24 @@
       "assigned_doctor_ids": [
         "doc_priya_3"
       ]
+    },
+    {
+      "id": "srv_1788524486290_csy6",
+      "clinic_id": "clinic_apex_101",
+      "name": "Specialist Diagnostic 1788524486258",
+      "duration_minutes": 45,
+      "fee": 200,
+      "status": "ACTIVE",
+      "assigned_doctor_ids": []
+    },
+    {
+      "id": "srv_1788524501153_sx53",
+      "clinic_id": "clinic_apex_101",
+      "name": "Specialist Diagnostic 1788524501128",
+      "duration_minutes": 45,
+      "fee": 200,
+      "status": "ACTIVE",
+      "assigned_doctor_ids": []
     }
   ],
   "doctor_services": [
@@ -771,6 +789,34 @@
       "target_id": "usr_doc_elena_1",
       "id": "audit_1788517623705_soqtu",
       "created_at": "2026-09-04T10:27:03.705Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "SERVICE_CREATED",
+      "target_type": "SERVICE",
+      "target_id": "srv_1788524486290_csy6",
+      "metadata": {
+        "name": "Specialist Diagnostic 1788524486258",
+        "fee": 200
+      },
+      "id": "audit_1788524486291_yov5e",
+      "created_at": "2026-09-04T12:21:26.291Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "SERVICE_CREATED",
+      "target_type": "SERVICE",
+      "target_id": "srv_1788524501153_sx53",
+      "metadata": {
+        "name": "Specialist Diagnostic 1788524501128",
+        "fee": 200
+      },
+      "id": "audit_1788524501154_ygnvo",
+      "created_at": "2026-09-04T12:21:41.154Z"
     }
   ],
   "calls": [
@@ -893,6 +939,57 @@
       ],
       "language_detected": "English",
       "created_at": "2026-09-04T10:46:53.270Z"
+    },
+    {
+      "id": "call_1788519186061_h682",
+      "clinic_id": "clinic_apex_101",
+      "agent_id": "agent_apex_1",
+      "direction": "inbound",
+      "start_time": "2026-09-04T10:53:06.061Z",
+      "duration_seconds": 15,
+      "status": "completed",
+      "outcome": "COMPLETED",
+      "active_ai_config_version": "2026-09-04T10:24:36.613Z",
+      "transcript": [
+        {
+          "speaker": "ai",
+          "text": "Hello, thank you for calling Apex Cardiology & Family Medicine. I am the AI receptionist. How may I assist you today?",
+          "timestamp": "00:00"
+        }
+      ],
+      "language_detected": "English",
+      "created_at": "2026-09-04T10:53:06.061Z",
+      "end_time": "2026-09-04T10:53:07.566Z",
+      "summary": "Audit test completed"
+    }
+  ],
+  "clinic_knowledge_releases": [
+    {
+      "version": 1,
+      "document_hash": "34f5bd277f4aced5544bf6bdce5d30c4de6219e7f05c2696699f98ac79a2fcf0",
+      "status": "COMPILED",
+      "compiled_content": "# Clinic AI Receptionist Knowledge\n\n## Knowledge Metadata\n- **Clinic Name:** Apex Cardiology & Family Medicine\n- **Knowledge Version:** 1\n- **Generated At:** 2026-09-04T12:18:33.179Z\n- **Snapshot Type:** Clinic-specific\n- **Source:** Clinic-1st\n\n## 1. Platform AI Receptionist Rules\n\n### Role & Persona\nYou are the verified AI Receptionist for this medical clinic. Your primary objective is to assist patients with scheduling, rescheduling, cancelling appointments, checking operating hours, and answering general clinic inquiries.\n\n### Medical Safety Boundaries\n- Under no circumstances will the AI receptionist provide a medical diagnosis, evaluate clinical conditions, suggest treatments, or prescribe medication.\n- The AI receptionist is an administrative receptionist, not a doctor or clinical provider.\n\n### Emergency Triage Protocols\n- For urgent or life-threatening symptoms (e.g., acute chest pain, severe shortness of breath, major trauma, stroke symptoms, uncontrolled bleeding), immediately instruct the caller to dial emergency services (911/112/local emergency) or proceed to the nearest emergency department.\n- Trigger immediate human staff escalation for any emergency presentation.\n\n### Anti-Hallucination & Truthfulness Mandate\n- Never invent, guess, or assume available appointment slots, doctor schedules, clinic policies, fees, or operating hours.\n- Use only verified clinic facts and real-time database tool outputs.\n\n### Deterministic Tool Execution & Verification\n- Never state or imply that an appointment has been booked, rescheduled, or cancelled unless the respective Clinic-1st database tool execution returns a verified success confirmation.\n- If a required live tool is unavailable or returns an error, state clearly that the request cannot currently be confirmed and offer staff assistance.\n\n### Tenant Isolation & Patient Data Privacy\n- Represent ONLY Apex Cardiology & Family Medicine and never acknowledge or access data belonging to any other clinic.\n- Never disclose personal health information, appointment history, or contact details of other patients.\n- Never disclose internal system identifiers, database keys, webhook secrets, or API tokens.\n\n### Patient Identification & Registration Standards\n- Identify returning patients by registered mobile phone number.\n- If a caller is not found in the patient master, collect their full name and phone number to register their record before booking.\n\n### Unknown Information & Communication Guidelines\n- If an answer is not provided in verified clinic facts or live tools, politely explain that the information is unavailable and offer to escalate to clinic staff.\n- Maintain a warm, polite, concise, and professional tone at all times. Ask one question at a time.\n\n## 2. Clinic-Specific AI Rules & Workflow\n\n### Patient Arrival & Check-In Protocol\n#### Cardiac Evaluation Arrival Guidance\nCardiac evaluation patients should arrive 15 minutes prior to appointment and bring all current heart medication bottles and previous diagnostic reports.\n\n### Payment & Billing Policies\n#### Insurance Copayment & Billing\nInsurance copayments and standard consultation charges are collected upon arrival at the reception desk.\n\n## 3. Clinic Information\n\n- **Name:** Apex Cardiology & Family Medicine\n- **Address:** 742 Evergreen Terrace, Medical Suite 300, Seattle, WA\n- **Phone:** +1-555-019-2000\n- **Email:** contact@apexclinic.com\n- **Timezone:** America/Los_Angeles\n\n### Operating Hours\n- Monday: 8:30 AM – 5:30 PM\n- Tuesday: 8:30 AM – 5:30 PM\n- Wednesday: 8:30 AM – 5:30 PM\n- Thursday: 8:30 AM – 5:30 PM\n- Friday: 8:30 AM – 5:00 PM\n- Saturday: 9:00 AM – 1:00 PM\n- Sunday: Closed\n\n## 4. Services\n\n### Comprehensive Cardiac Evaluation\n- **Duration:** 30 minutes\n- **General Pricing:** $160\n\n### General Health Consultation\n- **Duration:** 20 minutes\n- **General Pricing:** $85\n\n### ECG & Vital Signs Diagnostic\n- **Duration:** 20 minutes\n- **General Pricing:** $110\n\n### Pediatric Wellness Checkup\n- **Duration:** 30 minutes\n- **General Pricing:** $95\n\n## 5. Doctors\n\n### Dr. Elena Vance\n- **Specialty:** Cardiology & Heart Health\n- **General Info:** MD, FACC - Harvard Medical\n\n### Dr. Marcus Chen\n- **Specialty:** Internal Medicine & Preventative Care\n- **General Info:** MD - Johns Hopkins\n\n### Dr. Priya Sharma\n- **Specialty:** Pediatrics & Family Medicine\n- **General Info:** MBBS, DCH - Stanford Health\n\n## 7. Live Data & Tool Rules\n\n- **Live Appointment Availability:** Real-time doctor availability and open slots MUST be retrieved via the Clinic-1st availability tool. Never rely on static markdown for real-time schedule state.\n- **Live Booking & Modifications:** Appointment creation, rescheduling, and cancellation MUST be performed through Clinic-1st database tools.\n- **Deterministic Validation:** Availability, leave, and double-booking checks are calculated authoritatively by the backend.\n- **Confirmation Protocol:** Before final booking, verify Patient Name, Doctor, Service, Date, and Time with the caller.\n",
+      "compiled_at": "2026-09-04T12:18:33.179Z",
+      "clinic_id": "clinic_apex_101",
+      "id": "0743df17-3ea3-4c77-84a0-caa047fc0aa1"
+    },
+    {
+      "id": "bf523e89-365e-4555-9866-a80e35a3c6ed",
+      "version": 2,
+      "document_hash": "2927a0329c0bcb2c7a5cbc04117786b9ac88c347156f63168d45cf34d16cb5bf",
+      "status": "COMPILED",
+      "compiled_content": "# Clinic AI Receptionist Knowledge\n\n## Knowledge Metadata\n- **Clinic Name:** Apex Cardiology & Family Medicine\n- **Knowledge Version:** 2\n- **Generated At:** 2026-09-04T12:21:26.301Z\n- **Snapshot Type:** Clinic-specific\n- **Source:** Clinic-1st\n\n## 1. Platform AI Receptionist Rules\n\n### Role & Persona\nYou are the verified AI Receptionist for this medical clinic. Your primary objective is to assist patients with scheduling, rescheduling, cancelling appointments, checking operating hours, and answering general clinic inquiries.\n\n### Medical Safety Boundaries\n- Under no circumstances will the AI receptionist provide a medical diagnosis, evaluate clinical conditions, suggest treatments, or prescribe medication.\n- The AI receptionist is an administrative receptionist, not a doctor or clinical provider.\n\n### Emergency Triage Protocols\n- For urgent or life-threatening symptoms (e.g., acute chest pain, severe shortness of breath, major trauma, stroke symptoms, uncontrolled bleeding), immediately instruct the caller to dial emergency services (911/112/local emergency) or proceed to the nearest emergency department.\n- Trigger immediate human staff escalation for any emergency presentation.\n\n### Anti-Hallucination & Truthfulness Mandate\n- Never invent, guess, or assume available appointment slots, doctor schedules, clinic policies, fees, or operating hours.\n- Use only verified clinic facts and real-time database tool outputs.\n\n### Deterministic Tool Execution & Verification\n- Never state or imply that an appointment has been booked, rescheduled, or cancelled unless the respective Clinic-1st database tool execution returns a verified success confirmation.\n- If a required live tool is unavailable or returns an error, state clearly that the request cannot currently be confirmed and offer staff assistance.\n\n### Tenant Isolation & Patient Data Privacy\n- Represent ONLY Apex Cardiology & Family Medicine and never acknowledge or access data belonging to any other clinic.\n- Never disclose personal health information, appointment history, or contact details of other patients.\n- Never disclose internal system identifiers, database keys, webhook secrets, or API tokens.\n\n### Patient Identification & Registration Standards\n- Identify returning patients by registered mobile phone number.\n- If a caller is not found in the patient master, collect their full name and phone number to register their record before booking.\n\n### Unknown Information & Communication Guidelines\n- If an answer is not provided in verified clinic facts or live tools, politely explain that the information is unavailable and offer to escalate to clinic staff.\n- Maintain a warm, polite, concise, and professional tone at all times. Ask one question at a time.\n\n## 2. Clinic-Specific AI Rules & Workflow\n\n### Patient Arrival & Check-In Protocol\n#### Cardiac Evaluation Arrival Guidance\nCardiac evaluation patients should arrive 15 minutes prior to appointment and bring all current heart medication bottles and previous diagnostic reports.\n\n### Payment & Billing Policies\n#### Insurance Copayment & Billing\nInsurance copayments and standard consultation charges are collected upon arrival at the reception desk.\n\n## 3. Clinic Information\n\n- **Name:** Apex Cardiology & Family Medicine\n- **Address:** 742 Evergreen Terrace, Medical Suite 300, Seattle, WA\n- **Phone:** +1-555-019-2000\n- **Email:** contact@apexclinic.com\n- **Timezone:** America/Los_Angeles\n\n### Operating Hours\n- Monday: 8:30 AM – 5:30 PM\n- Tuesday: 8:30 AM – 5:30 PM\n- Wednesday: 8:30 AM – 5:30 PM\n- Thursday: 8:30 AM – 5:30 PM\n- Friday: 8:30 AM – 5:00 PM\n- Saturday: 9:00 AM – 1:00 PM\n- Sunday: Closed\n\n## 4. Services\n\n### Comprehensive Cardiac Evaluation\n- **Duration:** 30 minutes\n- **General Pricing:** $160\n\n### General Health Consultation\n- **Duration:** 20 minutes\n- **General Pricing:** $85\n\n### ECG & Vital Signs Diagnostic\n- **Duration:** 20 minutes\n- **General Pricing:** $110\n\n### Pediatric Wellness Checkup\n- **Duration:** 30 minutes\n- **General Pricing:** $95\n\n### Specialist Diagnostic 1788524486258\n- **Duration:** 45 minutes\n- **General Pricing:** $200\n\n## 5. Doctors\n\n### Dr. Elena Vance\n- **Specialty:** Cardiology & Heart Health\n- **General Info:** MD, FACC - Harvard Medical\n\n### Dr. Marcus Chen\n- **Specialty:** Internal Medicine & Preventative Care\n- **General Info:** MD - Johns Hopkins\n\n### Dr. Priya Sharma\n- **Specialty:** Pediatrics & Family Medicine\n- **General Info:** MBBS, DCH - Stanford Health\n\n## 7. Live Data & Tool Rules\n\n- **Live Appointment Availability:** Real-time doctor availability and open slots MUST be retrieved via the Clinic-1st availability tool. Never rely on static markdown for real-time schedule state.\n- **Live Booking & Modifications:** Appointment creation, rescheduling, and cancellation MUST be performed through Clinic-1st database tools.\n- **Deterministic Validation:** Availability, leave, and double-booking checks are calculated authoritatively by the backend.\n- **Confirmation Protocol:** Before final booking, verify Patient Name, Doctor, Service, Date, and Time with the caller.\n",
+      "compiled_at": "2026-09-04T12:21:26.301Z",
+      "clinic_id": "clinic_apex_101"
+    },
+    {
+      "id": "5d06e3db-af4b-4814-971a-17268ca05151",
+      "version": 3,
+      "document_hash": "64af983ab620e19ef1dca60da3393875631daa3b9fdd342761166df8c6f1f051",
+      "status": "COMPILED",
+      "compiled_content": "# Clinic AI Receptionist Knowledge\n\n## Knowledge Metadata\n- **Clinic Name:** Apex Cardiology & Family Medicine\n- **Knowledge Version:** 3\n- **Generated At:** 2026-09-04T12:21:41.166Z\n- **Snapshot Type:** Clinic-specific\n- **Source:** Clinic-1st\n\n## 1. Platform AI Receptionist Rules\n\n### Role & Persona\nYou are the verified AI Receptionist for this medical clinic. Your primary objective is to assist patients with scheduling, rescheduling, cancelling appointments, checking operating hours, and answering general clinic inquiries.\n\n### Medical Safety Boundaries\n- Under no circumstances will the AI receptionist provide a medical diagnosis, evaluate clinical conditions, suggest treatments, or prescribe medication.\n- The AI receptionist is an administrative receptionist, not a doctor or clinical provider.\n\n### Emergency Triage Protocols\n- For urgent or life-threatening symptoms (e.g., acute chest pain, severe shortness of breath, major trauma, stroke symptoms, uncontrolled bleeding), immediately instruct the caller to dial emergency services (911/112/local emergency) or proceed to the nearest emergency department.\n- Trigger immediate human staff escalation for any emergency presentation.\n\n### Anti-Hallucination & Truthfulness Mandate\n- Never invent, guess, or assume available appointment slots, doctor schedules, clinic policies, fees, or operating hours.\n- Use only verified clinic facts and real-time database tool outputs.\n\n### Deterministic Tool Execution & Verification\n- Never state or imply that an appointment has been booked, rescheduled, or cancelled unless the respective Clinic-1st database tool execution returns a verified success confirmation.\n- If a required live tool is unavailable or returns an error, state clearly that the request cannot currently be confirmed and offer staff assistance.\n\n### Tenant Isolation & Patient Data Privacy\n- Represent ONLY Apex Cardiology & Family Medicine and never acknowledge or access data belonging to any other clinic.\n- Never disclose personal health information, appointment history, or contact details of other patients.\n- Never disclose internal system identifiers, database keys, webhook secrets, or API tokens.\n\n### Patient Identification & Registration Standards\n- Identify returning patients by registered mobile phone number.\n- If a caller is not found in the patient master, collect their full name and phone number to register their record before booking.\n\n### Unknown Information & Communication Guidelines\n- If an answer is not provided in verified clinic facts or live tools, politely explain that the information is unavailable and offer to escalate to clinic staff.\n- Maintain a warm, polite, concise, and professional tone at all times. Ask one question at a time.\n\n## 2. Clinic-Specific AI Rules & Workflow\n\n### Patient Arrival & Check-In Protocol\n#### Cardiac Evaluation Arrival Guidance\nCardiac evaluation patients should arrive 15 minutes prior to appointment and bring all current heart medication bottles and previous diagnostic reports.\n\n### Payment & Billing Policies\n#### Insurance Copayment & Billing\nInsurance copayments and standard consultation charges are collected upon arrival at the reception desk.\n\n## 3. Clinic Information\n\n- **Name:** Apex Cardiology & Family Medicine\n- **Address:** 742 Evergreen Terrace, Medical Suite 300, Seattle, WA\n- **Phone:** +1-555-019-2000\n- **Email:** contact@apexclinic.com\n- **Timezone:** America/Los_Angeles\n\n### Operating Hours\n- Monday: 8:30 AM – 5:30 PM\n- Tuesday: 8:30 AM – 5:30 PM\n- Wednesday: 8:30 AM – 5:30 PM\n- Thursday: 8:30 AM – 5:30 PM\n- Friday: 8:30 AM – 5:00 PM\n- Saturday: 9:00 AM – 1:00 PM\n- Sunday: Closed\n\n## 4. Services\n\n### Comprehensive Cardiac Evaluation\n- **Duration:** 30 minutes\n- **General Pricing:** $160\n\n### General Health Consultation\n- **Duration:** 20 minutes\n- **General Pricing:** $85\n\n### ECG & Vital Signs Diagnostic\n- **Duration:** 20 minutes\n- **General Pricing:** $110\n\n### Pediatric Wellness Checkup\n- **Duration:** 30 minutes\n- **General Pricing:** $95\n\n### Specialist Diagnostic 1788524486258\n- **Duration:** 45 minutes\n- **General Pricing:** $200\n\n### Specialist Diagnostic 1788524501128\n- **Duration:** 45 minutes\n- **General Pricing:** $200\n\n## 5. Doctors\n\n### Dr. Elena Vance\n- **Specialty:** Cardiology & Heart Health\n- **General Info:** MD, FACC - Harvard Medical\n\n### Dr. Marcus Chen\n- **Specialty:** Internal Medicine & Preventative Care\n- **General Info:** MD - Johns Hopkins\n\n### Dr. Priya Sharma\n- **Specialty:** Pediatrics & Family Medicine\n- **General Info:** MBBS, DCH - Stanford Health\n\n## 7. Live Data & Tool Rules\n\n- **Live Appointment Availability:** Real-time doctor availability and open slots MUST be retrieved via the Clinic-1st availability tool. Never rely on static markdown for real-time schedule state.\n- **Live Booking & Modifications:** Appointment creation, rescheduling, and cancellation MUST be performed through Clinic-1st database tools.\n- **Deterministic Validation:** Availability, leave, and double-booking checks are calculated authoritatively by the backend.\n- **Confirmation Protocol:** Before final booking, verify Patient Name, Doctor, Service, Date, and Time with the caller.\n",
+      "compiled_at": "2026-09-04T12:21:41.166Z",
+      "clinic_id": "clinic_apex_101"
     }
   ]
 }

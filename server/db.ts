@@ -639,6 +639,13 @@ class DatabaseEngine {
     }
 
     const enriched = this.ensureSeedUsers(dbData);
+    if (enriched && Array.isArray((enriched as any).clinic_knowledge_releases)) {
+      for (const rel of (enriched as any).clinic_knowledge_releases) {
+        if (!rel.id) {
+          rel.id = crypto.randomUUID();
+        }
+      }
+    }
     return enriched;
   }
 
@@ -966,7 +973,11 @@ class DatabaseEngine {
     if (!this.data.clinic_knowledge_releases) {
       this.data.clinic_knowledge_releases = [];
     }
-    this.data.clinic_knowledge_releases.push(release);
+    const item = {
+      ...release,
+      id: release.id || crypto.randomUUID()
+    };
+    this.data.clinic_knowledge_releases.push(item);
     this.saveDatabase();
   }
 
@@ -974,7 +985,11 @@ class DatabaseEngine {
     if (!this.data.clinic_knowledge_releases) {
       this.data.clinic_knowledge_releases = [];
     }
-    this.data.clinic_knowledge_releases.push(release);
+    const item = {
+      ...release,
+      id: release.id || crypto.randomUUID()
+    };
+    this.data.clinic_knowledge_releases.push(item);
   }
 
   public updateKnowledgeReleaseStatus(id: string, clinic_id: string, status: 'COMPILED' | 'PUBLISHED' | 'PUBLISH_FAILED'): boolean {
