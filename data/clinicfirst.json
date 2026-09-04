@@ -63,7 +63,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "8faab8b48e7bacdde1aa60b109927643:62cc187b992ad5eb536abe35630ce5ab69c18c5d21ef6afe419682dc54d9682c141fb4257a1dd31248e6540c057ff67576c6ab8493c630a3dcae4b40638fdd74"
+      "password_hash": "58cf602b9df079a8cb8675dc72e485b3:8bd81abdd9a4ee8d0a4c75fc45e02ae2f1a766490fa1c9e0c6ba216341fa4a52465d52c82430f49a656bfdca032cf8f8532b0649d63e972f31ac8f6d0ea7a22f"
     },
     {
       "id": "usr_platform_admin_2",
@@ -75,7 +75,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "8add0a9f50702dd595a2120f4ec3fca9:1abc05d432c3d56c784502eb40deb86aee8df52da8496b34ed7c3f05b45b4f8d7f2f6173782b3f1cfc525bb12d17459f10b560a50c7a1ab13baf8e95bef77b9f"
+      "password_hash": "a956c051940411796bdadd5321b7419f:85c438034d7a02c88b750276b4d90dcd28abeff4562add3d7c53dccaaf765bbcfc97cb33eca0fd63f001362531b1b89a60c141c115f5652efd0bcc5258805d7e"
     },
     {
       "id": "usr_apex_admin_1",
@@ -87,7 +87,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "bb20260b70754cfcf02c25c1ddce4f02:95ae35878ea2c171db8e5084da3a737853b7f6c7cf18f8553c69483d07414457f137c32976948369016fcd6b8c7256eeb7c1c93ff5f01f02b8928384f6c561f2"
+      "password_hash": "a51e13a5418bb6cbae2db1410648d0f9:1d51be54343a467d87a337ac88782271a852f61e1250bb667db7c496257d78fe1dbeaa813923a2d62f683dca2216ecd7e4b0e5ab6deccb53d7ae2ebb6ecc8429"
     },
     {
       "id": "usr_apex_staff_1",
@@ -99,7 +99,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "4cfaeb3e3190b81c17138f2f54e9d966:36c5f80775e25e3cc1467d006822a70764fde9bfed216172d80407e18e1cbe7b334dbf9c0da6c86021cb0b0bdfdebdef172c1b48aedac4b4e2a7c68aff520b4e"
+      "password_hash": "8204e2cf66ba7bc1b64b17267366f946:0fa3fc763c9d081b070b33f2f1acdeb0def8bbc868912f9e45381c974dd4ee149f0f038884d16561fb80037a26fcfef02dae52dc6a5b9229808285980f4cfb1a"
     },
     {
       "id": "usr_apex_admin_legacy",
@@ -111,7 +111,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "81744ca9b8a9bb440b7d2d5d1ef6f37e:0f8d03dd7150ae3ee3a7c8528ee691cc2ac100db57eec625c3f2581973f024a93ef0b46915924c1a864e8bf7d8c91ce4ca9a454e90a1887c599ef2bf08481cff"
+      "password_hash": "53e11ebae0d9790f906e7624323a8394:5bcd1fc94688a31f39fa403adf4808760f065a7e1dc38ef01717b0253bf1d622fa3f901083792c8e1ee7ddb549fa5afbd914393125e22fe2a05bfaa02e0f3cf7"
     },
     {
       "id": "usr_apex_staff_legacy",
@@ -123,7 +123,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "c383b3f527a55cfd754963b785246904:2e79f111913310ebcab270261b7336b3cbc812ef9612d773f4895eb8485b2b8ae5efae2e26fe4926176a5008e88378c548d37b2e1e2cbce0bc3a88f1384cbce6"
+      "password_hash": "3c70527e79d5d8862d9a8c75428efe7e:4c1f9931a7692d4a34c7e39a4c959bc45199201991b7d22dc02e86c39b0a0283038b8e6696c2cda813e1c052fb03ae45135eedbb193f44a113022c9e2e11f689"
     },
     {
       "id": "usr_doc_elena_1",
@@ -550,11 +550,38 @@
       ],
       "status": "ACTIVE",
       "escalation_contact": {
-        "name": "Urgent Care & Reception Triage",
         "phone": "+1-555-019-2099",
-        "email": "urgent@apexclinic.com"
+        "email": "urgent@apexclinic.com",
+        "name": "Urgent Care & Reception Triage"
       },
-      "instructions_note": "Please keep responses concise and clear, speak politely, and verify patient details before confirming."
+      "instructions_note": "Please keep responses concise and clear, speak politely, and verify patient details before confirming.",
+      "enabled": true,
+      "updated_at": "2026-09-04T12:57:46.467Z"
+    },
+    {
+      "id": "agent_sanjeevani_1",
+      "clinic_id": "clinic_1787923240249_cqgw",
+      "name": "Aarohi",
+      "greeting": "Hello, thank you for calling Sanjeevani Multispeciality Clinic! I'm Aarohi, your AI receptionist. How can I help you today?",
+      "voice_provider": "sarvam",
+      "voice_config": {
+        "voice_name": "Aarohi",
+        "temperature": 0.2
+      },
+      "languages": [
+        "English",
+        "Hindi"
+      ],
+      "status": "ACTIVE",
+      "provider_agent_id": "sarvam_agent_456",
+      "enabled": true,
+      "escalation_contact": {
+        "phone": "+91-9876543210",
+        "email": "urgent@sanjeevaniclinic.com",
+        "name": "Urgent Care & Reception Triage"
+      },
+      "instructions_note": "Please speak warmly and clearly, prioritize emergencies, and confirm appointment details accurately.",
+      "updated_at": "2026-09-04T13:00:00.000Z"
     }
   ],
   "ai_usage_events": [],
@@ -817,6 +844,40 @@
       },
       "id": "audit_1788524501154_ygnvo",
       "created_at": "2026-09-04T12:21:41.154Z"
+    },
+    {
+      "clinic_id": null,
+      "actor_user_id": "usr_platform_admin_2",
+      "actor_name": "Platform Administrator",
+      "action": "PLATFORM_ADMIN_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_platform_admin_2",
+      "id": "audit_1788525473707_m938t",
+      "created_at": "2026-09-04T12:37:53.707Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1788526254237_p2s51",
+      "created_at": "2026-09-04T12:50:54.237Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "AI_RECEPTIONIST_CONFIG_UPDATED",
+      "target_type": "AI_AGENT",
+      "target_id": "agent_apex_1",
+      "metadata": {
+        "voice_provider": "gemini_live",
+        "status": "ACTIVE"
+      },
+      "id": "audit_1788526666468_pzx3m",
+      "created_at": "2026-09-04T12:57:46.468Z"
     }
   ],
   "calls": [

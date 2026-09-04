@@ -937,9 +937,30 @@ class DatabaseEngine {
         email: 'urgent@apexclinic.com',
       },
       instructions_note: 'Please keep responses concise and clear, speak politely, and verify patient details before confirming.',
+      enabled: true,
     };
 
-
+    const sanjeevaniAgent: AiAgent = {
+      id: 'agent_sanjeevani_1',
+      clinic_id: 'clinic_1787923240249_cqgw',
+      name: 'Aarohi',
+      greeting: "Hello, thank you for calling Sanjeevani Multispeciality Clinic! I'm Aarohi, your AI receptionist. How can I help you today?",
+      voice_provider: "sarvam" as const,
+      voice_config: {
+        voice_name: 'Aarohi',
+        temperature: 0.2,
+      },
+      languages: ['English', 'Hindi'],
+      status: "ACTIVE" as const,
+      provider_agent_id: 'sarvam_agent_456',
+      enabled: true,
+      escalation_contact: {
+        name: 'Urgent Care & Reception Triage',
+        phone: '+91-9876543210',
+        email: 'urgent@sanjeevaniclinic.com',
+      },
+      instructions_note: 'Please speak warmly and clearly, prioritize emergencies, and confirm appointment details accurately.',
+    };
 
     return {
       clinics: [clinic1],
@@ -951,7 +972,7 @@ class DatabaseEngine {
       doctor_services: doctorServices,
       patients,
       appointments,
-      ai_agents: [aiAgent],
+      ai_agents: [aiAgent, sanjeevaniAgent],
       ai_usage_events: [],
     };
   }

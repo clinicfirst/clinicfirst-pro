@@ -321,7 +321,7 @@ export const AiReceptionistPage: React.FC<AiReceptionistPageProps> = ({ onOpenSi
           </p>
         </div>
         <div className="border border-gray-100 rounded-lg bg-gray-50 p-4">
-          <SarvamVoiceWidget />
+          <SarvamVoiceWidget onOpenDiagnosticSimulator={onOpenSimulator} />
         </div>
       </div>
 

@@ -25,7 +25,8 @@ import { CallsPage } from './pages/clinic/CallsPage';
 import { StaffPage } from './pages/clinic/StaffPage';
 import { ClinicAuditLogsPage } from './pages/clinic/ClinicAuditLogsPage';
 
-// AI Phone Simulator
+// AI Voice Experience
+import { SarvamVoiceModal } from './components/ai/SarvamVoiceModal';
 import { AiPhoneSimulator } from './components/ai/AiPhoneSimulator';
 import { Phone } from 'lucide-react';
 
@@ -35,7 +36,8 @@ const MainApp: React.FC = () => {
   const { user, clinic, loading } = useAuth();
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [loginMode, setLoginMode] = useState<'clinic' | 'platform'>('clinic');
-  const [simulatorOpen, setSimulatorOpen] = useState(false);
+  const [sarvamVoiceModalOpen, setSarvamVoiceModalOpen] = useState(false);
+  const [diagnosticSimulatorOpen, setDiagnosticSimulatorOpen] = useState(false);
 
   useEffect(() => {
     const handleRealtimeUpdate = (e: any) => {
@@ -100,14 +102,14 @@ const MainApp: React.FC = () => {
       <ClinicNavbar
         activeTab={activeTab}
         onSelectTab={setActiveTab}
-        onOpenSimulator={() => setSimulatorOpen(true)}
+        onOpenSimulator={() => setSarvamVoiceModalOpen(true)}
       />
 
       <main className="flex-1 max-w-7xl 2xl:max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 min-w-0">
         {activeTab === 'dashboard' && (
           <ClinicDashboard
             onNavigateToTab={setActiveTab}
-            onOpenPhoneSimulator={() => setSimulatorOpen(true)}
+            onOpenPhoneSimulator={() => setSarvamVoiceModalOpen(true)}
           />
         )}
         {activeTab === 'appointments' && <AppointmentsPage />}
@@ -117,17 +119,31 @@ const MainApp: React.FC = () => {
         {activeTab === 'schedules' && <SchedulesPage />}
         {activeTab === 'calls' && <CallsPage />}
         {activeTab === 'ai_receptionist' && (
-          <AiReceptionistPage onOpenSimulator={() => setSimulatorOpen(true)} />
+          <AiReceptionistPage onOpenSimulator={() => setSarvamVoiceModalOpen(true)} />
         )}
         {activeTab === 'staff' && <StaffPage />}
         {activeTab === 'audit_logs' && <ClinicAuditLogsPage />}
       </main>
 
-      {/* Phone Simulator Modal */}
+      {/* Primary Production AI Receptionist: Sarvam Managed Web Widget Modal */}
+      {clinic && (
+        <SarvamVoiceModal
+          isOpen={sarvamVoiceModalOpen}
+          onClose={() => setSarvamVoiceModalOpen(false)}
+          clinicId={clinic.id}
+          clinicName={clinic.name}
+          onOpenDiagnosticSimulator={() => {
+            setSarvamVoiceModalOpen(false);
+            setDiagnosticSimulatorOpen(true);
+          }}
+        />
+      )}
+
+      {/* Secondary Developer/Testing Diagnostic Simulator Modal */}
       {clinic && (
         <AiPhoneSimulator
-          isOpen={simulatorOpen}
-          onClose={() => setSimulatorOpen(false)}
+          isOpen={diagnosticSimulatorOpen}
+          onClose={() => setDiagnosticSimulatorOpen(false)}
           clinicId={clinic.id}
           clinicName={clinic.name}
         />
