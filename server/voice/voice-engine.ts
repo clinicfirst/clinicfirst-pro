@@ -147,12 +147,44 @@ Receptionist Behavioral Preferences are SUBORDINATE and must NEVER be used to in
   ].join('\n\n--------------------\n\n');
 }
 
+interface ActiveSessionMetadata {
+  clinicId: string;
+  callId: string;
+  createdAt: number;
+  lastActivityAt: number;
+}
+
+const SESSION_TTL_MS = 30 * 60 * 1000; // 30 minutes TTL
+
 class VoiceEngineManager {
   private providers = new Map<string, IVoiceProvider>();
+  private activeSessions = new Map<string, ActiveSessionMetadata>();
 
   constructor() {
     this.providers.set('gemini_live', new GeminiLiveVoiceProvider());
     this.providers.set('sarvam', new SarvamVoiceProvider());
+  }
+
+  public getSession(sessionId: string) {
+    this.cleanStaleSessions();
+    const session = this.activeSessions.get(sessionId);
+    if (session) {
+      session.lastActivityAt = Date.now();
+    }
+    return session;
+  }
+
+  public removeSession(sessionId: string) {
+    this.activeSessions.delete(sessionId);
+  }
+
+  private cleanStaleSessions() {
+    const now = Date.now();
+    for (const [sId, sess] of this.activeSessions.entries()) {
+      if (now - sess.lastActivityAt > SESSION_TTL_MS) {
+        this.activeSessions.delete(sId);
+      }
+    }
   }
 
   public getProvider(providerId: string = 'gemini_live'): IVoiceProvider {
@@ -212,13 +244,20 @@ class VoiceEngineManager {
       created_at: new Date().toISOString(),
     });
 
+    this.activeSessions.set(sessionId, {
+      clinicId,
+      callId: callRecord.id,
+      createdAt: Date.now(),
+      lastActivityAt: Date.now(),
+    });
+
     let audioBase64: string | undefined = undefined;
     try {
       const apiKey = process.env.GEMINI_API_KEY;
       if (apiKey) {
         const ai = new GoogleGenAI({ apiKey });
-        const ttsResponse = await ai.models.generateContent({
-          model: 'gemini-3.6-flash',
+        const ttsPromise = ai.models.generateContent({
+          model: 'gemini-3.8-flash',
           contents: [{ parts: [{ text: agent.greeting }] }],
           config: {
             responseModalities: ['AUDIO'],
@@ -229,10 +268,14 @@ class VoiceEngineManager {
             },
           },
         });
+        const ttsResponse = await Promise.race([
+          ttsPromise,
+          new Promise<any>((_, reject) => setTimeout(() => reject(new Error('TTS_TIMEOUT')), 1500)),
+        ]);
         audioBase64 = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
       }
-    } catch (ttsErr: any) {
-      console.warn('Greeting TTS Generation failed:', ttsErr?.message);
+    } catch {
+      // Non-fatal: frontend speech synthesizer or widget will speak
     }
 
     return {
@@ -269,12 +312,28 @@ class VoiceEngineManager {
       content: h.text,
     }));
 
+    let fullSystemInstruction: string | undefined = undefined;
+    try {
+      fullSystemInstruction = await buildHierarchicalSystemInstruction(
+        clinicId,
+        agent?.name || 'Ava',
+        agent?.instructions_note
+      );
+    } catch {
+      // Non-fatal
+    }
+
     const result = await provider.processUserMessage(
       sessionId,
       userText,
       formattedHistory,
       async (toolName, args) => {
         return await executeVoiceTool(clinicId, toolName, args);
+      },
+      {
+        clinicId,
+        agentName: agent?.name || 'Ava',
+        systemInstruction: fullSystemInstruction,
       }
     );
 
@@ -306,14 +365,14 @@ class VoiceEngineManager {
       let patientId = call.patient_id;
 
       for (const tc of result.toolCallsExecuted) {
-        if (tc.name === 'createAppointment' && tc.result?.appointment_id) {
+        if (tc.name === 'createAppointment' && tc.result?.appointment_id && tc.result?.success) {
           outcome = 'APPOINTMENT_BOOKED';
           appointmentId = tc.result.appointment_id;
-        } else if (tc.name === 'rescheduleAppointment') {
+        } else if (tc.name === 'rescheduleAppointment' && tc.result?.success) {
           outcome = 'APPOINTMENT_RESCHEDULED';
-        } else if (tc.name === 'cancelAppointment') {
+        } else if (tc.name === 'cancelAppointment' && tc.result?.success) {
           outcome = 'APPOINTMENT_CANCELLED';
-        } else if (tc.name === 'escalateToStaff' && tc.result?.escalation_id) {
+        } else if (tc.name === 'escalateToStaff' && tc.result?.escalated) {
           outcome = 'ESCALATED';
           escalationId = tc.result.escalation_id;
         } else if (tc.name === 'getPatientByPhone' && tc.result?.patient_id) {
@@ -337,10 +396,14 @@ class VoiceEngineManager {
       /* db.logAiUsage block removed */
     }
 
-    return result;
+    return {
+      ...result,
+      reply: result.replyText,
+      toolCalls: result.toolCallsExecuted,
+    };
   }
 
-  public async finishCall(clinicId: string, callId: string, durationSeconds: number, summary?: string) {
+  public async finishCall(clinicId: string, callId: string, durationSeconds: number, summary?: string, sessionId?: string) {
     const call = await CallService.getCallById(clinicId, callId);
     if (!call) return;
 
@@ -357,6 +420,18 @@ class VoiceEngineManager {
       end_time: new Date().toISOString(),
       summary: finalSummary,
     });
+
+    // Cleanup transient session memory and provider session
+    if (sessionId) {
+      this.activeSessions.delete(sessionId);
+    } else {
+      for (const [sId, sess] of this.activeSessions.entries()) {
+        if (sess.callId === callId && sess.clinicId === clinicId) {
+          this.activeSessions.delete(sId);
+          break;
+        }
+      }
+    }
   }
 }
 

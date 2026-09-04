@@ -29,7 +29,8 @@ export interface IVoiceProvider {
     sessionId: string,
     userText: string,
     history: VoiceMessage[],
-    toolExecutor: (name: string, args: Record<string, any>) => Promise<any>
+    toolExecutor: (name: string, args: Record<string, any>) => Promise<any>,
+    sessionConfig?: Partial<VoiceSessionConfig>
   ): Promise<{
     replyText: string;
     toolCallsExecuted: Array<{ name: string; args: any; result: any }>;

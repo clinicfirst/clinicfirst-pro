@@ -29,14 +29,29 @@ aiRouter.post('/call/message', async (req: Request, res: Response) => {
   try {
     const { clinicId, sessionId, callId, message, history, durationSeconds } = req.body;
 
-    if (!clinicId || !sessionId || !callId || !message) {
-      return res.status(400).json({ error: 'clinicId, sessionId, callId, and message are required.' });
+    let effectiveClinicId = clinicId;
+    let effectiveCallId = callId;
+
+    if (sessionId) {
+      const activeSession = voiceEngine.getSession(sessionId);
+      if (activeSession) {
+        // Strict tenant isolation: client-supplied clinicId must match session clinicId
+        if (clinicId && activeSession.clinicId !== clinicId) {
+          return res.status(403).json({ error: 'Cross-tenant session access rejected.' });
+        }
+        effectiveClinicId = effectiveClinicId || activeSession.clinicId;
+        effectiveCallId = effectiveCallId || activeSession.callId;
+      }
+    }
+
+    if (!effectiveClinicId || !sessionId || !message) {
+      return res.status(400).json({ error: 'clinicId, sessionId, and message are required.' });
     }
 
     const result = await voiceEngine.handleCallMessage(
-      clinicId,
+      effectiveClinicId,
       sessionId,
-      callId,
+      effectiveCallId || sessionId,
       message,
       history || [],
       Number(durationSeconds) || 0
@@ -52,12 +67,19 @@ aiRouter.post('/call/message', async (req: Request, res: Response) => {
 // End Call
 aiRouter.post('/call/end', async (req: Request, res: Response) => {
   try {
-    const { clinicId, callId, durationSeconds, summary } = req.body;
+    const { clinicId, callId, sessionId, durationSeconds, summary } = req.body;
     if (!clinicId || !callId) {
       return res.status(400).json({ error: 'clinicId and callId are required.' });
     }
 
-    await voiceEngine.finishCall(clinicId, callId, Number(durationSeconds) || 0, summary);
+    if (sessionId) {
+      const activeSession = voiceEngine.getSession(sessionId);
+      if (activeSession && activeSession.clinicId !== clinicId) {
+        return res.status(403).json({ error: 'Cross-tenant session access rejected.' });
+      }
+    }
+
+    await voiceEngine.finishCall(clinicId, callId, Number(durationSeconds) || 0, summary, sessionId);
     return res.json({ success: true, message: 'Call record finalized.' });
   } catch (err: any) {
     console.error('Error finalizing call:', err);

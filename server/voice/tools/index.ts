@@ -149,32 +149,79 @@ export const AI_RECEPTIONIST_TOOL_DEFINITIONS: ToolDefinition[] = [
   },
 ];
 
+export const MUTATION_TOOLS = new Set([
+  'createAppointment',
+  'rescheduleAppointment',
+  'cancelAppointment',
+  'createPatient',
+  'escalateToStaff',
+]);
+
 /**
  * Shared tool execution dispatcher for all voice providers.
+ * Protected by a deterministic 4000ms bounded timeout so external or DB delays never hang the request.
+ * Dispatches explicit timeout semantics:
+ * - READ timeout: deterministic temporary lookup failure.
+ * - MUTATION timeout: MUTATION_PENDING_VERIFICATION status to prevent false failure reporting or reckless duplicate retries.
  */
 export async function executeVoiceTool(clinicId: string, name: string, args: Record<string, any>) {
-  switch (name) {
-    case 'getClinicInfo':
-      return await getClinicInfo(clinicId);
-    case 'getPatientByPhone':
-      return await getPatientByPhone(clinicId, args.phone);
-    case 'createPatient':
-      return await createPatient(clinicId, args as any);
-    case 'getClinicDoctors':
-      return await getClinicDoctors(clinicId, args.specialization);
-    case 'getClinicServices':
-      return await getClinicServices(clinicId);
-    case 'getAvailableSlots':
-      return await getAvailableSlots(clinicId, args as any);
-    case 'createAppointment':
-      return await createAppointment(clinicId, args as any);
-    case 'rescheduleAppointment':
-      return await rescheduleAppointment(clinicId, args as any);
-    case 'cancelAppointment':
-      return await cancelAppointment(clinicId, args as any);
-    case 'escalateToStaff':
-      return await escalateToStaff(clinicId, args as any);
-    default:
-      return { error: `Tool ${name} is not recognized.` };
+  const timeoutMs = 4000;
+  const isMutation = MUTATION_TOOLS.has(name);
+
+  const dispatchPromise = (async () => {
+    switch (name) {
+      case 'getClinicInfo':
+        return await getClinicInfo(clinicId);
+      case 'getPatientByPhone':
+        return await getPatientByPhone(clinicId, args.phone);
+      case 'createPatient':
+        return await createPatient(clinicId, args as any);
+      case 'getClinicDoctors':
+        return await getClinicDoctors(clinicId, args.specialization);
+      case 'getClinicServices':
+        return await getClinicServices(clinicId);
+      case 'getAvailableSlots':
+        return await getAvailableSlots(clinicId, args as any);
+      case 'createAppointment':
+        return await createAppointment(clinicId, args as any);
+      case 'rescheduleAppointment':
+        return await rescheduleAppointment(clinicId, args as any);
+      case 'cancelAppointment':
+        return await cancelAppointment(clinicId, args as any);
+      case 'escalateToStaff':
+        return await escalateToStaff(clinicId, args as any);
+      default:
+        return { error: `Tool ${name} is not recognized.` };
+    }
+  })();
+
+  try {
+    return await Promise.race([
+      dispatchPromise,
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error(`TIMEOUT_${name}`)), timeoutMs)
+      ),
+    ]);
+  } catch (err: any) {
+    console.warn(`[executeVoiceTool] Error or timeout executing tool ${name}:`, err.message);
+
+    if (err.message === `TIMEOUT_${name}`) {
+      if (isMutation) {
+        return {
+          status: 'MUTATION_PENDING_VERIFICATION',
+          isMutation: true,
+          requiresVerification: true,
+          error: `Tool ${name} timed out after ${timeoutMs}ms. The database mutation was dispatched and may still commit in PostgreSQL. Do NOT report this as a definite booking failure, and do NOT retry immediately without verifying existing appointments.`,
+        };
+      } else {
+        return {
+          status: 'TIMEOUT',
+          isMutation: false,
+          error: `Tool ${name} timed out after ${timeoutMs}ms. Temporary lookup failure.`,
+        };
+      }
+    }
+
+    return { error: err.message || `Failed to execute tool ${name}` };
   }
 }

@@ -238,28 +238,35 @@ export const AiPhoneSimulator: React.FC<AiPhoneSimulatorProps> = ({
     try {
       setLoading(true);
       const res = await apiRequest<{
-        reply: string;
+        reply?: string;
+        replyText?: string;
         outcome?: string;
         toolCalls?: Array<{ name: string; args: any; result: any }>;
+        toolCallsExecuted?: Array<{ name: string; args: any; result: any }>;
         audioBase64?: string;
       }>('/api/ai/call/message', {
         method: 'POST',
         body: JSON.stringify({
+          clinicId,
           sessionId,
+          callId,
           message: userMsg,
+          durationSeconds,
         }),
       });
 
-      if (res.toolCalls && res.toolCalls.length > 0) {
-        setToolLogs((prev) => [...prev, ...res.toolCalls!]);
+      const effectiveTools = res.toolCalls || res.toolCallsExecuted;
+      if (effectiveTools && effectiveTools.length > 0) {
+        setToolLogs((prev) => [...prev, ...effectiveTools]);
       }
 
-      if (res.reply) {
+      const effectiveReply = res.reply || res.replyText;
+      if (effectiveReply) {
         setTranscript((prev) => [
           ...prev,
           {
             speaker: 'ai',
-            text: res.reply,
+            text: effectiveReply,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           },
         ]);
