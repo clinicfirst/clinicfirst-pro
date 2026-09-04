@@ -63,7 +63,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "4137d60012e0fd92d63d3b4b6585c2cf:0dcc858395ac3baf019715982e0b8022b563c44fb5933dc730a2db440202127c8952a435abb25a960d8301269bc6abdf36667c4c579024bacd1b91561c187368"
+      "password_hash": "8faab8b48e7bacdde1aa60b109927643:62cc187b992ad5eb536abe35630ce5ab69c18c5d21ef6afe419682dc54d9682c141fb4257a1dd31248e6540c057ff67576c6ab8493c630a3dcae4b40638fdd74"
     },
     {
       "id": "usr_platform_admin_2",
@@ -75,7 +75,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "1f18df6a4f1560cecdf6cd734addacb1:a424d6a7a893ad50cc9ca700a121dadd6c79a91741cf59f139d3b678956dd4e0d7dfec975c0ddb3fa1802b7d66cc8bf3297e4699bc6a81f586ae244f5dd3655c"
+      "password_hash": "8add0a9f50702dd595a2120f4ec3fca9:1abc05d432c3d56c784502eb40deb86aee8df52da8496b34ed7c3f05b45b4f8d7f2f6173782b3f1cfc525bb12d17459f10b560a50c7a1ab13baf8e95bef77b9f"
     },
     {
       "id": "usr_apex_admin_1",
@@ -87,7 +87,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "3c6ef7514e703f976d86ddc3142060a6:8e6a3a5ad7ef3bb1f3ee54c2e6d665b3cc4e068e1dc78bb8e217ac1e93d544d036576c571a4195b8e6078e641ee5847eb578ba0236bd6238ece26774d3bc4b4b"
+      "password_hash": "bb20260b70754cfcf02c25c1ddce4f02:95ae35878ea2c171db8e5084da3a737853b7f6c7cf18f8553c69483d07414457f137c32976948369016fcd6b8c7256eeb7c1c93ff5f01f02b8928384f6c561f2"
     },
     {
       "id": "usr_apex_staff_1",
@@ -99,7 +99,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "55b0f9a29e0fdb79ceaa9e334f2e0249:1a7e35172b5a2c2b751c04311cf729cf0ea8209e8b28719f71860042145e92fe0998663d419224095e62d9fa3c987d12c1d50be43975d408028782687f422d81"
+      "password_hash": "4cfaeb3e3190b81c17138f2f54e9d966:36c5f80775e25e3cc1467d006822a70764fde9bfed216172d80407e18e1cbe7b334dbf9c0da6c86021cb0b0bdfdebdef172c1b48aedac4b4e2a7c68aff520b4e"
     },
     {
       "id": "usr_apex_admin_legacy",
@@ -111,7 +111,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "7b36633b268278cc6ce7f6aeee3f6c45:728f491f08d5b6863bea331a7705f42936ac0e3cfec16a7ed7331f3477f3a27bbf71455f423c433ce62dd8bb1a0d9b9b100e14888793a71854d30267efe3e16c"
+      "password_hash": "81744ca9b8a9bb440b7d2d5d1ef6f37e:0f8d03dd7150ae3ee3a7c8528ee691cc2ac100db57eec625c3f2581973f024a93ef0b46915924c1a864e8bf7d8c91ce4ca9a454e90a1887c599ef2bf08481cff"
     },
     {
       "id": "usr_apex_staff_legacy",
@@ -123,7 +123,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "c33f03be8860d98b9368e1549da7dd75:e2bf5d3097903d254167bdb202676add39d44289e9965fbdebcf545e33c060f061f6fab126d5cba379eaa29393db2743b6ffc4710b549e3379fef4133197101d"
+      "password_hash": "c383b3f527a55cfd754963b785246904:2e79f111913310ebcab270261b7336b3cbc812ef9612d773f4895eb8485b2b8ae5efae2e26fe4926176a5008e88378c548d37b2e1e2cbce0bc3a88f1384cbce6"
     },
     {
       "id": "usr_doc_elena_1",

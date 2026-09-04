@@ -41,7 +41,7 @@ export class KnowledgeService {
   }
 
   static async createPlatformKnowledge(item: Omit<PlatformKnowledgeItem, 'id' | 'created_at' | 'updated_at'>): Promise<PlatformKnowledgeItem> {
-    const newItem = {
+    const newItem: PlatformKnowledgeItem = {
       ...item,
       id: `pk_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       created_at: new Date().toISOString(),
@@ -55,12 +55,43 @@ export class KnowledgeService {
       return newItem as PlatformKnowledgeItem;
     }
 
-    const { data, error } = await supabase.from('platform_knowledge_base').insert(newItem).select().single();
+    const corePayload: Record<string, any> = {
+      id: newItem.id,
+      title: newItem.title,
+      category: newItem.category,
+      content: newItem.content,
+      is_active: newItem.is_active ?? true,
+      created_at: newItem.created_at,
+      updated_at: newItem.updated_at,
+    };
+
+    const fullPayload: Record<string, any> = {
+      ...corePayload,
+      ...(newItem.file_name ? { file_name: newItem.file_name } : {}),
+      ...(newItem.file_type ? { file_type: newItem.file_type } : {}),
+      ...(newItem.file_data ? { file_data: newItem.file_data } : {}),
+      ...(newItem.file_size ? { file_size: newItem.file_size } : {}),
+    };
+
+    let resultData: any = null;
+    const { data, error } = await supabase.from('platform_knowledge_base').insert(fullPayload).select().single();
     if (error) {
-      console.error('[KnowledgeService.createPlatformKnowledge] Supabase error:', error);
-      throw new Error('Failed to create platform knowledge in database.');
+      if (error.code === 'PGRST204' || (error.message && error.message.includes('schema cache'))) {
+        console.warn('[KnowledgeService.createPlatformKnowledge] Supabase schema missing optional file columns, retrying with core payload:', error.message);
+        const retryResult = await supabase.from('platform_knowledge_base').insert(corePayload).select().single();
+        if (retryResult.error) {
+          console.error('[KnowledgeService.createPlatformKnowledge] Supabase retry error:', retryResult.error);
+          throw new Error(`Failed to create platform knowledge in database: ${retryResult.error.message || retryResult.error.code}`);
+        }
+        resultData = retryResult.data;
+      } else {
+        console.error('[KnowledgeService.createPlatformKnowledge] Supabase error:', error);
+        throw new Error(`Failed to create platform knowledge in database: ${error.message || error.code}`);
+      }
+    } else {
+      resultData = data;
     }
-    return data as PlatformKnowledgeItem;
+    return { ...newItem, ...resultData } as PlatformKnowledgeItem;
   }
 
   static async updatePlatformKnowledge(id: string, updates: Partial<PlatformKnowledgeItem>): Promise<PlatformKnowledgeItem> {
@@ -76,10 +107,28 @@ export class KnowledgeService {
       return (db.data as any).platform_knowledge_base[idx];
     }
 
-    const { data, error } = await supabase.from('platform_knowledge_base').update({ ...updates, updated_at: new Date().toISOString() }).eq('id', id).select().single();
+    const cleanUpdates: Record<string, any> = { ...updates, updated_at: new Date().toISOString() };
+    delete cleanUpdates.id;
+
+    let { data, error } = await supabase.from('platform_knowledge_base').update(cleanUpdates).eq('id', id).select().single();
     if (error) {
-      console.error('[KnowledgeService.updatePlatformKnowledge] Supabase error:', error);
-      throw new Error('Failed to update platform knowledge in database.');
+      if (error.code === 'PGRST204' || (error.message && error.message.includes('schema cache'))) {
+        console.warn('[KnowledgeService.updatePlatformKnowledge] Supabase schema missing optional columns, retrying with core fields:', error.message);
+        const coreUpdates = { ...cleanUpdates };
+        delete coreUpdates.file_name;
+        delete coreUpdates.file_type;
+        delete coreUpdates.file_data;
+        delete coreUpdates.file_size;
+        const retryResult = await supabase.from('platform_knowledge_base').update(coreUpdates).eq('id', id).select().single();
+        if (retryResult.error) {
+          console.error('[KnowledgeService.updatePlatformKnowledge] Supabase retry error:', retryResult.error);
+          throw new Error(`Failed to update platform knowledge in database: ${retryResult.error.message || retryResult.error.code}`);
+        }
+        data = retryResult.data;
+      } else {
+        console.error('[KnowledgeService.updatePlatformKnowledge] Supabase error:', error);
+        throw new Error(`Failed to update platform knowledge in database: ${error.message || error.code}`);
+      }
     }
     return data as PlatformKnowledgeItem;
   }
@@ -139,11 +188,19 @@ export class KnowledgeService {
     return result;
   }
 
-  static async getClinicKnowledgeById(clinicId: string, id: string): Promise<ClinicKnowledgeItem | null> {
-    if (!clinicId) throw new Error('clinicId is required');
+  static async getClinicKnowledgeById(clinicIdOrId: string, idOrClinicId: string): Promise<ClinicKnowledgeItem | null> {
+    if (!clinicIdOrId || !idOrClinicId) return null;
+
+    // Detect if arguments were passed as (id, clinicId) vs (clinicId, id)
+    let clinicId = clinicIdOrId;
+    let id = idOrClinicId;
+    if (clinicIdOrId.startsWith('ck_') && !idOrClinicId.startsWith('ck_')) {
+      id = clinicIdOrId;
+      clinicId = idOrClinicId;
+    }
 
     if (!supabase) {
-      return ((db.data as any).clinic_knowledge_base || []).find((k: ClinicKnowledgeItem) => k.id === id && k.clinic_id === clinicId) || null;
+      return ((db.data as any).clinic_knowledge_base || []).find((k: ClinicKnowledgeItem) => (k.id === id && k.clinic_id === clinicId) || (k.id === clinicId && k.clinic_id === id)) || null;
     }
 
     const { data, error } = await supabase.from('clinic_knowledge_base').select('*').eq('clinic_id', clinicId).eq('id', id).single();
@@ -157,13 +214,14 @@ export class KnowledgeService {
   static async createClinicKnowledge(clinicId: string, item: Omit<ClinicKnowledgeItem, 'id' | 'clinic_id' | 'created_at' | 'updated_at'>): Promise<ClinicKnowledgeItem> {
     if (!clinicId) throw new Error('clinicId is required to create clinic knowledge');
 
-    const newItem = {
+    const newItem: ClinicKnowledgeItem = {
       ...item,
       clinic_id: clinicId,
       id: `ck_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       status: item.status || 'DRAFT',
+      version: item.version ?? 1,
     };
 
     if (!supabase) {
@@ -173,12 +231,50 @@ export class KnowledgeService {
       return newItem as ClinicKnowledgeItem;
     }
 
-    const { data, error } = await supabase.from('clinic_knowledge_base').insert(newItem).select().single();
+    // Core guaranteed columns in standard schema
+    const corePayload: Record<string, any> = {
+      id: newItem.id,
+      clinic_id: newItem.clinic_id,
+      title: newItem.title,
+      content: newItem.content,
+      category: newItem.category,
+      status: newItem.status,
+      version: String(newItem.version || '1'),
+      created_at: newItem.created_at,
+      updated_at: newItem.updated_at,
+    };
+
+    // Full payload including optional audit metadata
+    const fullPayload: Record<string, any> = {
+      ...corePayload,
+      ...(newItem.created_by ? { created_by: newItem.created_by } : {}),
+      ...(newItem.updated_by ? { updated_by: newItem.updated_by } : {}),
+      ...(newItem.published_at ? { published_at: newItem.published_at } : {}),
+      ...(newItem.published_by ? { published_by: newItem.published_by } : {}),
+    };
+
+    let resultData: any = null;
+    const { data, error } = await supabase.from('clinic_knowledge_base').insert(fullPayload).select().single();
     if (error) {
-      console.error('[KnowledgeService.createClinicKnowledge] Supabase error:', error);
-      throw new Error('Failed to create clinic knowledge in database.');
+      // PGRST204: "Could not find column ... in the schema cache"
+      // If optional audit columns don't exist in Supabase yet, retry with core schema payload
+      if (error.code === 'PGRST204' || (error.message && error.message.includes('schema cache'))) {
+        console.warn('[KnowledgeService.createClinicKnowledge] Supabase schema missing optional audit column, retrying with core schema payload:', error.message);
+        const retryResult = await supabase.from('clinic_knowledge_base').insert(corePayload).select().single();
+        if (retryResult.error) {
+          console.error('[KnowledgeService.createClinicKnowledge] Supabase retry error:', retryResult.error);
+          throw new Error(`Failed to create clinic knowledge in database: ${retryResult.error.message || retryResult.error.code}`);
+        }
+        resultData = retryResult.data;
+      } else {
+        console.error('[KnowledgeService.createClinicKnowledge] Supabase error:', error);
+        throw new Error(`Failed to create clinic knowledge in database: ${error.message || error.code}`);
+      }
+    } else {
+      resultData = data;
     }
-    return data as ClinicKnowledgeItem;
+
+    return { ...newItem, ...resultData } as ClinicKnowledgeItem;
   }
 
   static async updateClinicKnowledge(clinicId: string, id: string, updates: Partial<ClinicKnowledgeItem>): Promise<ClinicKnowledgeItem> {
@@ -196,15 +292,30 @@ export class KnowledgeService {
       return (db.data as any).clinic_knowledge_base[idx];
     }
 
-    // Ensure clinic_id isn't accidentally modified
-    const cleanUpdates = { ...updates, updated_at: new Date().toISOString() };
+    // Ensure clinic_id and id aren't accidentally modified
+    const cleanUpdates: Record<string, any> = { ...updates, updated_at: new Date().toISOString() };
     delete cleanUpdates.clinic_id;
     delete cleanUpdates.id;
 
-    const { data, error } = await supabase.from('clinic_knowledge_base').update(cleanUpdates).eq('clinic_id', clinicId).eq('id', id).select().single();
+    let { data, error } = await supabase.from('clinic_knowledge_base').update(cleanUpdates).eq('clinic_id', clinicId).eq('id', id).select().single();
     if (error) {
-      console.error('[KnowledgeService.updateClinicKnowledge] Supabase error:', error);
-      throw new Error('Failed to update clinic knowledge in database.');
+      if (error.code === 'PGRST204' || (error.message && error.message.includes('schema cache'))) {
+        console.warn('[KnowledgeService.updateClinicKnowledge] Supabase schema missing optional audit column, retrying with core fields:', error.message);
+        const coreUpdates = { ...cleanUpdates };
+        delete coreUpdates.created_by;
+        delete coreUpdates.updated_by;
+        delete coreUpdates.published_at;
+        delete coreUpdates.published_by;
+        const retryResult = await supabase.from('clinic_knowledge_base').update(coreUpdates).eq('clinic_id', clinicId).eq('id', id).select().single();
+        if (retryResult.error) {
+          console.error('[KnowledgeService.updateClinicKnowledge] Supabase retry error:', retryResult.error);
+          throw new Error(`Failed to update clinic knowledge in database: ${retryResult.error.message || retryResult.error.code}`);
+        }
+        data = retryResult.data;
+      } else {
+        console.error('[KnowledgeService.updateClinicKnowledge] Supabase error:', error);
+        throw new Error(`Failed to update clinic knowledge in database: ${error.message || error.code}`);
+      }
     }
     return data as ClinicKnowledgeItem;
   }
@@ -242,20 +353,37 @@ export class KnowledgeService {
     }
 
     const now = new Date().toISOString();
-    const { data, error } = await supabase
+    const fullPayload: Record<string, any> = {
+      status: 'PUBLISHED',
+      published_at: now,
+      ...(actorUserId ? { published_by: actorUserId } : {})
+    };
+
+    let { data, error } = await supabase
       .from('clinic_knowledge_base')
-      .update({
-        status: 'PUBLISHED',
-        published_at: now,
-        ...(actorUserId ? { published_by: actorUserId } : {})
-      })
+      .update(fullPayload)
       .eq('clinic_id', clinicId)
       .eq('status', 'VALIDATED')
       .select();
 
     if (error) {
-      console.error('[KnowledgeService.publishClinicKnowledge] Supabase error:', error);
-      throw new Error('Failed to publish clinic knowledge in database.');
+      if (error.code === 'PGRST204' || (error.message && error.message.includes('schema cache'))) {
+        console.warn('[KnowledgeService.publishClinicKnowledge] Supabase schema missing optional audit column, retrying with status update only:', error.message);
+        const retryResult = await supabase
+          .from('clinic_knowledge_base')
+          .update({ status: 'PUBLISHED', updated_at: now })
+          .eq('clinic_id', clinicId)
+          .eq('status', 'VALIDATED')
+          .select();
+        if (retryResult.error) {
+          console.error('[KnowledgeService.publishClinicKnowledge] Supabase retry error:', retryResult.error);
+          throw new Error(`Failed to publish clinic knowledge in database: ${retryResult.error.message || retryResult.error.code}`);
+        }
+        data = retryResult.data;
+      } else {
+        console.error('[KnowledgeService.publishClinicKnowledge] Supabase error:', error);
+        throw new Error(`Failed to publish clinic knowledge in database: ${error.message || error.code}`);
+      }
     }
     return data || [];
   }

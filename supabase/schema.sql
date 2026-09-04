@@ -225,6 +225,10 @@ CREATE TABLE clinic_knowledge_base (
   category TEXT,
   status TEXT,
   version TEXT,
+  created_by TEXT REFERENCES users(id) ON DELETE SET NULL,
+  updated_by TEXT REFERENCES users(id) ON DELETE SET NULL,
+  published_at TIMESTAMPTZ,
+  published_by TEXT REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );

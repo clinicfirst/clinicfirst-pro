@@ -595,86 +595,101 @@ platformRouter.get('/knowledge-base', async (req: AuthenticatedRequest, res: Res
 });
 
 platformRouter.post('/knowledge-base', async (req: AuthenticatedRequest, res: Response) => {
-  const { title, category, content, is_active, file_name, file_type, file_data, file_size } = req.body;
+  try {
+    const { title, category, content, is_active, file_name, file_type, file_data, file_size } = req.body;
 
-  if (!title || !category) {
-    return res.status(400).json({ error: 'Title and Category are required.' });
+    if (!title || !category) {
+      return res.status(400).json({ error: 'Title and Category are required.' });
+    }
+
+    const item = await KnowledgeService.createPlatformKnowledge({
+      title,
+      category,
+      content: content || '',
+      is_active: is_active ?? true,
+      file_name,
+      file_type,
+      file_data,
+      file_size,
+    });
+
+    await AuditService.logAudit({
+      clinic_id: null,
+      actor_user_id: req.user!.id,
+      actor_name: req.user!.name,
+      action: 'KNOWLEDGE_BASE_ITEM_CREATED',
+      target_type: 'KNOWLEDGE_BASE',
+      target_id: item.id,
+      metadata: { title, category },
+    });
+
+    return res.status(201).json({ item });
+  } catch (err: any) {
+    console.error('[POST /knowledge-base] Error:', err);
+    return res.status(500).json({ error: err.message || 'Failed to create knowledge base item.' });
   }
-
-  const item = await KnowledgeService.createPlatformKnowledge({
-    title,
-    category,
-    content: content || '',
-    is_active: is_active ?? true,
-    file_name,
-    file_type,
-    file_data,
-    file_size,
-  });
-
-  await AuditService.logAudit({
-    clinic_id: null,
-    actor_user_id: req.user!.id,
-    actor_name: req.user!.name,
-    action: 'KNOWLEDGE_BASE_ITEM_CREATED',
-    target_type: 'KNOWLEDGE_BASE',
-    target_id: item.id,
-    metadata: { title, category },
-  });
-
-  return res.status(201).json({ item });
 });
 
 platformRouter.put('/knowledge-base/:id', async (req: AuthenticatedRequest, res: Response) => {
-  const { id } = req.params;
-  const { title, category, content, is_active, file_name, file_type, file_data, file_size } = req.body;
+  try {
+    const { id } = req.params;
+    const { title, category, content, is_active, file_name, file_type, file_data, file_size } = req.body;
 
-  const updated = await KnowledgeService.updatePlatformKnowledge(id, {
-    title,
-    category,
-    content: content || '',
-    is_active,
-    ...(file_name !== undefined && { file_name }),
-    ...(file_type !== undefined && { file_type }),
-    ...(file_data !== undefined && { file_data }),
-    ...(file_size !== undefined && { file_size }),
-  });
+    const updated = await KnowledgeService.updatePlatformKnowledge(id, {
+      title,
+      category,
+      content: content || '',
+      is_active,
+      ...(file_name !== undefined && { file_name }),
+      ...(file_type !== undefined && { file_type }),
+      ...(file_data !== undefined && { file_data }),
+      ...(file_size !== undefined && { file_size }),
+    });
 
-  if (!updated) {
-    return res.status(404).json({ error: 'Knowledge base item not found.' });
+    if (!updated) {
+      return res.status(404).json({ error: 'Knowledge base item not found.' });
+    }
+
+    await AuditService.logAudit({
+      clinic_id: null,
+      actor_user_id: req.user!.id,
+      actor_name: req.user!.name,
+      action: 'KNOWLEDGE_BASE_ITEM_UPDATED',
+      target_type: 'KNOWLEDGE_BASE',
+      target_id: id,
+      metadata: { title, category, is_active },
+    });
+
+    return res.json({ item: updated });
+  } catch (err: any) {
+    console.error('[PUT /knowledge-base/:id] Error:', err);
+    return res.status(500).json({ error: err.message || 'Failed to update knowledge base item.' });
   }
-
-  await AuditService.logAudit({
-    clinic_id: null,
-    actor_user_id: req.user!.id,
-    actor_name: req.user!.name,
-    action: 'KNOWLEDGE_BASE_ITEM_UPDATED',
-    target_type: 'KNOWLEDGE_BASE',
-    target_id: id,
-    metadata: { title, category, is_active },
-  });
-
-  return res.json({ item: updated });
 });
 
 platformRouter.delete('/knowledge-base/:id', async (req: AuthenticatedRequest, res: Response) => {
-  const { id } = req.params;
-  const deleted = await KnowledgeService.deletePlatformKnowledge(id);
+  try {
+    const { id } = req.params;
+    const deleted = await KnowledgeService.deletePlatformKnowledge(id);
 
-  if (!deleted) {
-    return res.status(404).json({ error: 'Knowledge base item not found.' });
+    if (!deleted) {
+      return res.status(404).json({ error: 'Knowledge base item not found.' });
+    }
+
+    await AuditService.logAudit({
+      clinic_id: null,
+      actor_user_id: req.user!.id,
+      actor_name: req.user!.name,
+      action: 'KNOWLEDGE_BASE_ITEM_DELETED',
+      target_type: 'KNOWLEDGE_BASE',
+      target_id: id,
+    });
+
+    return res.json({ success: true, message: 'Knowledge base item deleted.' });
+  } catch (err: any) {
+    console.error('[DELETE /knowledge-base/:id] Error:', err);
+    return res.status(500).json({ error: err.message || 'Failed to delete knowledge base item.' });
   }
-
-  await AuditService.logAudit({
-    clinic_id: null,
-    actor_user_id: req.user!.id,
-    actor_name: req.user!.name,
-    action: 'KNOWLEDGE_BASE_ITEM_DELETED',
-    target_type: 'KNOWLEDGE_BASE',
-    target_id: id,
-  });
-
-  return res.json({ success: true, message: 'Knowledge base item deleted.' });
 });
 
 
@@ -705,198 +720,223 @@ const APPROVED_CLINIC_KNOWLEDGE_CATEGORIES = [
 
 // Get AI Knowledge items for a specific clinic
 platformRouter.get('/clinics/:clinic_id/ai-knowledge', async (req: AuthenticatedRequest, res: Response) => {
-  const { clinic_id } = req.params;
-  const { status, category, search } = req.query;
+  try {
+    const { clinic_id } = req.params;
+    const { status, category, search } = req.query;
 
-  const clinic = await ClinicService.getById(clinic_id);
-  if (!clinic) {
-    return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
+    const clinic = await ClinicService.getById(clinic_id);
+    if (!clinic) {
+      return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
+    }
+
+    const items = await KnowledgeService.listClinicKnowledge(clinic_id, {
+      status: status as string,
+      category: category as string,
+      search: search as string,
+    });
+
+    return res.json({
+      clinic_id,
+      clinic_name: clinic.name,
+      items,
+      total: items.length,
+    });
+  } catch (err: any) {
+    console.error('[GET /clinics/:clinic_id/ai-knowledge] Error:', err);
+    return res.status(500).json({ error: err.message || 'Failed to fetch clinic AI knowledge.' });
   }
-
-  const items = await KnowledgeService.listClinicKnowledge(clinic_id, {
-    status: status as string,
-    category: category as string,
-    search: search as string,
-  });
-
-  return res.json({
-    clinic_id,
-    clinic_name: clinic.name,
-    items,
-    total: items.length,
-  });
 });
 
 // Create AI Knowledge item for a specific clinic
 platformRouter.post('/clinics/:clinic_id/ai-knowledge', async (req: AuthenticatedRequest, res: Response) => {
-  const { clinic_id } = req.params;
-  const { title, category, content, status } = req.body;
+  try {
+    const { clinic_id } = req.params;
+    const { title, category, content, status } = req.body;
 
-  const clinic = await ClinicService.getById(clinic_id);
-  if (!clinic) {
-    return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
-  }
+    const clinic = await ClinicService.getById(clinic_id);
+    if (!clinic) {
+      return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
+    }
 
-  if (!title || typeof title !== 'string' || title.trim().length === 0) {
-    return res.status(400).json({ error: 'Title is required.' });
-  }
+    if (!title || typeof title !== 'string' || title.trim().length === 0) {
+      return res.status(400).json({ error: 'Title is required.' });
+    }
 
-  if (!category || !APPROVED_CLINIC_KNOWLEDGE_CATEGORIES.includes(category)) {
-    return res.status(400).json({
-      error: `Invalid category. Must be one of: ${APPROVED_CLINIC_KNOWLEDGE_CATEGORIES.join(', ')}`,
+    if (!category || !APPROVED_CLINIC_KNOWLEDGE_CATEGORIES.includes(category)) {
+      return res.status(400).json({
+        error: `Invalid category. Must be one of: ${APPROVED_CLINIC_KNOWLEDGE_CATEGORIES.join(', ')}`,
+      });
+    }
+
+    if (!content || typeof content !== 'string' || content.trim().length === 0) {
+      return res.status(400).json({ error: 'Content/Instruction is required.' });
+    }
+
+    const validStatuses = ['DRAFT', 'VALIDATED', 'PUBLISHED'];
+    const ruleStatus = status && validStatuses.includes(status) ? status : 'DRAFT';
+
+    const newItem = await KnowledgeService.createClinicKnowledge(clinic_id, { 
+      title: title.trim(),
+      category,
+      content: content.trim(),
+      status: ruleStatus,
+      version: 1,
+      created_by: req.user!.id,
+      updated_by: req.user!.id,
+      ...(ruleStatus === 'PUBLISHED' && {
+        published_at: new Date().toISOString(),
+        published_by: req.user!.id,
+      }),
     });
+
+    await AuditService.logAudit({
+      clinic_id,
+      actor_user_id: req.user!.id,
+      actor_name: req.user!.name,
+      action: 'CLINIC_AI_KNOWLEDGE_CREATED',
+      target_type: 'CLINIC_AI_KNOWLEDGE',
+      target_id: newItem.id,
+      metadata: { title: newItem.title, category: newItem.category, status: newItem.status },
+    });
+
+    return res.status(201).json({ item: newItem });
+  } catch (err: any) {
+    console.error('[POST /clinics/:clinic_id/ai-knowledge] Error:', err);
+    return res.status(500).json({ error: err.message || 'Failed to create clinic AI knowledge rule.' });
   }
-
-  if (!content || typeof content !== 'string' || content.trim().length === 0) {
-    return res.status(400).json({ error: 'Content/Instruction is required.' });
-  }
-
-  const validStatuses = ['DRAFT', 'VALIDATED', 'PUBLISHED'];
-  const ruleStatus = status && validStatuses.includes(status) ? status : 'DRAFT';
-
-  const newItem = await KnowledgeService.createClinicKnowledge(clinic_id, { 
-    title: title.trim(),
-    category,
-    content: content.trim(),
-    status: ruleStatus,
-    version: 1,
-    created_by: req.user!.id,
-    updated_by: req.user!.id,
-    ...(ruleStatus === 'PUBLISHED' && {
-      published_at: new Date().toISOString(),
-      published_by: req.user!.id,
-    }),
-   });
-
-  await AuditService.logAudit({
-    clinic_id,
-    actor_user_id: req.user!.id,
-    actor_name: req.user!.name,
-    action: 'CLINIC_AI_KNOWLEDGE_CREATED',
-    target_type: 'CLINIC_AI_KNOWLEDGE',
-    target_id: newItem.id,
-    metadata: { title: newItem.title, category: newItem.category, status: newItem.status },
-  });
-
-  return res.status(201).json({ item: newItem });
 });
 
 // Update AI Knowledge item for a specific clinic
 platformRouter.put('/clinics/:clinic_id/ai-knowledge/:id', async (req: AuthenticatedRequest, res: Response) => {
-  const { clinic_id, id } = req.params;
-  const { title, category, content, status } = req.body;
+  try {
+    const { clinic_id, id } = req.params;
+    const { title, category, content, status } = req.body;
 
-  const clinic = await ClinicService.getById(clinic_id);
-  if (!clinic) {
-    return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
-  }
+    const clinic = await ClinicService.getById(clinic_id);
+    if (!clinic) {
+      return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
+    }
 
-  const existingItem = await KnowledgeService.getClinicKnowledgeById(id, clinic_id);
-  if (!existingItem) {
-    return res.status(404).json({ error: 'Clinic AI Knowledge item not found for this clinic.' });
-  }
+    const existingItem = await KnowledgeService.getClinicKnowledgeById(clinic_id, id);
+    if (!existingItem) {
+      return res.status(404).json({ error: 'Clinic AI Knowledge item not found for this clinic.' });
+    }
 
-  if (category && !APPROVED_CLINIC_KNOWLEDGE_CATEGORIES.includes(category)) {
-    return res.status(400).json({
-      error: `Invalid category. Must be one of: ${APPROVED_CLINIC_KNOWLEDGE_CATEGORIES.join(', ')}`,
+    if (category && !APPROVED_CLINIC_KNOWLEDGE_CATEGORIES.includes(category)) {
+      return res.status(400).json({
+        error: `Invalid category. Must be one of: ${APPROVED_CLINIC_KNOWLEDGE_CATEGORIES.join(', ')}`,
+      });
+    }
+
+    const validStatuses = ['DRAFT', 'VALIDATED', 'PUBLISHED'];
+    if (status && !validStatuses.includes(status)) {
+      return res.status(400).json({
+        error: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
+      });
+    }
+
+    const updates: any = {
+      ...(title !== undefined && { title: title.trim() }),
+      ...(category !== undefined && { category }),
+      ...(content !== undefined && { content: content.trim() }),
+      ...(status !== undefined && { status }),
+      updated_by: req.user!.id,
+    };
+
+    if (status === 'PUBLISHED' && existingItem.status !== 'PUBLISHED') {
+      updates.published_at = new Date().toISOString();
+      updates.published_by = req.user!.id;
+    }
+
+    const updatedItem = await KnowledgeService.updateClinicKnowledge(clinic_id, id, updates);
+    if (!updatedItem) {
+      return res.status(500).json({ error: 'Failed to update Clinic AI Knowledge item.' });
+    }
+
+    await AuditService.logAudit({
+      clinic_id,
+      actor_user_id: req.user!.id,
+      actor_name: req.user!.name,
+      action: 'CLINIC_AI_KNOWLEDGE_UPDATED',
+      target_type: 'CLINIC_AI_KNOWLEDGE',
+      target_id: id,
+      metadata: { title: updatedItem.title, category: updatedItem.category, status: updatedItem.status },
     });
+
+    return res.json({ item: updatedItem });
+  } catch (err: any) {
+    console.error('[PUT /clinics/:clinic_id/ai-knowledge/:id] Error:', err);
+    return res.status(500).json({ error: err.message || 'Failed to update clinic AI knowledge rule.' });
   }
-
-  const validStatuses = ['DRAFT', 'VALIDATED', 'PUBLISHED'];
-  if (status && !validStatuses.includes(status)) {
-    return res.status(400).json({
-      error: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
-    });
-  }
-
-  const updates: any = {
-    ...(title !== undefined && { title: title.trim() }),
-    ...(category !== undefined && { category }),
-    ...(content !== undefined && { content: content.trim() }),
-    ...(status !== undefined && { status }),
-    updated_by: req.user!.id,
-  };
-
-  if (status === 'PUBLISHED' && existingItem.status !== 'PUBLISHED') {
-    updates.published_at = new Date().toISOString();
-    updates.published_by = req.user!.id;
-  }
-
-  const updatedItem = await KnowledgeService.updateClinicKnowledge(clinic_id, id, updates);
-  if (!updatedItem) {
-    return res.status(500).json({ error: 'Failed to update Clinic AI Knowledge item.' });
-  }
-
-  await AuditService.logAudit({
-    clinic_id,
-    actor_user_id: req.user!.id,
-    actor_name: req.user!.name,
-    action: 'CLINIC_AI_KNOWLEDGE_UPDATED',
-    target_type: 'CLINIC_AI_KNOWLEDGE',
-    target_id: id,
-    metadata: { title: updatedItem.title, category: updatedItem.category, status: updatedItem.status },
-  });
-
-  return res.json({ item: updatedItem });
 });
 
 // Delete AI Knowledge item for a specific clinic
 platformRouter.delete('/clinics/:clinic_id/ai-knowledge/:id', async (req: AuthenticatedRequest, res: Response) => {
-  const { clinic_id, id } = req.params;
+  try {
+    const { clinic_id, id } = req.params;
 
-  const clinic = await ClinicService.getById(clinic_id);
-  if (!clinic) {
-    return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
+    const clinic = await ClinicService.getById(clinic_id);
+    if (!clinic) {
+      return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
+    }
+
+    const existingItem = await KnowledgeService.getClinicKnowledgeById(clinic_id, id);
+    if (!existingItem) {
+      return res.status(404).json({ error: 'Clinic AI Knowledge item not found for this clinic.' });
+    }
+
+    const deleted = await KnowledgeService.deleteClinicKnowledge(clinic_id, id);
+    if (!deleted) {
+      return res.status(500).json({ error: 'Failed to delete Clinic AI Knowledge item.' });
+    }
+
+    await AuditService.logAudit({
+      clinic_id,
+      actor_user_id: req.user!.id,
+      actor_name: req.user!.name,
+      action: 'CLINIC_AI_KNOWLEDGE_DELETED',
+      target_type: 'CLINIC_AI_KNOWLEDGE',
+      target_id: id,
+      metadata: { title: existingItem.title, category: existingItem.category },
+    });
+
+    return res.json({ success: true, message: 'Clinic AI Knowledge item deleted.' });
+  } catch (err: any) {
+    console.error('[DELETE /clinics/:clinic_id/ai-knowledge/:id] Error:', err);
+    return res.status(500).json({ error: err.message || 'Failed to delete clinic AI knowledge rule.' });
   }
-
-  const existingItem = await KnowledgeService.getClinicKnowledgeById(clinic_id, id);
-  if (!existingItem) {
-    return res.status(404).json({ error: 'Clinic AI Knowledge item not found for this clinic.' });
-  }
-
-  const deleted = await KnowledgeService.deleteClinicKnowledge(clinic_id, id);
-  if (!deleted) {
-    return res.status(500).json({ error: 'Failed to delete Clinic AI Knowledge item.' });
-  }
-
-  await AuditService.logAudit({
-    clinic_id,
-    actor_user_id: req.user!.id,
-    actor_name: req.user!.name,
-    action: 'CLINIC_AI_KNOWLEDGE_DELETED',
-    target_type: 'CLINIC_AI_KNOWLEDGE',
-    target_id: id,
-    metadata: { title: existingItem.title, category: existingItem.category },
-  });
-
-  return res.json({ success: true, message: 'Clinic AI Knowledge item deleted.' });
 });
 
 // Publish all or validated AI Knowledge for a specific clinic
 platformRouter.post('/clinics/:clinic_id/ai-knowledge/publish', async (req: AuthenticatedRequest, res: Response) => {
-  const { clinic_id } = req.params;
+  try {
+    const { clinic_id } = req.params;
 
-  const clinic = await ClinicService.getById(clinic_id);
-  if (!clinic) {
-    return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
+    const clinic = await ClinicService.getById(clinic_id);
+    if (!clinic) {
+      return res.status(404).json({ error: `Clinic with ID '${clinic_id}' not found.` });
+    }
+
+    const publishedItems = await KnowledgeService.publishClinicKnowledge(clinic_id, req.user!.id);
+
+    await AuditService.logAudit({
+      clinic_id,
+      actor_user_id: req.user!.id,
+      actor_name: req.user!.name,
+      action: 'CLINIC_AI_KNOWLEDGE_PUBLISHED',
+      target_type: 'CLINIC_AI_KNOWLEDGE',
+      target_id: clinic_id,
+      metadata: { published_count: publishedItems.length },
+    });
+
+    return res.json({
+      success: true,
+      message: `Successfully published ${publishedItems.length} knowledge items for ${clinic.name}.`,
+      items: publishedItems,
+    });
+  } catch (err: any) {
+    console.error('[POST /clinics/:clinic_id/ai-knowledge/publish] Error:', err);
+    return res.status(500).json({ error: err.message || 'Failed to publish clinic AI knowledge.' });
   }
-
-  const publishedItems = await KnowledgeService.publishClinicKnowledge(clinic_id, req.user!.id);
-
-  await AuditService.logAudit({
-    clinic_id,
-    actor_user_id: req.user!.id,
-    actor_name: req.user!.name,
-    action: 'CLINIC_AI_KNOWLEDGE_PUBLISHED',
-    target_type: 'CLINIC_AI_KNOWLEDGE',
-    target_id: clinic_id,
-    metadata: { published_count: publishedItems.length },
-  });
-
-  return res.json({
-    success: true,
-    message: `Successfully published ${publishedItems.length} knowledge items for ${clinic.name}.`,
-    items: publishedItems,
-  });
 });
 

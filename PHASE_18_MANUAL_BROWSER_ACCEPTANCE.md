@@ -31,7 +31,7 @@
 Use only verified, database-configured doctors for Sanjeevani Multispeciality Clinic:
 - **Primary Test Doctor**: **Dr. Raj Patel** (General Medicine / Cardiology)
 - **Alternate Test Doctor**: **Dr. Meera Joshi** (Family Medicine / Pediatrics)
-*(Do NOT use placeholder names like Dr. Vance or invent doctors not present in the database).*
+*(All tests must strictly reference verified database doctors Dr. Raj Patel or Dr. Meera Joshi).*
 
 ### 2. Synthetic Patient Profile
 To prevent exposure of personal health information (PHI), testers MUST use only this clearly synthetic test profile:
