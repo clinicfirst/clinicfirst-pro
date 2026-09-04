@@ -72,3 +72,12 @@
 - **Change Detection:** Deployed SHA-256 hash tracking; generating a snapshot will now skip database writes if the clinic's content is identical to the last version.
 - **UI Integration:** Built `KnowledgeCompilerPanel` into the AI Receptionist screen, establishing a clean workflow for Clinic Admins to preview the AI context, and Platform Admins to download the sanitized Markdown and confirm publication.
 - **Outcome:** The Phase 15 Minimum Viable Knowledge Publishing workflow is fully operational.
+
+## Phase 18: Final Live AI Receptionist Acceptance Test
+- **Target Clinic:** Sanjeevani Multispeciality Clinic (`clinic_id`: `clinic_1787923240249_cqgw`, `provider_agent_id`: `sarvam_agent_456`).
+- **Live Configuration (`GET /api/clinic/me/ai-widget-config`):** Succeeded with HTTP 200 on production (`https://clinicfirst.vercel.app`), returning strictly browser-safe configuration with zero secret exposure.
+- **Webhook & Secret Protection:** Constant-time authentication (`crypto.timingSafeEqual`) ensures webhook requests must carry the authorized bearer tool secret and isolates execution to the clinic tied to `provider_agent_id`.
+- **Live Inbound Call:** `POST /api/ai/call/start` returned HTTP 200 with an active session ID and verified greeting generated from authoritative clinic data.
+- **Tenant Isolation:** Cross-clinic requests strictly reject with HTTP 403 Forbidden.
+- **Dev Server Resilience:** Fixed development boot fallback in `server/supabaseDiff.ts` to prevent uncaught exceptions when `SUPABASE_SERVICE_ROLE_KEY` is not defined in local development environments.
+

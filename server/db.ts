@@ -643,9 +643,8 @@ class DatabaseEngine {
   }
 
   private saveDatabase(dataToSave?: DatabaseSchema) {
-    const payload = dataToSave || this.data;
-    // syncToSupabase(payload);
     if (!isOfflineMode) return;
+    const payload = dataToSave || this.data;
     try {
       this.ensureDirectory();
       fs.writeFileSync(DB_FILE, JSON.stringify(payload, null, 2), 'utf-8');
