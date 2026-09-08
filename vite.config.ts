@@ -9,6 +9,7 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+        'sarvam-convai-embed': path.resolve(__dirname, 'src/lib/sarvam/sarvam-session.ts'),
       },
     },
     server: {

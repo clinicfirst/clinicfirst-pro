@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { AlertCircle, MicOff, Sparkles, Phone, Terminal, PhoneOff, Mic } from 'lucide-react';
 import { apiRequest } from '../../api';
-import { SarvamSession } from 'sarvam-convai-embed';
+import { SarvamSession } from '../../lib/sarvam/sarvam-session';
 
 export interface SarvamConfig {
   enabled: boolean;
@@ -95,7 +95,7 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
     setCallState('connecting');
 
     try {
-      // Create session
+      // Create session using official SDK-backed SarvamSession with minimal config
       const session = new SarvamSession({
         apiKey: effectiveEmbedKey,
         orgId: effectiveOrgId,
@@ -103,9 +103,6 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
         appId: effectiveAppId,
         userId: user?.id || 'clinic-staff',
         interactionType: 'call',
-        agentVariables: {
-          user_name: user?.name || 'Staff'
-        }
       });
 
       sessionRef.current = session;
@@ -115,21 +112,30 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
         else if (state === 'connecting') setCallState('connecting');
         else if (state === 'listening') setCallState('listening');
         else if (state === 'speaking') setCallState('speaking');
+        else if (state === 'error') setCallState('error');
+      });
+
+      session.on('disconnect', () => {
+        setCallState('idle');
+      });
+
+      session.on('error', (err: any) => {
+        console.error('[SarvamVoiceWidget] Session error:', err);
+        setMicError(err?.message || 'Voice connection encountered an error.');
+        setCallState('error');
       });
 
       await session.start();
     } catch (err: any) {
-      console.error('Failed to start Sarvam session:', err);
-      if (
-        err?.name === 'NotAllowedError' ||
-        err?.name === 'NotFoundError' ||
-        err?.message?.toLowerCase().includes('microphone') ||
-        err?.toString().toLowerCase().includes('microphone')
-      ) {
-        setMicError('Microphone access is unavailable. You can continue using the clinic\'s text/contact option.');
-      } else {
-        setMicError('Failed to connect to the voice agent. Please try again later.');
-      }
+      console.error('[SarvamVoiceWidget] Failed to start Sarvam session:', {
+        name: err?.name,
+        message: err?.message,
+        stack: err?.stack,
+        error: err,
+      });
+
+      const message = err?.message || 'Failed to connect to the voice agent.';
+      setMicError(message);
       setCallState('error');
       sessionRef.current = null;
     }
