@@ -11,8 +11,117 @@ import { AiAgentService } from '../services/ai-agent.service';
 import { AiConfigService } from '../services/ai-config.service';
 import { getAvailableSlots } from '../voice/tools/get-available-slots';
 import { createAppointment, cancelAppointment } from '../voice/tools/create-appointment';
+import { requireAuth, type AuthenticatedRequest } from '../auth';
 
 export const voiceRouter = Router();
+
+// ============================================================================
+// Sarvam Level 2 App-Runtime Handshake Proxy
+//
+// Allows the browser SDK to obtain a temporary signed WebSocket URL without
+// exposing the master SARVAM_API_KEY to client-side code.
+//
+// Security & Architecture Guarantees:
+// 1. Strict Session Authentication: Requires valid Clinic-1st user JWT.
+// 2. Tenant Isolation: Only allows requests for the clinic's assigned provider_agent_id.
+// 3. Server-Only Secret: Injects process.env.SARVAM_API_KEY securely server-side.
+// 4. Short-lived Handshake: Only proxies the HTTP GET handshake (<5s timeout).
+// 5. Direct Audio: Does NOT proxy audio/WebSocket; browser connects directly to Sarvam WSS.
+// ============================================================================
+voiceRouter.get(
+  '/sarvam-proxy/orgs/:org_id/workspaces/:workspace_id/apps/:app_id/url',
+  requireAuth,
+  async (req: AuthenticatedRequest, res) => {
+    const startTime = Date.now();
+    try {
+      const { org_id, workspace_id, app_id } = req.params;
+      const clinicId = req.user?.clinic_id;
+
+      if (!clinicId) {
+        return res.status(403).json({ error: 'User does not belong to an active clinic.' });
+      }
+
+      // Verify server-side master credential
+      const sarvamApiKey = process.env.SARVAM_API_KEY;
+      if (!sarvamApiKey) {
+        return res.status(503).json({
+          error: 'SARVAM_API_KEY is not configured on the server. Please contact platform administrator.',
+        });
+      }
+
+      // Tenant Authorization: Check that app_id matches the clinic's registered AI agent
+      const agent = await AiAgentService.getAgentByClinic(clinicId);
+      if (!agent || agent.status !== 'ACTIVE' || !agent.enabled) {
+        return res.status(403).json({ error: 'AI Receptionist is not active for this clinic.' });
+      }
+
+      if (agent.provider_agent_id !== app_id) {
+        return res.status(403).json({
+          error: 'Unauthorized app_id. Cross-tenant access is strictly prohibited.',
+        });
+      }
+
+      // Check platform AI configuration
+      const isPlatformEnabled = await AiConfigService.isPlatformAiEnabled();
+      if (!isPlatformEnabled) {
+        return res.status(403).json({ error: 'Platform AI features are currently disabled.' });
+      }
+
+      // Build upstream Sarvam URL, preserving allowed query parameters
+      const upstreamBase = 'https://apps.sarvam.ai/api/app-runtime/';
+      const targetUrl = new URL(
+        `orgs/${encodeURIComponent(org_id)}/workspaces/${encodeURIComponent(workspace_id)}/apps/${encodeURIComponent(app_id)}/url`,
+        upstreamBase
+      );
+
+      // Forward query parameters passed by the SDK (e.g., interaction_type, version, user_identifier)
+      for (const [key, value] of Object.entries(req.query)) {
+        if (typeof value === 'string') {
+          targetUrl.searchParams.set(key, value);
+        }
+      }
+
+      // Execute request to Sarvam with server-only key & 5-second timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      try {
+        const upstreamResponse = await fetch(targetUrl.toString(), {
+          method: 'GET',
+          headers: {
+            'X-API-Key': sarvamApiKey,
+            Accept: 'application/json',
+          },
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        const responseData = await upstreamResponse.json().catch(() => null);
+
+        if (!upstreamResponse.ok) {
+          const status = upstreamResponse.status;
+          console.warn(`[Sarvam Handshake Proxy] Upstream returned HTTP ${status} in ${Date.now() - startTime}ms`);
+          return res.status(status).json(
+            responseData || { error: `Sarvam gateway returned HTTP ${status}` }
+          );
+        }
+
+        // Return signed WebSocket URL and reference ID to the client SDK
+        return res.json(responseData);
+      } catch (fetchErr: any) {
+        clearTimeout(timeoutId);
+        if (fetchErr.name === 'AbortError') {
+          return res.status(504).json({ error: 'Sarvam handshake request timed out after 5000ms.' });
+        }
+        throw fetchErr;
+      }
+    } catch (err: any) {
+      console.error('[Sarvam Handshake Proxy] Error:', err?.message || err);
+      return res.status(500).json({ error: 'Internal server error during voice handshake.' });
+    }
+  }
+);
 
 // Sarvam API Tool Authentication
 function getToolSecret() {

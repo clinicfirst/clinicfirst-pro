@@ -1489,28 +1489,35 @@ clinicRouter.get(
       // Demo fallbacks are strictly isolated to offline development mode.
       const isOffline = process.env.OFFLINE_MODE === 'true';
 
+      // Prioritize canonical environment variables with VITE_ fallback
       const orgId = 
-        process.env.VITE_SARVAM_ORG_ID || 
         process.env.SARVAM_ORG_ID || 
+        process.env.VITE_SARVAM_ORG_ID || 
         (isOffline ? 'demo-org-id' : '');
 
       const workspaceId = 
-        process.env.VITE_SARVAM_WORKSPACE_ID || 
         process.env.SARVAM_WORKSPACE_ID || 
+        process.env.VITE_SARVAM_WORKSPACE_ID || 
         (isOffline ? 'demo-workspace-id' : '');
 
       const embedKey = 
-        process.env.VITE_SARVAM_EMBED_KEY || 
         process.env.SARVAM_EMBED_KEY || 
+        process.env.VITE_SARVAM_EMBED_KEY || 
         (isOffline ? 'demo-embed-key' : '');
       
       const isConfigured = Boolean(
-        embedKey && 
+        (process.env.SARVAM_API_KEY || embedKey) && 
         orgId && 
         workspaceId && 
-        !embedKey.startsWith('demo-') &&
-        embedKey !== 'YOUR_SARVAM_EMBED_KEY'
+        orgId !== 'YOUR_SARVAM_ORG_ID' &&
+        workspaceId !== 'YOUR_SARVAM_WORKSPACE_ID'
       );
+
+      // Determine the handshake base URL.
+      // When SARVAM_API_KEY is present server-side, use the Clinic-1st authenticated proxy.
+      // This ensures SARVAM_API_KEY never touches the browser.
+      const useProxy = Boolean(process.env.SARVAM_API_KEY);
+      const proxyBaseUrl = '/api/voice/sarvam-proxy/';
 
       return res.json({
         enabled: true,
@@ -1519,7 +1526,9 @@ clinicRouter.get(
         appId: providerAgentId,
         orgId: orgId || null,
         workspaceId: workspaceId || null,
-        embedKey: embedKey || null,
+        embedKey: embedKey || 'session-authenticated',
+        baseUrl: useProxy ? proxyBaseUrl : undefined,
+        useProxy,
         configured: isConfigured,
       });
     } catch (err: any) {

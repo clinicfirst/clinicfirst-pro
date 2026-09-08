@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { AlertCircle, MicOff, Sparkles, Phone, Terminal, PhoneOff, Mic } from 'lucide-react';
-import { apiRequest } from '../../api';
+import { apiRequest, getStoredToken } from '../../api';
 import { SarvamSession } from '../../lib/sarvam/sarvam-session';
 
 export interface SarvamConfig {
@@ -12,6 +12,9 @@ export interface SarvamConfig {
   orgId: string;
   workspaceId: string;
   embedKey: string;
+  baseUrl?: string;
+  useProxy?: boolean;
+  configured?: boolean;
 }
 
 interface SarvamVoiceWidgetProps {
@@ -78,12 +81,10 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
   const effectiveWorkspaceId = config?.workspaceId || (import.meta.env.VITE_SARVAM_WORKSPACE_ID as string) || '';
 
   const isValidConfig = Boolean(
-    effectiveEmbedKey &&
+    (config?.configured || effectiveEmbedKey) &&
     effectiveOrgId &&
     effectiveWorkspaceId &&
     effectiveAppId &&
-    !effectiveEmbedKey.startsWith('demo-') &&
-    effectiveEmbedKey !== 'YOUR_SARVAM_EMBED_KEY' &&
     effectiveOrgId !== 'YOUR_SARVAM_ORG_ID' &&
     effectiveWorkspaceId !== 'YOUR_SARVAM_WORKSPACE_ID'
   );
@@ -95,14 +96,22 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
     setCallState('connecting');
 
     try {
-      // Create session using official SDK-backed SarvamSession with minimal config
+      // If using backend proxy, attach Clinic-1st authorization token
+      const token = getStoredToken();
+      const customHeaders = (config?.useProxy || config?.baseUrl) && token
+        ? { Authorization: `Bearer ${token}` }
+        : undefined;
+
+      // Create session using official SDK-backed SarvamSession
       const session = new SarvamSession({
-        apiKey: effectiveEmbedKey,
+        apiKey: effectiveEmbedKey || 'session-authenticated',
         orgId: effectiveOrgId,
         workspaceId: effectiveWorkspaceId,
         appId: effectiveAppId,
         userId: user?.id || 'clinic-staff',
         interactionType: 'call',
+        baseUrl: config?.baseUrl,
+        customHeaders,
       });
 
       sessionRef.current = session;

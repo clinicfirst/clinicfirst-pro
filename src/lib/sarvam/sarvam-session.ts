@@ -31,6 +31,7 @@ export interface SarvamSessionConfig {
   interactionType?: 'call' | 'text';
   agentVariables?: Record<string, any>;
   baseUrl?: string;
+  customHeaders?: Record<string, string>;
 }
 
 export type SarvamState = 'idle' | 'connecting' | 'listening' | 'speaking' | 'error';
@@ -154,6 +155,7 @@ export class SarvamSession {
         config: interactionConfig,
         audioInterface: this.audioInterface,
         baseUrl: this.config.baseUrl,
+        customHeaders: this.config.customHeaders,
         stateCallback: (agentState: AgentState) => {
           this.handleSdkStateChange(agentState);
         },
