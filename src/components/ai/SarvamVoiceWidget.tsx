@@ -71,7 +71,6 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
     if (existingScript) {
       existingScript.addEventListener('load', () => setScriptLoaded(true));
       existingScript.addEventListener('error', () => setScriptError(true));
-      setScriptLoaded(true);
       return;
     }
 
@@ -248,7 +247,8 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
               workspace-id={effectiveWorkspaceId}
               user-id={user?.id || 'clinic-staff'}
               button-text={buttonText}
-              interaction-type="voice"
+              interaction-type="call"
+              className="block w-full min-h-[60px] min-w-[200px]"
             ></sarvam-widget>
           </div>
         )}
