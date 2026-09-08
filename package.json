@@ -25,6 +25,7 @@
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "recharts": "^3.10.1",
+    "sarvam-convai-embed": "^1.0.19",
     "uuid": "^14.0.2"
   },
   "devDependencies": {
