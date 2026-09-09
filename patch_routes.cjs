@@ -1,105 +1,47 @@
 const fs = require('fs');
 
-let code = fs.readFileSync('server/routes/clinic.routes.ts', 'utf-8');
+// Patch clinic.routes.ts
+let clinic = fs.readFileSync('server/routes/clinic.routes.ts', 'utf8');
 
-// Add import
-const importStmt = "import { AppointmentService } from '../services/appointment.service';\n";
-if (!code.includes("import { AppointmentService }")) {
-  code = importStmt + code;
-}
-
-// 1. Replace POST /appointments
-code = code.replace(
-  /clinicRouter\.post\(\s*'\/appointments',\s*requireClinicPermission\('manage_appointments'\),\s*\(req: AuthenticatedRequest, res: Response\) => \{[\s\S]*?return res\.status\(201\)\.json\(\{ appointment: result\.appointment \}\);\s*\}\s*\);/,
-`clinicRouter.post(
-  '/appointments',
-  requireClinicPermission('manage_appointments'),
-  async (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const { patient_id, doctor_id, service_id, date, start_time, notes } = req.body;
-
-    const result = await AppointmentService.book(clinicId, {
-      patientId: patient_id,
-      doctorId: doctor_id,
-      serviceId: service_id,
-      date,
-      startTime: start_time,
-      notes
-    }, {
-      type: 'HUMAN_RECEPTIONIST',
-      userId: req.user!.id,
-      name: req.user!.name
-    });
-
-    if (!result.success) {
-      const status = result.error_code === 'SLOT_NO_LONGER_AVAILABLE' || result.error_code === 'VALIDATION_ERROR' ? 409 : 400;
-      return res.status(status).json({ error: result.error });
-    }
-
-    return res.status(201).json({ appointment: result.appointment });
-  }
-);`
+clinic = clinic.replace(
+  `const useProxy = Boolean(process.env.SARVAM_API_KEY);`,
+  `// Enforce proxy mode in production to prevent silent browser fallback
+      const useProxy = true;`
 );
 
-// 2. Replace PUT /appointments/:id/status
-code = code.replace(
-  /clinicRouter\.put\(\s*'\/appointments\/:id\/status',\s*requireClinicPermission\('manage_appointments'\),\s*\(req: AuthenticatedRequest, res: Response\) => \{[\s\S]*?return res\.json\(\{ appointment: result\.appointment \}\);\s*\}\s*\);/,
-`clinicRouter.put(
-  '/appointments/:id/status',
-  requireClinicPermission('manage_appointments'),
-  async (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const appointmentId = req.params.id;
-    const { status, notes } = req.body;
-
-    const result = await AppointmentService.updateStatus(clinicId, appointmentId, {
-      status,
-      notes: notes !== undefined ? notes : undefined
-    }, {
-      type: 'HUMAN_RECEPTIONIST',
-      userId: req.user!.id,
-      name: req.user!.name
-    });
-
-    if (!result.success) {
-      return res.status(400).json({ error: result.error });
-    }
-
-    return res.json({ appointment: result.appointment });
-  }
-);`
+clinic = clinic.replace(
+  `baseUrl: useProxy ? proxyBaseUrl : undefined,`,
+  `baseUrl: proxyBaseUrl,`
 );
 
-// 3. Replace POST /appointments/:id/reschedule
-code = code.replace(
-  /clinicRouter\.post\(\s*'\/appointments\/:id\/reschedule',\s*requireClinicPermission\('manage_appointments'\),\s*\(req: AuthenticatedRequest, res: Response\) => \{[\s\S]*?return res\.json\(\{ appointment: result\.appointment \}\);\s*\}\s*\);/,
-`clinicRouter.post(
-  '/appointments/:id/reschedule',
-  requireClinicPermission('manage_appointments'),
-  async (req: AuthenticatedRequest, res: Response) => {
-    const clinicId = getAuthClinicId(req);
-    const appointmentId = req.params.id;
-    const { newDate, newStartTime, reason } = req.body;
-
-    const result = await AppointmentService.reschedule(clinicId, appointmentId, {
-      newDate,
-      newStartTime,
-      reason
-    }, {
-      type: 'HUMAN_RECEPTIONIST',
-      userId: req.user!.id,
-      name: req.user!.name
-    });
-
-    if (!result.success) {
-      const status = result.error_code === 'SLOT_NO_LONGER_AVAILABLE' || result.error_code === 'VALIDATION_ERROR' ? 409 : 400;
-      return res.status(status).json({ error: result.error });
-    }
-
-    return res.json({ appointment: result.appointment });
-  }
-);`
+// Diagnostic log inside clinic config
+clinic = clinic.replace(
+  `return res.json({`,
+  `console.log('[AI Widget Config] VERCEL_ENV:', process.env.VERCEL_ENV, 'SARVAM_API_KEY exists:', Boolean(process.env.SARVAM_API_KEY));
+      
+      return res.json({`
 );
 
-fs.writeFileSync('server/routes/clinic.routes.ts', code);
-console.log("Routes patched");
+fs.writeFileSync('server/routes/clinic.routes.ts', clinic);
+
+// Patch voice.routes.ts
+let voice = fs.readFileSync('server/routes/voice.routes.ts', 'utf8');
+
+const diagLog = `
+      console.log(\`[Sarvam Proxy Diagnostics]\`);
+      console.log(\`  - VERCEL_ENV: \${process.env.VERCEL_ENV || 'unknown'}\`);
+      console.log(\`  - NODE_ENV: \${process.env.NODE_ENV}\`);
+      console.log(\`  - SARVAM_API_KEY exists: \${Boolean(sarvamApiKey)}\`);
+      console.log(\`  - SARVAM_ORG_ID exists: \${Boolean(process.env.SARVAM_ORG_ID)}\`);
+      console.log(\`  - SARVAM_WORKSPACE_ID exists: \${Boolean(process.env.SARVAM_WORKSPACE_ID)}\`);
+      console.log(\`  - Requested Clinic: \${clinicId}\`);
+      console.log(\`  - Requested App/Agent: \${app_id}\`);
+`;
+
+voice = voice.replace(
+  `// Verify server-side master credential`,
+  diagLog + `\n      // Verify server-side master credential`
+);
+
+fs.writeFileSync('server/routes/voice.routes.ts', voice);
+console.log('Patched routes.');

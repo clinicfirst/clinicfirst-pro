@@ -41,6 +41,16 @@ voiceRouter.get(
         return res.status(403).json({ error: 'User does not belong to an active clinic.' });
       }
 
+      
+      console.log(`[Sarvam Proxy Diagnostics]`);
+      console.log(`  - VERCEL_ENV: ${process.env.VERCEL_ENV || 'unknown'}`);
+      console.log(`  - NODE_ENV: ${process.env.NODE_ENV}`);
+      console.log(`  - SARVAM_API_KEY exists: ${Boolean(process.env.SARVAM_API_KEY)}`);
+      console.log(`  - SARVAM_ORG_ID exists: ${Boolean(process.env.SARVAM_ORG_ID)}`);
+      console.log(`  - SARVAM_WORKSPACE_ID exists: ${Boolean(process.env.SARVAM_WORKSPACE_ID)}`);
+      console.log(`  - Requested Clinic: ${clinicId}`);
+      console.log(`  - Requested App/Agent: ${app_id}`);
+
       // Verify server-side master credential
       const sarvamApiKey = process.env.SARVAM_API_KEY;
       if (!sarvamApiKey) {

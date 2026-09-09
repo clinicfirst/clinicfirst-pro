@@ -63,7 +63,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "58cf602b9df079a8cb8675dc72e485b3:8bd81abdd9a4ee8d0a4c75fc45e02ae2f1a766490fa1c9e0c6ba216341fa4a52465d52c82430f49a656bfdca032cf8f8532b0649d63e972f31ac8f6d0ea7a22f"
+      "password_hash": "cfa4f5e0a8a4ea5e932618ce15bd3d07:2144446976d2efdea83e892e6e5406c9e8bb40e51d4eeb2e45458cf0cccde5b2258cd94ebf727032a07505492dbb67b3fe0af51b23faef10ab948a923ae4f918"
     },
     {
       "id": "usr_platform_admin_2",
@@ -75,7 +75,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "a956c051940411796bdadd5321b7419f:85c438034d7a02c88b750276b4d90dcd28abeff4562add3d7c53dccaaf765bbcfc97cb33eca0fd63f001362531b1b89a60c141c115f5652efd0bcc5258805d7e"
+      "password_hash": "cfa45b7836ae8d4164d615bcd1ae4657:9975c04b0b1b6d74fc74039911305fddc35ae284cd1921082505c34fb6da1600457260d385368747c4d5d9045f8ec38836eb0a095a222de9c42b6d31ebab3278"
     },
     {
       "id": "usr_apex_admin_1",
@@ -87,7 +87,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "a51e13a5418bb6cbae2db1410648d0f9:1d51be54343a467d87a337ac88782271a852f61e1250bb667db7c496257d78fe1dbeaa813923a2d62f683dca2216ecd7e4b0e5ab6deccb53d7ae2ebb6ecc8429"
+      "password_hash": "f3119945e19e886772b4d56fcbd34562:3e3f3495a79cb67fb61ee8d65bc45337da2682d8c3f1e5cfa71431551028aef2dad9b9fbda8000408d275d11fe220f31972217c54cc16b7a039a23e271063c3b"
     },
     {
       "id": "usr_apex_staff_1",
@@ -99,7 +99,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "8204e2cf66ba7bc1b64b17267366f946:0fa3fc763c9d081b070b33f2f1acdeb0def8bbc868912f9e45381c974dd4ee149f0f038884d16561fb80037a26fcfef02dae52dc6a5b9229808285980f4cfb1a"
+      "password_hash": "f4eabd0f374975a9fc34eb9cca01340f:9952d8155e48763253db1e1069ec49ccc1a29de73276ea87f5ce1d2d0e908bb9c0532744fa66008c54ffbef79ebf107366d28b7c5d1a625ec5f9901dd08e2abf"
     },
     {
       "id": "usr_apex_admin_legacy",
@@ -111,7 +111,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "53e11ebae0d9790f906e7624323a8394:5bcd1fc94688a31f39fa403adf4808760f065a7e1dc38ef01717b0253bf1d622fa3f901083792c8e1ee7ddb549fa5afbd914393125e22fe2a05bfaa02e0f3cf7"
+      "password_hash": "a1b998341d606b938ac603215ff091f9:59ce9d79e3df3c943c04fec8e611cbeab6777def313e1b7b1ebfef3cfd6f2f804273e57d04e6e03487fe41f8178df58fbf06ed4c90566a34b781b02e0998c896"
     },
     {
       "id": "usr_apex_staff_legacy",
@@ -123,7 +123,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "3c70527e79d5d8862d9a8c75428efe7e:4c1f9931a7692d4a34c7e39a4c959bc45199201991b7d22dc02e86c39b0a0283038b8e6696c2cda813e1c052fb03ae45135eedbb193f44a113022c9e2e11f689"
+      "password_hash": "71c09fb6d383e541b3fe3ea604759966:4ffc7075b31be1b332eb42082b3536471d67fe2520233bde29949914467e9bcd5964265c9015ef8221c872565329b95fb88021833ecf123fd9308cfaceec979e"
     },
     {
       "id": "usr_doc_elena_1",
@@ -878,6 +878,26 @@
       },
       "id": "audit_1788526666468_pzx3m",
       "created_at": "2026-09-04T12:57:46.468Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1788934578701_886gp",
+      "created_at": "2026-09-09T06:16:18.701Z"
+    },
+    {
+      "clinic_id": "clinic_apex_101",
+      "actor_user_id": "usr_apex_admin_1",
+      "actor_name": "Dr. Arthur Pendelton",
+      "action": "CLINIC_USER_LOGIN",
+      "target_type": "USER",
+      "target_id": "usr_apex_admin_1",
+      "id": "audit_1788934582588_m1j2s",
+      "created_at": "2026-09-09T06:16:22.588Z"
     }
   ],
   "calls": [

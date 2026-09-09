@@ -493,7 +493,7 @@ clinicRouter.get(
       };
     }
 
-    return res.json({
+      return res.json({
       clinic,
       date: today,
       metrics: {
@@ -645,7 +645,7 @@ clinicRouter.get(
       }
     }
 
-    return res.json({
+          return res.json({
       date: today,
       currency_symbol: clinic?.currency_symbol || '$',
       currency: clinic?.currency || 'USD',
@@ -680,7 +680,7 @@ clinicRouter.get(
       if (req.user?.role === 'DOCTOR') {
         doctors = doctors.filter(d => d.id === req.user.doctor_id);
       }
-      return res.json({ doctors });
+            return res.json({ doctors });
     } catch (err: any) {
       console.error('[GET /doctors] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to fetch doctors.' });
@@ -758,7 +758,7 @@ clinicRouter.put(
         metadata: updates,
       });
 
-      return res.json({ doctor: result.doctor });
+            return res.json({ doctor: result.doctor });
     } catch (err: any) {
       console.error('[PUT /doctors/:id] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to update doctor.' });
@@ -776,7 +776,7 @@ clinicRouter.get(
     try {
       const clinicId = getAuthClinicId(req);
       const staff = await StaffService.listStaff(clinicId);
-      return res.json({ staff });
+            return res.json({ staff });
     } catch (err: any) {
       console.error('[GET /staff] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to fetch staff.' });
@@ -856,7 +856,7 @@ clinicRouter.put(
         metadata: updates,
       });
 
-      return res.json({ staff: result.user });
+            return res.json({ staff: result.user });
     } catch (err: any) {
       console.error('[PUT /staff/:id] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to update staff member.' });
@@ -897,7 +897,7 @@ clinicRouter.post(
         metadata: { target_email: targetUser.email },
       });
 
-      return res.json({ success: true, message: 'Temporary password reset successfully.' });
+            return res.json({ success: true, message: 'Temporary password reset successfully.' });
     } catch (err: any) {
       console.error('[POST /staff/:id/reset-password] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to reset password.' });
@@ -916,7 +916,7 @@ clinicRouter.get(
       const clinicId = getAuthClinicId(req);
       const doctorId = req.user?.role === 'DOCTOR' ? req.user.doctor_id : undefined;
       const services = await ServiceService.list(clinicId, { doctorId });
-      return res.json({ services });
+            return res.json({ services });
     } catch (err: any) {
       console.error('[GET /api/clinic/services] Error:', err);
       return res.status(500).json({ error: err.message || 'Failed to fetch services.' });
@@ -993,7 +993,7 @@ clinicRouter.put(
         metadata: updates,
       });
 
-      return res.json({ service: result.service });
+            return res.json({ service: result.service });
     } catch (err: any) {
       console.error('[PUT /api/clinic/services/:id] Error:', err);
       return res.status(500).json({ error: err.message || 'Failed to update service.' });
@@ -1017,7 +1017,7 @@ clinicRouter.get(
         LeaveService.list(clinicId, doctorId),
       ]);
 
-      return res.json({ schedules, leaves });
+            return res.json({ schedules, leaves });
     } catch (err: any) {
       console.error('[GET /schedules] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to retrieve schedules and leaves.' });
@@ -1063,7 +1063,7 @@ clinicRouter.post(
         metadata: result.schedule,
       });
 
-      return res.json({ schedule: result.schedule });
+            return res.json({ schedule: result.schedule });
     } catch (err: any) {
       console.error('[POST /schedules] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to save schedule.' });
@@ -1099,7 +1099,7 @@ clinicRouter.delete(
         metadata: { doctor_id: doctorId, day_of_week: Number(dayOfWeek) },
       });
 
-      return res.json({ success: true });
+            return res.json({ success: true });
     } catch (err: any) {
       console.error('[DELETE /schedules] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to delete schedule.' });
@@ -1174,7 +1174,7 @@ clinicRouter.delete(
         target_id: leaveId,
       });
 
-      return res.json({ success: true });
+            return res.json({ success: true });
     } catch (err: any) {
       console.error('[DELETE /leaves/:id] Error:', err);
       return res.status(500).json({ error: err?.message || 'Failed to delete leave record.' });
@@ -1198,7 +1198,7 @@ clinicRouter.get(
         const myPatientIds = new Set((await AppointmentService.list(clinicId, { doctor_id: req.user.doctor_id })).map(a => a.patient_id));
         patients = patients.filter(p => myPatientIds.has(p.id));
       }
-      return res.json({ patients });
+            return res.json({ patients });
     } catch (err: any) {
       console.error('[GET /patients] Error:', err);
       return res.status(500).json({ error: 'Failed to retrieve patients.' });
@@ -1222,7 +1222,7 @@ clinicRouter.get(
       const appointments = (await AppointmentService.list(clinicId, )).filter((a) => a.patient_id === patientId);
       const calls = (await CallService.listCalls(clinicId)).filter((c) => c.patient_id === patientId);
 
-      return res.json({ patient, appointments, calls });
+            return res.json({ patient, appointments, calls });
     } catch (err: any) {
       console.error('[GET /patients/:id] Error:', err);
       return res.status(500).json({ error: 'Failed to retrieve patient details.' });
@@ -1293,7 +1293,7 @@ clinicRouter.put(
         return res.status(500).json({ error: result.error || 'Failed to update patient.' });
       }
 
-      return res.json({ patient: result.patient });
+            return res.json({ patient: result.patient });
     } catch (err: any) {
       console.error('[PUT /patients/:id] Error:', err);
       return res.status(500).json({ error: 'Failed to update patient.' });
@@ -1344,7 +1344,7 @@ clinicRouter.get(
         service: apt.service || serviceMap.get(apt.service_id) || undefined,
       }));
 
-      return res.json({ appointments });
+            return res.json({ appointments });
     } catch (err: any) {
       console.error('[GET /appointments] Error:', err);
       return res.status(500).json({ error: 'Failed to retrieve appointments.' });
@@ -1422,7 +1422,7 @@ clinicRouter.put(
       return res.status(400).json({ error: result.error });
     }
 
-    return res.json({ appointment: result.appointment });
+          return res.json({ appointment: result.appointment });
   }
 );
 
@@ -1449,7 +1449,7 @@ clinicRouter.post(
       return res.status(status).json({ error: result.error });
     }
 
-    return res.json({ appointment: result.appointment });
+          return res.json({ appointment: result.appointment });
   }
 );
 
@@ -1516,10 +1516,12 @@ clinicRouter.get(
       // Determine the handshake base URL.
       // When SARVAM_API_KEY is present server-side, use the Clinic-1st authenticated proxy.
       // This ensures SARVAM_API_KEY never touches the browser.
-      const useProxy = Boolean(process.env.SARVAM_API_KEY);
+      // Enforce proxy mode in production to prevent silent browser fallback
+      const useProxy = true;
       const proxyBaseUrl = '/api/voice/sarvam-proxy/';
+      console.log(`[AI Widget Config] VERCEL_ENV: ${process.env.VERCEL_ENV}, SARVAM_API_KEY exists: ${Boolean(process.env.SARVAM_API_KEY)}`);
 
-      return res.json({
+            return res.json({
         enabled: true,
         clinic_id: clinicId,
         provider_agent_id: providerAgentId,
@@ -1527,7 +1529,7 @@ clinicRouter.get(
         orgId: orgId || null,
         workspaceId: workspaceId || null,
         embedKey: embedKey || 'session-authenticated',
-        baseUrl: useProxy ? proxyBaseUrl : undefined,
+        baseUrl: proxyBaseUrl,
         useProxy,
         configured: isConfigured,
       });
@@ -1548,7 +1550,7 @@ clinicRouter.get(
       const today = new Date().toISOString().split('T')[0];
       const callsToday = (await CallService.listCalls(clinicId)).filter((c) => c.created_at.startsWith(today)).length;
 
-      return res.json({
+            return res.json({
         agent,
         callsTodayCount: callsToday,
       });
@@ -1664,7 +1666,7 @@ clinicRouter.put(
         metadata: { voice_provider: saved.voice_provider, status: saved.status },
       });
 
-      return res.json({ agent: saved });
+            return res.json({ agent: saved });
     } catch (err: any) {
       console.error('[PUT /ai-agent] Error:', err);
       return res.status(500).json({ error: 'Failed to update AI Receptionist configuration.' });
@@ -1684,7 +1686,7 @@ clinicRouter.get(
     if (req.user?.role === 'DOCTOR') {
       calls = calls.filter(c => c.doctor_id === req.user.doctor_id);
     }
-    return res.json({ calls });
+          return res.json({ calls });
   }
 );
 
@@ -1694,7 +1696,7 @@ clinicRouter.get(
   async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const escalations = await EscalationService.listEscalations(clinicId);
-    return res.json({ escalations });
+          return res.json({ escalations });
   }
 );
 
@@ -1719,7 +1721,7 @@ clinicRouter.put(
       target_id: escalationId,
     });
 
-    return res.json({ escalation: resolved });
+          return res.json({ escalation: resolved });
   }
 );
 
@@ -1732,7 +1734,7 @@ clinicRouter.get(
   async (req: AuthenticatedRequest, res: Response) => {
     const clinicId = getAuthClinicId(req);
     const logs = await AuditService.listAuditLogs(clinicId);
-    return res.json({ logs });
+          return res.json({ logs });
   }
 );
 
@@ -1752,7 +1754,7 @@ clinicRouter.get(
       search: search as string,
     });
 
-    return res.json({
+          return res.json({
       clinic_id: clinicId,
       items,
       total: items.length,
