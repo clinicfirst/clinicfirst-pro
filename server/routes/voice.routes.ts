@@ -59,13 +59,45 @@ voiceRouter.get(
         });
       }
 
+      // Safe Diagnostic Pre-flight Validation
+      const isUuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const keyLooksLikeUuid = isUuidPattern.test(sarvamApiKey.trim());
+      const keyHasWhitespace = /\s/.test(sarvamApiKey);
+      
+      console.log(`[Sarvam Handshake Proxy] Diagnostic Check:`);
+      console.log(`  - VERCEL_ENV: ${process.env.VERCEL_ENV || 'local'}`);
+      console.log(`  - sarvamApiKeyExists: true`);
+      console.log(`  - sarvamApiKeyLength: ${sarvamApiKey.length}`);
+      console.log(`  - sarvamApiKeyLooksLikeUuid: ${keyLooksLikeUuid}`);
+      console.log(`  - sarvamApiKeyHasWhitespace: ${keyHasWhitespace}`);
+      console.log(`  - authHeaderName: X-API-Key`);
+      console.log(`  - orgIdPresent: ${Boolean(org_id)}`);
+      console.log(`  - workspaceIdPresent: ${Boolean(workspace_id)}`);
+      console.log(`  - clinicId: ${clinicId}`);
+      
+      // If the API key is 36 characters and explicitly looks like a UUID, we log a strong warning, 
+      // but let it proceed just in case Sarvam uses UUIDs for some keys. However, we format a specific local error if it fails later.
+      if (keyLooksLikeUuid && sarvamApiKey.length === 36) {
+         console.warn(`[Sarvam Handshake Proxy] WARNING: SARVAM_API_KEY looks like a UUID (length 36). Ensure you are using the true API Subscription Key, NOT a workspace or org ID.`);
+      }
+
+      if (keyHasWhitespace) {
+         return res.status(503).json({
+           error: 'SARVAM_API_KEY contains unexpected whitespace. Please check Vercel environment variables.'
+         });
+      }
+
       // Tenant Authorization: Check that app_id matches the clinic's registered AI agent
       const agent = await AiAgentService.getAgentByClinic(clinicId);
       if (!agent || agent.status !== 'ACTIVE' || !agent.enabled) {
         return res.status(403).json({ error: 'AI Receptionist is not active for this clinic.' });
       }
+      console.log(`  - providerAgentId: ${agent.provider_agent_id}`);
+      console.log(`  - providerAgentIdLength: ${agent.provider_agent_id?.length}`);
+
 
       if (agent.provider_agent_id !== app_id) {
+        console.warn(`[Sarvam Handshake Proxy] App ID mismatch: Requested ${app_id} but DB has ${agent.provider_agent_id}`);
         return res.status(403).json({
           error: 'Unauthorized app_id. Cross-tenant access is strictly prohibited.',
         });
@@ -148,6 +180,130 @@ function fuzzyMatch(str1: string, str2: string) {
   return str1.toLowerCase().replace(/[^a-z0-9]/g, '').includes(str2.toLowerCase().replace(/[^a-z0-9]/g, '')) ||
          str2.toLowerCase().replace(/[^a-z0-9]/g, '').includes(str1.toLowerCase().replace(/[^a-z0-9]/g, ''));
 }
+
+
+// ============================================================================
+// Sarvam Tool: CHECK AVAILABILITY
+// Path: POST /api/voice/availability/:provider_agent_id
+// ============================================================================
+voiceRouter.post('/availability/:provider_agent_id', async (req, res) => {
+  try {
+    const { provider_agent_id } = req.params;
+    const toolSecret = getToolSecret();
+
+    // 1. Validate Secret (Server-to-Server)
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ success: false, error: 'Missing or invalid Authorization header' });
+    }
+    const token = authHeader.split(' ')[1];
+
+    if (!toolSecret) {
+      return res.status(403).json({ success: false, error: 'Tool secret is not configured' });
+    }
+
+    try {
+      const tokenBuffer = Buffer.from(token);
+      const secretBuffer = Buffer.from(toolSecret);
+
+      if (tokenBuffer.length !== secretBuffer.length || !crypto.timingSafeEqual(tokenBuffer, secretBuffer)) {
+        return res.status(403).json({ success: false, error: 'Invalid tool secret' });
+      }
+    } catch (e) {
+      return res.status(403).json({ success: false, error: 'Invalid tool secret format' });
+    }
+
+    // 2. Resolve Tenant (Agent -> Clinic)
+    const agent = await AiAgentService.getAgentByProviderAgentId(provider_agent_id);
+    if (!agent) {
+      return res.status(404).json({ success: false, error: 'Agent not found for this provider_agent_id' });
+    }
+
+    const isPlatformEnabled = await AiConfigService.isPlatformAiEnabled();
+    if (!isPlatformEnabled) {
+      return res.status(403).json({ success: false, error: 'Platform AI features are currently disabled.' });
+    }
+
+    if (agent.status !== 'ACTIVE' && agent.status !== 'TESTING') {
+       return res.status(403).json({ success: false, error: 'This AI Receptionist is currently disabled.' });
+    }
+
+    const clinic_id = agent.clinic_id;
+
+    // 3. Extract inputs
+    const { doctor, service, date, preferred_time } = req.body;
+    
+    if (!date) {
+      return res.status(400).json({ success: false, error: 'Date (YYYY-MM-DD) is required to check availability.' });
+    }
+
+    let resolvedServiceId: string | undefined = undefined;
+    let resolvedDoctorId: string | undefined = undefined;
+
+    // Resolve service by name within the clinic
+    if (service && typeof service === 'string') {
+      const services = await ServiceService.list(clinic_id, { status: 'ACTIVE' });
+      const matches = services.filter(s => fuzzyMatch(s.name, service) && s.status === 'ACTIVE');
+      if (matches.length === 1) {
+        resolvedServiceId = matches[0].id;
+      } else if (matches.length > 1) {
+        return res.json({ success: false, error: `Multiple services matched "${service}". Please clarify.`, slots: [] });
+      } else {
+        return res.json({ success: false, error: `Service "${service}" not found at this clinic.`, slots: [] });
+      }
+    }
+
+    // Resolve doctor by name within the clinic
+    if (doctor && typeof doctor === 'string') {
+      const doctors = await DoctorService.list(clinic_id, { status: 'ACTIVE' });
+      const matches = doctors.filter(d => fuzzyMatch(d.name, doctor) && d.status === 'ACTIVE');
+      if (matches.length === 1) {
+        resolvedDoctorId = matches[0].id;
+      } else if (matches.length > 1) {
+        return res.json({ success: false, error: `Multiple doctors matched "${doctor}". Please clarify.`, slots: [] });
+      } else {
+        return res.json({ success: false, error: `Doctor "${doctor}" not found at this clinic.`, slots: [] });
+      }
+    }
+
+    // 4. Delegate to the authoritative scheduling logic
+    const slotsResponse = await getAvailableSlots(clinic_id, {
+      doctorId: resolvedDoctorId,
+      serviceId: resolvedServiceId,
+      date: date // YYYY-MM-DD
+    });
+
+    if (slotsResponse.error) {
+      return res.json({ success: false, error: slotsResponse.error, slots: [] });
+    }
+
+    let slots = slotsResponse.slots || [];
+
+    // Optional: filter by preferred_time if requested, or just return top slots
+    // Actually, getAvailableSlots handles limiting to top slots.
+
+    return res.json({
+      success: true,
+      clinic_id: clinic_id,
+      available: slotsResponse.available,
+      date: slotsResponse.date,
+      reason: slotsResponse.reason,
+      total_slots_found: slotsResponse.total_slots_found,
+      slots: slots.map(s => ({
+        doctor_id: s.doctorId,
+        doctor_name: s.doctorName,
+        service_id: resolvedServiceId,
+        date: slotsResponse.date,
+        start_time: s.time,
+        end_time: s.endTime
+      }))
+    });
+
+  } catch (error: any) {
+    console.error('[Sarvam Tool: Check Availability] Error:', error);
+    return res.status(500).json({ success: false, error: 'Internal server error processing availability.' });
+  }
+});
 
 voiceRouter.post('/webhook/sarvam/:provider_agent_id', async (req, res) => {
   try {

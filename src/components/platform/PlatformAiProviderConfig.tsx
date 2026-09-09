@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, Key, CheckCircle2, AlertCircle, RefreshCw, Trash2, Cpu, Volume2, ShieldCheck, Zap } from 'lucide-react';
+import { Bot, Key, CheckCircle2, AlertCircle, RefreshCw, Trash2, Cpu, Volume2, ShieldCheck, Zap, Copy, KeySquare } from 'lucide-react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
@@ -32,6 +32,25 @@ export const PlatformAiProviderConfig: React.FC<PlatformAiProviderConfigProps> =
   const [voiceName, setVoiceName] = useState(config.voice_name || 'Zephyr');
   const [temperature, setTemperature] = useState(config.temperature ?? 0.2);
   const [status, setStatus] = useState(config.status || 'ACTIVE');
+
+    const [generatedSecret, setGeneratedSecret] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const generateToolSecret = () => {
+    const array = new Uint8Array(32);
+    window.crypto.getRandomValues(array);
+    const hex = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+    setGeneratedSecret(`Bearer ${hex}`);
+    setCopied(false);
+  };
+
+  const copyToClipboard = async () => {
+    if (generatedSecret) {
+      await navigator.clipboard.writeText(generatedSecret);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    }
+  };
 
   const handleSaveConfig = async (overrideParams?: Partial<PlatformAiConfig> & { new_api_key?: string; remove_api_key?: boolean }) => {
     setSaving(true);
@@ -383,7 +402,63 @@ export const PlatformAiProviderConfig: React.FC<PlatformAiProviderConfigProps> =
             </Button>
           </div>
         </Card>
-      </div>
+      
+      {/* Sarvam Tool Authentication Secret Generator */}
+      <Card className="p-5 mt-6 border-[#0A2540]/20 bg-blue-50/30">
+        <div className="flex items-start gap-3">
+          <div className="p-2 bg-[#0A2540]/10 rounded-md text-[#0A2540] shrink-0">
+            <KeySquare className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold text-[#0A0A0A]">Sarvam HTTP Tool Secret Generator</h3>
+            <p className="text-[12px] text-gray-600 mt-1 max-w-3xl leading-relaxed break-words">
+              Use this utility to generate a cryptographically secure <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-800 break-all">CLINICFIRST_AI_TOOL_SECRET</code>. 
+              You must copy the generated value below and add it to your <strong>Vercel Environment Variables</strong>. 
+              Then, paste the exact same value into the <strong>Authorization Header</strong> of your Sarvam HTTP Tool configuration.
+            </p>
+
+            <div className="mt-4 flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <Button 
+                  type="button" 
+                  onClick={generateToolSecret}
+                  className="bg-[#0A2540] text-white hover:bg-[#071b30] text-xs h-9"
+                >
+                  Generate New Secret Key
+                </Button>
+              </div>
+
+              {generatedSecret && (
+                <div className="bg-white border border-gray-300 rounded-md p-3 max-w-2xl flex items-center gap-3 shadow-sm overflow-hidden">
+                  <div className="flex-1 overflow-x-auto font-mono text-[13px] text-gray-800 tracking-tight whitespace-nowrap min-w-0 scrollbar-hide">
+                    {generatedSecret}
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={copyToClipboard}
+                    className="shrink-0 h-8 flex items-center gap-1.5"
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-emerald-700">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-gray-600" />
+                        <span className="text-gray-700">Copy to Clipboard</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </Card>
+
+</div>
     </div>
   );
 };
