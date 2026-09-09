@@ -110,6 +110,10 @@ voiceRouter.get(
         const responseData = await upstreamResponse.json().catch(() => null);
 
         if (!upstreamResponse.ok) {
+          console.log(`[Sarvam Handshake Proxy] UPSTREAM ERROR ${upstreamResponse.status}: `, responseData);
+          console.log(`[Sarvam Handshake Proxy] URL was: ${targetUrl.toString()}`);
+          console.log(`[Sarvam Handshake Proxy] Key length: ${sarvamApiKey ? sarvamApiKey.length : 0}`);
+          console.log(`[Sarvam Handshake Proxy] UPSTREAM ERROR ${upstreamResponse.status}: `, responseData);
           const status = upstreamResponse.status;
           console.warn(`[Sarvam Handshake Proxy] Upstream returned HTTP ${status} in ${Date.now() - startTime}ms`);
           return res.status(status).json(

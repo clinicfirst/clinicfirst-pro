@@ -296,7 +296,7 @@ export class SarvamSession {
     }
 
     if (err instanceof AuthenticationError || message.includes('401') || message.toLowerCase().includes('authentication failed')) {
-      const error = new Error('Authentication failed. Sarvam rejected the embed key. Please check your credentials.');
+      const error = new Error('Authentication failed. Sarvam rejected the API key. Please check your credentials.');
       error.name = 'SarvamAuthFailed';
       return error;
     }
