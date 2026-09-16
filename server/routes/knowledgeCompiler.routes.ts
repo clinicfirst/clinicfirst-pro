@@ -1,4 +1,5 @@
 import { KnowledgeService } from "../services/knowledge.service";
+import { RagService } from "../services/rag.service";
 import { supabase } from '../supabaseDiff';
 import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
@@ -386,6 +387,14 @@ knowledgeCompilerRouter.post('/:clinic_id/releases/:releaseId/publish', requireA
 
     const publishedBy = (req as any).user?.id || 'system';
     await KnowledgeService.updateKnowledgeReleaseStatus(clinic_id, releaseId, 'PUBLISHED', publishedBy);
+
+    // Phase 1C: Index for RAG
+    try {
+      await RagService.indexRelease(clinic_id, releaseId, content);
+    } catch (ragErr) {
+      console.error('[knowledgeCompilerRouter] RAG Indexing failed, but release was published:', ragErr);
+      // We don't fail the publishing request if RAG indexing temporarily fails
+    }
     
     res.json({ success: true });
   } catch (err: any) {

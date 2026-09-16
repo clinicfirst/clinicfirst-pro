@@ -2,6 +2,7 @@ import { getClinicInfo } from './get-clinic-info';
 import { getPatientByPhone, createPatient } from './get-patient-by-phone';
 import { getClinicDoctors, getClinicServices } from './get-clinic-doctors';
 import { getAvailableSlots } from './get-available-slots';
+import { searchClinicKnowledge } from './search-knowledge';
 import {
   createAppointment,
   rescheduleAppointment,
@@ -190,6 +191,8 @@ export async function executeVoiceTool(clinicId: string, name: string, args: Rec
         return await cancelAppointment(clinicId, args as any);
       case 'escalateToStaff':
         return await escalateToStaff(clinicId, args as any);
+      case 'searchClinicKnowledge':
+        return await searchClinicKnowledge(clinicId, args as any);
       default:
         return { error: `Tool ${name} is not recognized.` };
     }
