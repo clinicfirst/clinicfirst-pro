@@ -1,5 +1,6 @@
 import { KnowledgeService } from "../services/knowledge.service";
 import { RagService } from "../services/rag.service";
+import { RagIndexingService } from "../services/rag";
 import { supabase } from '../supabaseDiff';
 import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
@@ -388,12 +389,20 @@ knowledgeCompilerRouter.post('/:clinic_id/releases/:releaseId/publish', requireA
     const publishedBy = (req as any).user?.id || 'system';
     await KnowledgeService.updateKnowledgeReleaseStatus(clinic_id, releaseId, 'PUBLISHED', publishedBy);
 
-    // Phase 1C: Index for RAG
+    // Phase 1C: Index for RAG (V1 Production)
     try {
       await RagService.indexRelease(clinic_id, releaseId, content);
     } catch (ragErr) {
-      console.error('[knowledgeCompilerRouter] RAG Indexing failed, but release was published:', ragErr);
+      console.error('[knowledgeCompilerRouter] RAG V1 Indexing failed, but release was published:', ragErr);
       // We don't fail the publishing request if RAG indexing temporarily fails
+    }
+
+    // Phase 2C: Controlled RAG Migration - Dual Indexing Pipeline (V2 Candidate)
+    // Non-blocking candidate build. Zero production retrieval cutover.
+    try {
+      await RagIndexingService.indexReleaseV2(clinic_id, releaseId, content);
+    } catch (ragV2Err) {
+      console.error('[knowledgeCompilerRouter] RAG V2 Dual Indexing failed (non-blocking candidate build):', ragV2Err);
     }
     
     res.json({ success: true });

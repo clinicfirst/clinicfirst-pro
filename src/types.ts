@@ -560,6 +560,42 @@ export interface ClinicKnowledgeRelease {
   published_by?: string;
 }
 
+export type RagIndexStatus = 'BUILDING' | 'VALIDATING' | 'READY' | 'ACTIVE' | 'SUPERSEDED' | 'ROLLBACK' | 'FAILED';
+
+export interface ClinicRagIndex {
+  id: string;
+  clinic_id: string;
+  release_id: string;
+  representation_version: string;
+  embedding_model: string;
+  embedding_dimension: number;
+  retrieval_threshold: number;
+  content_hash: string;
+  status: RagIndexStatus;
+  is_active: boolean;
+  total_chunks: number;
+  embedded_chunks: number;
+  validation_report?: any;
+  error_message?: string;
+  created_at: string;
+  validated_at?: string;
+  activated_at?: string;
+  rolled_back_at?: string;
+}
+
+export interface ClinicRagChunk {
+  id: string;
+  index_id: string;
+  clinic_id: string;
+  chunk_index: number;
+  chunk_title: string;
+  chunk_text: string;
+  embedding_input: string;
+  chunk_content_hash: string;
+  embedding: number[];
+  created_at: string;
+}
+
 
 declare global {
   namespace JSX {

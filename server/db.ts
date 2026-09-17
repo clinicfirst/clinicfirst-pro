@@ -25,6 +25,8 @@ import {
   ClinicKnowledgeItem,
   ClinicAiTool,
   ClinicKnowledgeRelease,
+  ClinicRagIndex,
+  ClinicRagChunk,
 } from '../src/types';
 
 interface DatabaseSchema {
@@ -45,6 +47,8 @@ interface DatabaseSchema {
   clinic_knowledge_base?: ClinicKnowledgeItem[];
   clinic_ai_tools?: ClinicAiTool[];
   clinic_knowledge_releases?: ClinicKnowledgeRelease[];
+  clinic_rag_indices?: ClinicRagIndex[];
+  clinic_rag_chunks?: ClinicRagChunk[];
 }
 
 const IS_VERCEL = Boolean(process.env.VERCEL) || Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -937,6 +941,7 @@ class DatabaseEngine {
         email: 'urgent@apexclinic.com',
       },
       instructions_note: 'Please keep responses concise and clear, speak politely, and verify patient details before confirming.',
+      provider_agent_id: 'sarvam_agent_apex_1',
       enabled: true,
     };
 

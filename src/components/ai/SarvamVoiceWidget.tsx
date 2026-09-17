@@ -32,7 +32,7 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
   const [micError, setMicError] = useState<string | null>(null);
   const [config, setConfig] = useState<SarvamConfig | null>(null);
   const [configLoading, setConfigLoading] = useState(true);
-  const [configError, setConfigError] = useState(false);
+  const [configError, setConfigError] = useState<string | null>(null);
 
   // Call states
   const [callState, setCallState] = useState<'idle' | 'connecting' | 'listening' | 'speaking' | 'error'>('idle');
@@ -46,12 +46,12 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
         const data = await apiRequest<SarvamConfig>('/api/clinic/me/ai-widget-config');
         if (mounted) {
           setConfig(data);
-          setConfigError(false);
+          setConfigError(null);
         }
-      } catch (err) {
-        console.error('Failed to load Sarvam config:', err);
+      } catch (err: any) {
+        console.warn('[SarvamVoiceWidget] Config fetch response:', err);
         if (mounted) {
-          setConfigError(true);
+          setConfigError(err?.message || 'Failed to load AI agent configuration from the server.');
         }
       } finally {
         if (mounted) {
@@ -173,11 +173,11 @@ export const SarvamVoiceWidget: React.FC<SarvamVoiceWidgetProps> = ({
 
   if (configError) {
     return (
-      <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex flex-col items-center text-center gap-3">
-        <AlertCircle className="w-6 h-6 text-red-500" />
+      <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex flex-col items-center text-center gap-3">
+        <AlertCircle className="w-6 h-6 text-amber-600" />
         <div>
-          <h4 className="text-sm font-bold text-red-800">Configuration Error</h4>
-          <p className="text-xs text-red-600 mt-1">Failed to load AI agent configuration from the server.</p>
+          <h4 className="text-sm font-bold text-amber-900">Voice Receptionist Setup</h4>
+          <p className="text-xs text-amber-700 mt-1 max-w-sm">{configError}</p>
         </div>
       </div>
     );
