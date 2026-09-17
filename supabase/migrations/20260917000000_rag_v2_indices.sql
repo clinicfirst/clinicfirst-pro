@@ -115,7 +115,7 @@ ON clinic_rag_indices
 FOR SELECT
 USING (
   clinic_id IN (
-    SELECT clinic_id FROM users WHERE users.id = auth.uid()
+    SELECT clinic_id FROM users WHERE users.id = auth.uid()::text
   )
 );
 
@@ -125,7 +125,7 @@ ON clinic_rag_chunks
 FOR SELECT
 USING (
   clinic_id IN (
-    SELECT clinic_id FROM users WHERE users.id = auth.uid()
+    SELECT clinic_id FROM users WHERE users.id = auth.uid()::text
   )
 );
 
