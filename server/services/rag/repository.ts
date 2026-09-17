@@ -236,14 +236,77 @@ export class RagRepository {
   }
 
   /**
+   * Normalizes a pgvector representation from the database boundary into a strict JavaScript number[].
+   * PostgREST / Supabase returns PostgreSQL VECTOR columns as text formatted as "[0.0123, -0.456, ...]".
+   * This helper parses vector strings and verifies that every element is a finite number.
+   * Throws if the representation is malformed, contains non-finite numbers, or is empty.
+   */
+  static normalizePgVector(value: unknown): number[] {
+    if (value === null || value === undefined) {
+      throw new Error('Vector normalization failed: value is null or undefined');
+    }
+
+    // If already an array, validate elements are finite numbers
+    if (Array.isArray(value)) {
+      if (value.length === 0) {
+        throw new Error('Vector normalization failed: array is empty');
+      }
+      for (let i = 0; i < value.length; i++) {
+        const item = value[i];
+        if (typeof item !== 'number' || isNaN(item) || !Number.isFinite(item)) {
+          throw new Error(`Vector normalization failed: element at index ${i} is not a finite number (value: ${item})`);
+        }
+      }
+      return value as number[];
+    }
+
+    // If string, parse pgvector format: "[0.123, -0.456, ...]"
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (!trimmed.startsWith('[') || !trimmed.endsWith(']')) {
+        throw new Error(`Vector normalization failed: malformed vector string, expected bracketed syntax '[...]', got: ${trimmed.slice(0, 30)}...`);
+      }
+
+      const inner = trimmed.slice(1, -1).trim();
+      if (inner.length === 0) {
+        throw new Error('Vector normalization failed: vector string contains no elements');
+      }
+
+      const parts = inner.split(',');
+      const result: number[] = new Array(parts.length);
+
+      for (let i = 0; i < parts.length; i++) {
+        const rawPart = parts[i].trim();
+        if (rawPart.length === 0) {
+          throw new Error(`Vector normalization failed: empty element at index ${i}`);
+        }
+        const num = Number(rawPart);
+        if (isNaN(num) || !Number.isFinite(num)) {
+          throw new Error(`Vector normalization failed: element at index ${i} ('${rawPart}') is not a finite number`);
+        }
+        result[i] = num;
+      }
+
+      return result;
+    }
+
+    throw new Error(`Vector normalization failed: expected string or number[], got ${typeof value}`);
+  }
+
+  /**
    * Fetch all chunks for a given index ID (used for validation).
+   * Ensures the embedding vector is normalized to a valid number[] before returning.
    */
   static async getChunksByIndexId(indexId: string): Promise<ClinicRagChunk[]> {
     if (!supabase || isOfflineMode) {
       const list = ((db.data as any).clinic_rag_chunks || []) as ClinicRagChunk[];
       return list
         .filter(c => c.index_id === indexId)
-        .sort((a, b) => a.chunk_index - b.chunk_index);
+        .sort((a, b) => a.chunk_index - b.chunk_index)
+        .map(c => ({
+          ...c,
+          embedding: this.normalizePgVector(c.embedding)
+        }));
     }
 
     const { data, error } = await supabase
@@ -257,6 +320,13 @@ export class RagRepository {
       throw new Error(`Failed to fetch chunks for index ${indexId}: ${error.message}`);
     }
 
-    return (data as ClinicRagChunk[]) || [];
+    if (!data || !Array.isArray(data)) {
+      return [];
+    }
+
+    return data.map((row: any) => ({
+      ...row,
+      embedding: this.normalizePgVector(row.embedding)
+    })) as ClinicRagChunk[];
   }
 }

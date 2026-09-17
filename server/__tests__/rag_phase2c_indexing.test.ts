@@ -615,6 +615,158 @@ We accept BlueCross BlueShield, Aetna, Medicare, and UnitedHealthcare. Copayment
     'activate_rag_index must NOT be invoked in Phase 2C'
   );
 
+  // ============================================================================
+  // GROUP 11: DATABASE BOUNDARY PGVECTOR NORMALIZATION (POSTGREST STRING NORMALIZATION)
+  // ============================================================================
+  console.log('\n--- Group 11: Database Boundary PgVector Normalization ---');
+
+  // A. PostgreSQL-style string vector with 768 numeric values -> returns number[] of length 768
+  const sample768Floats = Array.from({ length: 768 }, (_, i) => parseFloat((Math.sin(i) * 0.05).toFixed(6)));
+  const pgVectorString768 = `[${sample768Floats.join(',')}]`;
+  const normalizedFromArrayString = RagRepository.normalizePgVector(pgVectorString768);
+  testAssert(
+    'PostgreSQL-style string vector with 768 numeric values parses to number[] of length 768',
+    Array.isArray(normalizedFromArrayString) &&
+      normalizedFromArrayString.length === 768 &&
+      typeof normalizedFromArrayString[0] === 'number' &&
+      Math.abs(normalizedFromArrayString[0] - sample768Floats[0]) < 1e-5,
+    'Failed to normalize 768-dim pgvector string'
+  );
+
+  // B. Already-numeric number[] -> returned unchanged or safely normalized
+  const alreadyNumeric = [0.1, -0.2, 0.35, 0.0];
+  const normalizedFromNumeric = RagRepository.normalizePgVector(alreadyNumeric);
+  testAssert(
+    'Already-numeric number[] returned cleanly',
+    Array.isArray(normalizedFromNumeric) &&
+      normalizedFromNumeric.length === 4 &&
+      normalizedFromNumeric[1] === -0.2,
+    'Failed to handle already-numeric array'
+  );
+
+  // C. Wrong dimension rejected during downstream strict validation
+  let wrongDimRejected = false;
+  try {
+    const wrongDimNormalized = RagRepository.normalizePgVector('[0.1, 0.2, 0.3]');
+    RagEmbeddingService.validateVector(wrongDimNormalized, 768);
+  } catch (err: any) {
+    wrongDimRejected = err.message.includes('dimension mismatch');
+  }
+  testAssert(
+    'Wrong dimension strictly rejected by validation contract after parsing',
+    wrongDimRejected,
+    'Validation failed to reject wrong dimension vector from normalized string'
+  );
+
+  // D. Malformed vector strings -> rejected with clear errors
+  const malformedInputs = [
+    '0.1, 0.2, 0.3', // missing brackets
+    '[0.1, 0.2, abc]', // non-numeric token
+    '[0.1, , 0.3]', // empty element between commas
+    '{"value": [0.1, 0.2]}' // JSON object instead of vector
+  ];
+  let malformedCount = 0;
+  for (const input of malformedInputs) {
+    try {
+      RagRepository.normalizePgVector(input);
+    } catch {
+      malformedCount++;
+    }
+  }
+  testAssert(
+    'Malformed vector strings strictly rejected',
+    malformedCount === malformedInputs.length,
+    `Only ${malformedCount}/${malformedInputs.length} malformed strings rejected`
+  );
+
+  // E. Non-finite values such as NaN / Infinity -> rejected
+  const nonFiniteInputs = [
+    '[0.1, NaN, 0.3]',
+    '[0.1, Infinity, 0.3]',
+    '[-Infinity, 0.2, 0.3]',
+    [0.1, NaN, 0.3],
+    [0.1, Infinity, 0.3]
+  ];
+  let nonFiniteRejected = 0;
+  for (const input of nonFiniteInputs) {
+    try {
+      RagRepository.normalizePgVector(input);
+    } catch {
+      nonFiniteRejected++;
+    }
+  }
+  testAssert(
+    'Non-finite values (NaN / Infinity) strictly rejected in string and array forms',
+    nonFiniteRejected === nonFiniteInputs.length,
+    `Only ${nonFiniteRejected}/${nonFiniteInputs.length} non-finite inputs rejected`
+  );
+
+  // F. Empty vector -> rejected
+  let emptyRejected = 0;
+  try {
+    RagRepository.normalizePgVector('[]');
+  } catch {
+    emptyRejected++;
+  }
+  try {
+    RagRepository.normalizePgVector([]);
+  } catch {
+    emptyRejected++;
+  }
+  testAssert(
+    'Empty vectors strictly rejected',
+    emptyRejected === 2,
+    'Empty vectors were not rejected'
+  );
+
+  // G. Existing validation behavior remains strict (RagEmbeddingService.validateVector unchanged)
+  testAssert(
+    'RagEmbeddingService.validateVector remains strict on non-array',
+    (() => {
+      try {
+        RagEmbeddingService.validateVector(pgVectorString768 as any, 768);
+        return false;
+      } catch (e: any) {
+        return e.message.includes('expected Array');
+      }
+    })(),
+    'validateVector must reject raw strings directly'
+  );
+
+  // H. Repository mapping with string embedding produces valid chunks for validation
+  const mockChunkWithStringVector: ClinicRagChunk = {
+    id: crypto.randomUUID(),
+    index_id: storedIndex!.id,
+    clinic_id: storedIndex!.clinic_id,
+    chunk_index: 0,
+    chunk_title: 'Intro',
+    chunk_text: 'Text',
+    embedding_input: 'Input',
+    chunk_content_hash: 'hash',
+    embedding: pgVectorString768 as any, // Raw PostgREST string in db row
+    created_at: new Date().toISOString()
+  };
+
+  // Put into offline db to simulate PostgREST returned record
+  if (!(db.data as any).clinic_rag_chunks) {
+    (db.data as any).clinic_rag_chunks = [];
+  }
+  const testIndexId = crypto.randomUUID();
+  (db.data as any).clinic_rag_chunks.push({
+    ...mockChunkWithStringVector,
+    index_id: testIndexId
+  });
+
+  const fetchedChunks = await RagRepository.getChunksByIndexId(testIndexId);
+  testAssert(
+    'RagRepository.getChunksByIndexId maps database string vector into real number[]',
+    fetchedChunks.length === 1 &&
+      Array.isArray(fetchedChunks[0].embedding) &&
+      typeof fetchedChunks[0].embedding[0] === 'number' &&
+      fetchedChunks[0].embedding.length === 768,
+    'getChunksByIndexId failed to normalize string vector to number[]'
+  );
+
   console.log('\n================================================================');
   console.log(`PHASE 2C TEST RESULTS: ${passed} Passed, ${failed} Failed`);
   console.log('================================================================\n');
