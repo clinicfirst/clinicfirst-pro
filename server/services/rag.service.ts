@@ -124,36 +124,47 @@ export class RagService {
   }
 
   /**
-   * Search knowledge base using query
+   * Search knowledge base using query.
+   * Public facade: preserves exact backward-compatible signature.
+   * Internally routes through RagRetrievalService for eligibility gating and V1 fallback.
    */
-  static async searchKnowledge(clinicId: string, query: string, matchCount: number = 3, matchThreshold: number = 0.6): Promise<string[]> {
+  static async searchKnowledge(
+    clinicId: string,
+    query: string,
+    matchCount: number = 3,
+    matchThreshold: number = 0.6
+  ): Promise<string[]> {
     if (isOfflineMode || !supabase) {
       console.log('[RagService.searchKnowledge] Offline mode fallback.');
       return [];
     }
 
     try {
-      const queryEmbedding = await this.generateEmbedding(query);
-      
-      const { data, error } = await supabase.rpc('match_clinic_knowledge', {
-        query_embedding: queryEmbedding,
-        match_threshold: matchThreshold,
-        match_count: matchCount,
-        p_clinic_id: clinicId
+      // Dynamic import to break any potential circular reference
+      const { RagRetrievalService } = await import('./rag/retrieval.service');
+      const response = await RagRetrievalService.retrieve(clinicId, query, {
+        matchCount,
+        matchThreshold
       });
 
-      if (error) {
-        throw error;
-      }
-
-      if (!data || data.length === 0) {
-        return [];
-      }
-
-      return data.map((row: any) => row.chunk_text);
+      return response.chunks.map(c => c.chunk_text);
     } catch (err) {
-      console.error('[RagService.searchKnowledge] Failed to search:', err);
-      return ["(Error retrieving knowledge context.)"];
+      console.error('[RagService.searchKnowledge] Fallback to legacy retrieval due to exception:', err);
+      // Failsafe direct call to legacy RPC
+      try {
+        const queryEmbedding = await this.generateEmbedding(query);
+        const { data, error } = await supabase.rpc('match_clinic_knowledge', {
+          query_embedding: queryEmbedding,
+          match_threshold: matchThreshold,
+          match_count: matchCount,
+          p_clinic_id: clinicId
+        });
+        if (error || !data) return [];
+        return data.map((row: any) => row.chunk_text);
+      } catch (fallbackErr) {
+        console.error('[RagService.searchKnowledge] Legacy search failed:', fallbackErr);
+        return ["(Error retrieving knowledge context.)"];
+      }
     }
   }
 }
