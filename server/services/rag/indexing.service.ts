@@ -243,12 +243,12 @@ export class RagIndexingService {
 
       candidateIndex = await RagRepository.updateIndex(existingIndex.id, {
         status: 'BUILDING',
-        error_message: undefined,
+        error_message: null,
         content_hash: indexContentHash,
         total_chunks: chunkMetadataList.length,
         embedded_chunks: 0,
-        validation_report: undefined,
-        validated_at: undefined
+        validation_report: null,
+        validated_at: null
       });
     } else {
       // Create new candidate index record (RagRepository.createIndex handles PostgreSQL 23505 race conditions gracefully)
@@ -388,7 +388,7 @@ export class RagIndexingService {
       embedded_chunks: storedChunks.length,
       validated_at: new Date().toISOString(),
       validation_report: report,
-      error_message: undefined
+      error_message: null
       // NOTE: is_active is NOT modified. It remains false.
     });
 

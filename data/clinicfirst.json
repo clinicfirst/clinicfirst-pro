@@ -112,7 +112,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "b7291880b4f9ee57ea89d987eecc6851:ddb4fd00d26897521ae04f3d3a0626ab6a7cd73fbc49317162741285ce1813a036a33999753c59e894d9a77476ce92018ed0efc246b60d4292186369bcafbcb7"
+      "password_hash": "f5b9218fa580b23281d88a1b140386eb:3fa586de4a85420bb7a93cfa356f3d80ade72a2b15ab4072fb204f8f182f180f3417574a220eb5ca4ce99a813897fa3a758e810c282b0dbd784bceec765feb8e"
     },
     {
       "id": "usr_platform_admin_2",
@@ -124,7 +124,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "9d2c120bfe174c75db47e58390bf7630:9a9084f9d1397701b1281e5efe930c4df253ee2d8487335becd7f1ea6e19e421c0fa1d2151dde1ce02549e076c9dbe61d0ca00dbeb2a9f3699c37ef585b166cd"
+      "password_hash": "14de73ac1803559e13fbf4ae1b63a53a:09e5aa226013695d4450862efcd8b868ee66b60874be8c11b0a6af7afedc3230adfbbed5a06d9ab477364bb73ef0916591fdd837a7abd56a77007d1c6e7bb77e"
     },
     {
       "id": "usr_apex_admin_1",
@@ -136,7 +136,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "f0b1e6fdb063d652d5a3ce8cb0391501:b4a1146413d1e8ffa10d058b8f78959ff9bdd1dbf543576e43cef6ca3801782826a250fbab26bd4eeec9aa71c2c29cdf09117787edd9edd3f8237989bd96291e"
+      "password_hash": "a5c9f432b9cad823a4fc2d5d1b7ddc9b:9829dcd780fabbbd2e57be65a5bc6875b9a01d49b9dd66c935d19f76fbc3722726c69c9379ce43c8d02a5bb97fb7a488a6fbdbbe8995a6271c4c232150838395"
     },
     {
       "id": "usr_apex_staff_1",
@@ -148,7 +148,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.025Z",
-      "password_hash": "c6c1a3652c8fca9348a5503a4060b295:04935d4147372234dfdc23d7587a84217c13923d2492fe013afe444e0eb3c7bee5b0aafbeed233c455bd61655fbfb7739e301242632f5078999e9d8433287196"
+      "password_hash": "ac6b0019bf0ccef055b2752e214c5b26:b65fdf050ddc9c131d68784207db28b4ceb6c993b982b40bbdd568af5cbaa7e1206815979d2af223e1366bbf611b0538a97100d6865ad9c40acf34f3c764b9f0"
     },
     {
       "id": "usr_apex_admin_legacy",
@@ -160,7 +160,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "c62f8c2330f4c03373106ea566842145:b7e6f110c6806cbd0e1e676a7e051e94ef944f6a1ecb499857c6b8958752413682ace2a5745e7b87b67bd7fdfe25a689989072b0a8e016cf075157a6a5cd33f1"
+      "password_hash": "df3ff7161a1399d1c0cd37153fdb2f56:e4f1f9ccaddea714d7cc15ed8fd1db640824286913a5fbd86912fffd477663aa1aad7b5389bf1d8383071cc808c8d809a24c0ec83ba069d56c66b8e06e20d276"
     },
     {
       "id": "usr_apex_staff_legacy",
@@ -172,7 +172,7 @@
       "status": "ACTIVE",
       "must_change_password": false,
       "created_at": "2026-09-04T10:24:36.229Z",
-      "password_hash": "27b0433cc892d616e789930c40d9fabf:8c6d3212ee51b6a1ec9c945bcd0c3f313f84d0a2532a2320f19a7381ce3dfa056343d53e8ea6268fed27108de7adc262681f6bb3c7e18fe45df4b35726837948"
+      "password_hash": "61e338faa3dd6665801ef2812fff6e8a:16ebfdf4dc6d4a0272a5b2f1a2001d1d11589927a341b140e631dac365259df4a1a4bac32d0a9fe440a4bc8ddc6f04c74b28cfa3d6b9bc8772e376fbb6a5df99"
     },
     {
       "id": "usr_doc_elena_1",
@@ -1042,8 +1042,8 @@
       "document_hash": "hash_a1",
       "compiled_content": "# City Health Clinic Knowledge Base\n\n## Operating Hours\nOur clinic is open Monday to Friday from 8:00 AM to 6:00 PM, and Saturday from 9:00 AM to 1:00 PM. We are closed on Sundays and national public holidays.\n\n## Appointment Booking Policies\nPatients must book appointments at least 2 hours in advance. Cancellations require 24 hours prior notice to avoid a late cancellation fee of $25. Walk-ins are accepted only for urgent triage.\n\n## Accepted Insurance Plans\nWe accept BlueCross BlueShield, Aetna, Medicare, and UnitedHealthcare. Copayments are due at the time of check-in via cash, credit card, or digital payment.",
       "status": "PUBLISHED",
-      "compiled_at": "2026-09-18T12:18:57.215Z",
-      "published_at": "2026-09-18T12:18:57.215Z",
+      "compiled_at": "2026-09-18T13:04:42.965Z",
+      "published_at": "2026-09-18T13:04:42.965Z",
       "published_by": "dr_smith"
     },
     {
@@ -1053,7 +1053,7 @@
       "document_hash": "hash_a2",
       "compiled_content": "# City Health Clinic Knowledge Base\n\n## Operating Hours\nOur clinic is open Monday to Friday from 8:00 AM to 6:00 PM, and Saturday from 9:00 AM to 1:00 PM. We are closed on Sundays and national public holidays.\n\n## Appointment Booking Policies\nPatients must book appointments at least 2 hours in advance. Cancellations require 24 hours prior notice to avoid a late cancellation fee of $25. Walk-ins are accepted only for urgent triage.\n\n## Accepted Insurance Plans\nWe accept BlueCross BlueShield, Aetna, Medicare, and UnitedHealthcare. Copayments are due at the time of check-in via cash, credit card, or digital payment.",
       "status": "COMPILED",
-      "compiled_at": "2026-09-18T12:18:57.215Z"
+      "compiled_at": "2026-09-18T13:04:42.965Z"
     },
     {
       "id": "rel_b1_pub",
@@ -1062,8 +1062,8 @@
       "document_hash": "hash_b1",
       "compiled_content": "## Beta Urgent Care\nOpen 24/7 for emergency pediatric care.",
       "status": "PUBLISHED",
-      "compiled_at": "2026-09-18T12:18:57.215Z",
-      "published_at": "2026-09-18T12:18:57.215Z"
+      "compiled_at": "2026-09-18T13:04:42.965Z",
+      "published_at": "2026-09-18T13:04:42.965Z"
     },
     {
       "id": "rel_fail_test",
@@ -1072,8 +1072,8 @@
       "document_hash": "hash_fail",
       "compiled_content": "## Section 1\nContent 1\n\n## Section 2\nContent 2\n\n## Section 3\nContent 3",
       "status": "PUBLISHED",
-      "compiled_at": "2026-09-18T12:18:57.227Z",
-      "published_at": "2026-09-18T12:18:57.227Z"
+      "compiled_at": "2026-09-18T13:04:42.977Z",
+      "published_at": "2026-09-18T13:04:42.977Z"
     },
     {
       "id": "rel_b2_pub",
@@ -1082,13 +1082,13 @@
       "document_hash": "b2_hash",
       "status": "PUBLISHED",
       "compiled_content": "# Section B2\n\nContent B2",
-      "compiled_at": "2026-09-18T12:18:57.267Z",
-      "published_at": "2026-09-18T12:18:57.267Z"
+      "compiled_at": "2026-09-18T13:04:43.013Z",
+      "published_at": "2026-09-18T13:04:43.013Z"
     }
   ],
   "clinic_rag_indices": [
     {
-      "id": "5aca4ab6-3f43-4a55-9d7e-f14417ca9840",
+      "id": "d831c7f5-db4a-4a2e-a1e2-26af82be5448",
       "clinic_id": "clinic_alpha",
       "release_id": "rel_a1_pub",
       "representation_version": "FORMATTED_V1",
@@ -1100,10 +1100,10 @@
       "is_active": false,
       "total_chunks": 3,
       "embedded_chunks": 3,
-      "created_at": "2026-09-18T12:18:57.219Z",
-      "validated_at": "2026-09-18T12:18:57.225Z",
+      "created_at": "2026-09-18T13:04:42.969Z",
+      "validated_at": "2026-09-18T13:04:42.975Z",
       "validation_report": {
-        "timestamp": "2026-09-18T12:18:57.225Z",
+        "timestamp": "2026-09-18T13:04:42.975Z",
         "all_passed": true,
         "checks": [
           {
@@ -1157,10 +1157,11 @@
         "representation_version": "FORMATTED_V1",
         "embedding_model": "gemini-embedding-2",
         "embedding_dimension": 768
-      }
+      },
+      "error_message": null
     },
     {
-      "id": "98c57207-4e34-45cc-9b0e-598c1e039f5a",
+      "id": "33537405-90a3-4eb8-a155-7eec290bef6e",
       "clinic_id": "clinic_alpha",
       "release_id": "rel_fail_test",
       "representation_version": "FORMATTED_V1",
@@ -1172,9 +1173,10 @@
       "is_active": false,
       "total_chunks": 3,
       "embedded_chunks": 3,
-      "created_at": "2026-09-18T12:18:57.227Z",
+      "created_at": "2026-09-18T13:04:42.977Z",
+      "error_message": null,
       "validation_report": {
-        "timestamp": "2026-09-18T12:18:57.246Z",
+        "timestamp": "2026-09-18T13:04:42.993Z",
         "all_passed": true,
         "checks": [
           {
@@ -1229,10 +1231,10 @@
         "embedding_model": "gemini-embedding-2",
         "embedding_dimension": 768
       },
-      "validated_at": "2026-09-18T12:18:57.246Z"
+      "validated_at": "2026-09-18T13:04:42.993Z"
     },
     {
-      "id": "b0c91824-84a6-4850-a29a-c76ba03d6ffd",
+      "id": "2ee7a366-15b4-41d4-aeb3-86d8b182d7c9",
       "clinic_id": "clinic_beta",
       "release_id": "rel_b1_pub",
       "representation_version": "FORMATTED_V1",
@@ -1244,10 +1246,10 @@
       "is_active": false,
       "total_chunks": 1,
       "embedded_chunks": 1,
-      "created_at": "2026-09-18T12:18:57.249Z",
-      "validated_at": "2026-09-18T12:18:57.259Z",
+      "created_at": "2026-09-18T13:04:42.996Z",
+      "validated_at": "2026-09-18T13:04:43.005Z",
       "validation_report": {
-        "timestamp": "2026-09-18T12:18:57.259Z",
+        "timestamp": "2026-09-18T13:04:43.005Z",
         "all_passed": true,
         "checks": [
           {
@@ -1301,10 +1303,11 @@
         "representation_version": "FORMATTED_V1",
         "embedding_model": "gemini-embedding-2",
         "embedding_dimension": 768
-      }
+      },
+      "error_message": null
     },
     {
-      "id": "6d65f667-b726-4de9-8576-d9d482ff0089",
+      "id": "38c2ccfb-1ce7-4a49-8b4d-bfb02c1dd8f1",
       "clinic_id": "clinic_beta",
       "release_id": "rel_b2_pub",
       "representation_version": "FORMATTED_V1",
@@ -1316,9 +1319,10 @@
       "is_active": false,
       "total_chunks": 1,
       "embedded_chunks": 1,
-      "created_at": "2026-09-18T11:58:57.268Z",
+      "created_at": "2026-09-18T12:44:43.013Z",
+      "error_message": null,
       "validation_report": {
-        "timestamp": "2026-09-18T12:18:57.285Z",
+        "timestamp": "2026-09-18T13:04:43.028Z",
         "all_passed": true,
         "checks": [
           {
@@ -1373,12 +1377,12 @@
         "embedding_model": "gemini-embedding-2",
         "embedding_dimension": 768
       },
-      "validated_at": "2026-09-18T12:18:57.285Z"
+      "validated_at": "2026-09-18T13:04:43.028Z"
     }
   ],
   "clinic_rag_chunks": [
     {
-      "index_id": "5aca4ab6-3f43-4a55-9d7e-f14417ca9840",
+      "index_id": "d831c7f5-db4a-4a2e-a1e2-26af82be5448",
       "clinic_id": "clinic_alpha",
       "chunk_index": 0,
       "chunk_title": "Operating Hours",
@@ -2155,11 +2159,11 @@
         0.007580171306511155,
         0.0026083279177647363
       ],
-      "id": "7222372b-af9e-4103-934d-a5bce846a126",
-      "created_at": "2026-09-18T12:18:57.221Z"
+      "id": "eced6e03-9edd-4a63-88da-06c069c4cdfa",
+      "created_at": "2026-09-18T13:04:42.971Z"
     },
     {
-      "index_id": "5aca4ab6-3f43-4a55-9d7e-f14417ca9840",
+      "index_id": "d831c7f5-db4a-4a2e-a1e2-26af82be5448",
       "clinic_id": "clinic_alpha",
       "chunk_index": 1,
       "chunk_title": "Appointment Booking Policies",
@@ -2936,11 +2940,11 @@
         -0.027498457296058754,
         -0.031530048015867035
       ],
-      "id": "ca15dce1-b206-4349-a62d-d60d142c4a98",
-      "created_at": "2026-09-18T12:18:57.221Z"
+      "id": "23063044-d44b-41e3-9824-bc13b0df82a2",
+      "created_at": "2026-09-18T13:04:42.971Z"
     },
     {
-      "index_id": "5aca4ab6-3f43-4a55-9d7e-f14417ca9840",
+      "index_id": "d831c7f5-db4a-4a2e-a1e2-26af82be5448",
       "clinic_id": "clinic_alpha",
       "chunk_index": 2,
       "chunk_title": "Accepted Insurance Plans",
@@ -3717,11 +3721,11 @@
         0.03291510187773505,
         0.028993163804266104
       ],
-      "id": "10d05a00-a9d7-4745-9de2-a821873e4af1",
-      "created_at": "2026-09-18T12:18:57.221Z"
+      "id": "1ce2d4a3-a612-4603-b50f-8c495f55be18",
+      "created_at": "2026-09-18T13:04:42.971Z"
     },
     {
-      "index_id": "98c57207-4e34-45cc-9b0e-598c1e039f5a",
+      "index_id": "33537405-90a3-4eb8-a155-7eec290bef6e",
       "clinic_id": "clinic_alpha",
       "chunk_index": 0,
       "chunk_title": "Section 1",
@@ -4498,11 +4502,11 @@
         -0.03003023204628513,
         -0.03387127722668955
       ],
-      "id": "28cf68c6-3a71-47b0-89aa-b5e7ff3a1282",
-      "created_at": "2026-09-18T12:18:57.241Z"
+      "id": "c3d92cee-0c4a-4cba-823a-e46519ffe6ad",
+      "created_at": "2026-09-18T13:04:42.989Z"
     },
     {
-      "index_id": "98c57207-4e34-45cc-9b0e-598c1e039f5a",
+      "index_id": "33537405-90a3-4eb8-a155-7eec290bef6e",
       "clinic_id": "clinic_alpha",
       "chunk_index": 1,
       "chunk_title": "Section 2",
@@ -5279,11 +5283,11 @@
         -0.03003023204628513,
         -0.03387127722668955
       ],
-      "id": "6fed6740-15c1-4fa7-871c-7dd2d41f8d82",
-      "created_at": "2026-09-18T12:18:57.241Z"
+      "id": "9dc3f0c1-21aa-4062-a12a-04decb238f8f",
+      "created_at": "2026-09-18T13:04:42.989Z"
     },
     {
-      "index_id": "98c57207-4e34-45cc-9b0e-598c1e039f5a",
+      "index_id": "33537405-90a3-4eb8-a155-7eec290bef6e",
       "clinic_id": "clinic_alpha",
       "chunk_index": 2,
       "chunk_title": "Section 3",
@@ -6060,11 +6064,11 @@
         -0.03003023204628513,
         -0.03387127722668955
       ],
-      "id": "435f0051-0f94-4845-99cb-42baaab2eb6b",
-      "created_at": "2026-09-18T12:18:57.241Z"
+      "id": "d710009d-c7b9-46ca-8836-8354b3f10519",
+      "created_at": "2026-09-18T13:04:42.989Z"
     },
     {
-      "index_id": "b0c91824-84a6-4850-a29a-c76ba03d6ffd",
+      "index_id": "2ee7a366-15b4-41d4-aeb3-86d8b182d7c9",
       "clinic_id": "clinic_beta",
       "chunk_index": 0,
       "chunk_title": "Beta Urgent Care",
@@ -6841,11 +6845,11 @@
         0.002741360642512307,
         -0.0022564973884821016
       ],
-      "id": "07457e1b-9994-4179-83f0-f6f5834a0d53",
-      "created_at": "2026-09-18T12:18:57.253Z"
+      "id": "b4a1f14b-8753-4310-88f1-5b38f01a5d87",
+      "created_at": "2026-09-18T13:04:43.000Z"
     },
     {
-      "index_id": "6d65f667-b726-4de9-8576-d9d482ff0089",
+      "index_id": "38c2ccfb-1ce7-4a49-8b4d-bfb02c1dd8f1",
       "clinic_id": "clinic_beta",
       "chunk_index": 0,
       "chunk_title": "Section B2",
@@ -7622,8 +7626,8 @@
         -0.023854277323593423,
         -0.019348141140028682
       ],
-      "id": "1a8f4230-1544-4f93-a663-74dba4c4c53e",
-      "created_at": "2026-09-18T12:18:57.279Z"
+      "id": "9fc82f5e-6096-4e6c-a65f-96e4011dd551",
+      "created_at": "2026-09-18T13:04:43.022Z"
     }
   ]
 }

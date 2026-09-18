@@ -576,7 +576,7 @@ export interface ClinicRagIndex {
   total_chunks: number;
   embedded_chunks: number;
   validation_report?: any;
-  error_message?: string;
+  error_message?: string | null;
   created_at: string;
   validated_at?: string;
   activated_at?: string;

@@ -407,6 +407,16 @@ We accept BlueCross BlueShield, Aetna, Medicare, and UnitedHealthcare. Copayment
   // ============================================================================
   console.log('\n--- Group 7: Resuming After Failure ---');
 
+  // Prior index state confirmation before retry
+  const priorFailedIndex = await RagRepository.getIndexById(failedBuildResult.index_id!);
+  testAssert(
+    'Prior failed index has status FAILED and non-null stale error_message before retry',
+    priorFailedIndex?.status === 'FAILED' &&
+      typeof priorFailedIndex?.error_message === 'string' &&
+      priorFailedIndex.error_message.length > 0,
+    'Expected prior failed index to retain stale error_message before rebuild'
+  );
+
   // Now retry indexing the same failed release with a working embedder
   const resumeBuildResult = await RagIndexingService.indexReleaseV2(
     'clinic_alpha',
@@ -431,6 +441,11 @@ We accept BlueCross BlueShield, Aetna, Medicare, and UnitedHealthcare. Copayment
     'Rebuilt index status updated to READY with clear error_message',
     updatedIndex?.status === 'READY' && !updatedIndex?.error_message,
     'Rebuilt index has lingering error message or wrong status'
+  );
+  testAssert(
+    'Rebuilt index error_message is explicitly null in persistent storage',
+    updatedIndex?.status === 'READY' && updatedIndex?.error_message === null,
+    `Expected error_message === null, got ${JSON.stringify(updatedIndex?.error_message)}`
   );
 
   // ============================================================================
@@ -765,6 +780,45 @@ We accept BlueCross BlueShield, Aetna, Medicare, and UnitedHealthcare. Copayment
       typeof fetchedChunks[0].embedding[0] === 'number' &&
       fetchedChunks[0].embedding.length === 768,
     'getChunksByIndexId failed to normalize string vector to number[]'
+  );
+
+  // ============================================================================
+  // GROUP 12: REPOSITORY BOUNDARY EXPLICIT NULL CLEARING (POSTGREST SERIALIZATION)
+  // ============================================================================
+  console.log('\n--- Group 12: Repository Boundary Explicit Null Clearing ---');
+
+  // Verify that an update payload with explicit null serializes correctly in JSON
+  const targetUpdatePayload = {
+    status: 'READY' as const,
+    error_message: null
+  };
+  const serialized = JSON.stringify(targetUpdatePayload);
+  const parsed = JSON.parse(serialized);
+
+  testAssert(
+    'Update payload contains explicit error_message: null key before serialization',
+    'error_message' in targetUpdatePayload && targetUpdatePayload.error_message === null,
+    'targetUpdatePayload must have error_message: null'
+  );
+
+  testAssert(
+    'JSON serialization preserves error_message: null (unlike undefined which drops the key)',
+    parsed.hasOwnProperty('error_message') && parsed.error_message === null,
+    'JSON.stringify dropped error_message key'
+  );
+
+  // Test that undefined drops the key in JSON (documenting why undefined left the DB column unchanged)
+  const undefinedPayload = {
+    status: 'READY' as const,
+    error_message: undefined
+  };
+  const undefinedSerialized = JSON.stringify(undefinedPayload);
+  const undefinedParsed = JSON.parse(undefinedSerialized);
+
+  testAssert(
+    'JSON serialization drops undefined keys, proving why undefined left PostgreSQL columns unchanged',
+    !undefinedParsed.hasOwnProperty('error_message'),
+    'JSON.stringify should have omitted undefined key'
   );
 
   console.log('\n================================================================');
