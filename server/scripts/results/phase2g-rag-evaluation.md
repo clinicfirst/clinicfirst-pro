@@ -6,7 +6,7 @@
 - **Candidate Content Hash:** `ddc007a1d0e066411a37f0f99895dae8a0524fad1a3a20dfa99db529187ef622`
 - **Candidate Status:** `READY` (is_active = `false`)
 - **Total Cases:** 30 (Answerable: 23, Abstention: 7)
-- **Executed At:** 2026-09-19T08:17:24.536Z
+- **Executed At:** 2026-09-19T10:56:05.767Z
 
 ---
 
@@ -81,5 +81,5 @@
 
 ## 5. Artifact Paths
 
-- **Machine-readable JSON:** `/app/applet/server/scripts/results/phase2g-rag-evaluation.json`
-- **Human-readable Report:** `/app/applet/server/scripts/results/phase2g-rag-evaluation.md`
+- **Machine-readable JSON:** `C:\Git_repo_Clinic_First\clinicfirst-pro\server\scripts\results\phase2g-rag-evaluation.json`
+- **Human-readable Report:** `C:\Git_repo_Clinic_First\clinicfirst-pro\server\scripts\results\phase2g-rag-evaluation.md`

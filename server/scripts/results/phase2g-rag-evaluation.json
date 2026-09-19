@@ -4664,7 +4664,7 @@
     "bq10_cross_tenant_leakage": 0
   },
   "execution_metadata": {
-    "executed_at": "2026-09-19T08:17:24.536Z",
+    "executed_at": "2026-09-19T10:56:05.767Z",
     "api_calls_made": 90,
     "embeddings_generated": 90
   }
