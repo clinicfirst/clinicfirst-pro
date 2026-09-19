@@ -9,3 +9,5 @@ coverage/
 .env.development
 .env.test
 .env.production
+phase2g-candidate-118ef4f1-export.json
+server/scripts/.phase2g-embedding-cache.json
