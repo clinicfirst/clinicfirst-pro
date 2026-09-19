@@ -5,7 +5,7 @@
  * and provider convergence.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   VoicePolicyGuard,
   classifyIntentAndSafety,
@@ -19,12 +19,54 @@ import {
   DEFAULT_RAG_V2_TIMEOUT_MS,
   RagRetrievalService,
 } from '../services/rag/retrieval.service';
+import { db } from '../db';
+import { EscalationService } from '../services/escalation.service';
+import { AppointmentService } from '../services/appointment.service';
+import { ClinicService } from '../services/clinic.service';
+import { AiAgentService } from '../services/ai-agent.service';
 
 describe('Phase 2H: Voice Safety & Intent Boundary Architecture', () => {
   const AUTHORITATIVE_CLINIC_ID = 'clinic_sanjeevani_001';
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // P1-2 Test Isolation: Prevent fixture pollution and database mutation during tests
+    vi.spyOn(db, 'flush').mockResolvedValue(undefined as any);
+    vi.spyOn(EscalationService, 'createEscalation').mockImplementation(async (clinicId, data: any) => ({
+      id: `esc_mock_${Date.now()}`,
+      clinic_id: clinicId,
+      call_id: data.call_id || 'call_conv_001',
+      reason: data.reason,
+      priority: data.priority || 'urgent',
+      context_summary: data.context_summary,
+      status: 'pending',
+      created_at: new Date().toISOString(),
+    }));
+    vi.spyOn(AppointmentService, 'book').mockResolvedValue({
+      id: 'apt_mock_test_123',
+      clinic_id: AUTHORITATIVE_CLINIC_ID,
+      patient_id: 'pat_mock',
+      doctor_id: 'doc_mock',
+      service_id: 'srv_mock',
+      start_time: '2026-09-25T11:00:00Z',
+      status: 'confirmed',
+    } as any);
+    vi.spyOn(ClinicService, 'getById').mockResolvedValue({
+      id: AUTHORITATIVE_CLINIC_ID,
+      name: 'Sanjeevani Health Center',
+      phone: '+91-22-2555-0199',
+    } as any);
+    vi.spyOn(AiAgentService, 'getAgentByClinic').mockResolvedValue({
+      id: 'agent_mock',
+      clinic_id: AUTHORITATIVE_CLINIC_ID,
+      name: 'Ava',
+      escalation_contact: { name: 'Emergency Duty Officer', phone: '+91-22-2555-0100' },
+    } as any);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   // -------------------------------------------------------------------------
@@ -499,5 +541,206 @@ describe('Phase 2H: Voice Safety & Intent Boundary Architecture', () => {
     );
     expect(resE.category).toBe(PolicyCategory.KNOWLEDGE_QUERY);
     expect(resE.decision).toBe('ALLOW');
+  });
+
+  // -------------------------------------------------------------------------
+  // Test 15: Cross-turn emergency safety state
+  // -------------------------------------------------------------------------
+  it('15. Cross-turn emergency safety: Turn 1 emergency flags session; Turn 2 routine availability/booking is blocked under P0', async () => {
+    const sessionId = 'session_turn_test_001';
+    const callId = 'call_turn_test_001';
+
+    // Turn 1: Caller discloses acute distress
+    const turn1Context: PolicyContext = {
+      userUtterance: 'I have crushing chest pain and feel dizzy.',
+      sessionId,
+      callId,
+      provider: 'gemini_live',
+      emergencyTriggered: false,
+    };
+
+    const turn1Result = await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'createAppointment',
+      { date: '2026-09-20', startTime: '10:00' },
+      turn1Context
+    );
+
+    expect(turn1Result.policyDecision).toBe('ESCALATE');
+    expect(turn1Result.policyCategory).toBe(PolicyCategory.EMERGENCY);
+    expect(turn1Result.policyReason).toBe('EMERGENCY_INTERCEPTION');
+    expect(turn1Result.escalated).toBe(true);
+    expect(turn1Result.escalation_id).toBeDefined();
+
+    // Turn 2: Caller pivots to routine question without emergency keywords
+    const turn2Context: PolicyContext = {
+      userUtterance: 'Anyway, what appointment times are available tomorrow?',
+      sessionId,
+      callId,
+      provider: 'gemini_live',
+      emergencyTriggered: true, // Persisted session emergency state
+      existingEscalationId: turn1Result.escalation_id,
+    };
+
+    const turn2Result = await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'getAvailableSlots',
+      { date: '2026-09-21' },
+      turn2Context
+    );
+
+    // Must be deterministically BLOCKED under P0_EMERGENCY
+    expect(turn2Result.policyDecision).toBe('BLOCK');
+    expect(turn2Result.policyCategory).toBe(PolicyCategory.EMERGENCY);
+    expect(turn2Result.policyReason).toBe('SESSION_EMERGENCY_ACTIVE');
+    expect(turn2Result.error).toContain('Emergency state is active');
+
+    // Also verify routine booking is blocked in Turn 2
+    const turn2BookingResult = await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'createAppointment',
+      { date: '2026-09-21', startTime: '11:00' },
+      turn2Context
+    );
+    expect(turn2BookingResult.policyDecision).toBe('BLOCK');
+    expect(turn2BookingResult.policyCategory).toBe(PolicyCategory.EMERGENCY);
+    expect(turn2BookingResult.policyReason).toBe('SESSION_EMERGENCY_ACTIVE');
+  });
+
+  // -------------------------------------------------------------------------
+  // Test 16: Duplicate escalation prevention
+  // -------------------------------------------------------------------------
+  it('16. Duplicate escalation prevention: Emergency state does not create duplicate escalation records on subsequent routine turns', async () => {
+    const escalationSpy = vi.spyOn(EscalationService, 'createEscalation');
+    const sessionId = 'session_dup_esc_001';
+    const callId = 'call_dup_esc_001';
+
+    // Turn 1: Emergency triggers escalation
+    const turn1Context: PolicyContext = {
+      userUtterance: 'I have severe chest pain and trouble breathing.',
+      sessionId,
+      callId,
+      emergencyTriggered: false,
+    };
+
+    const turn1Result = await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'createAppointment',
+      { date: '2026-09-20' },
+      turn1Context
+    );
+    expect(escalationSpy).toHaveBeenCalledTimes(1);
+
+    // Turn 2: Routine question with active emergency session state
+    const turn2Context: PolicyContext = {
+      userUtterance: 'What are your hours?',
+      sessionId,
+      callId,
+      emergencyTriggered: true,
+      existingEscalationId: turn1Result.escalation_id,
+    };
+
+    await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'searchClinicKnowledge',
+      { query: 'operating hours' },
+      turn2Context
+    );
+
+    // Still exactly 1 call - NO duplicate escalation created!
+    expect(escalationSpy).toHaveBeenCalledTimes(1);
+
+    // Turn 3: Another booking attempt
+    await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'getAvailableSlots',
+      { date: '2026-09-21' },
+      turn2Context
+    );
+
+    // Still exactly 1 call!
+    expect(escalationSpy).toHaveBeenCalledTimes(1);
+  });
+
+  // -------------------------------------------------------------------------
+  // Test 17: Session isolation
+  // -------------------------------------------------------------------------
+  it('17. Session isolation: Emergency state is strictly scoped to the active session; unrelated session is unaffected', async () => {
+    // Session A is in emergency state
+    const sessionAContext: PolicyContext = {
+      userUtterance: 'Can I book an appointment?',
+      sessionId: 'session_A',
+      callId: 'call_A',
+      emergencyTriggered: true,
+      existingEscalationId: 'esc_A_001',
+    };
+
+    // Session B is normal/benign
+    const sessionBContext: PolicyContext = {
+      userUtterance: 'Can I book an appointment for next Monday?',
+      sessionId: 'session_B',
+      callId: 'call_B',
+      emergencyTriggered: false,
+    };
+
+    // Verify policy classifier decision directly for Session A vs Session B
+    const evalA = classifyIntentAndSafety(
+      AUTHORITATIVE_CLINIC_ID,
+      'getAvailableSlots',
+      { date: '2026-09-22' },
+      sessionAContext
+    );
+    expect(evalA.decision).toBe('BLOCK');
+    expect(evalA.category).toBe(PolicyCategory.EMERGENCY);
+    expect(evalA.reasonCode).toBe('SESSION_EMERGENCY_ACTIVE');
+
+    const evalB = classifyIntentAndSafety(
+      AUTHORITATIVE_CLINIC_ID,
+      'getAvailableSlots',
+      { date: '2026-09-22' },
+      sessionBContext
+    );
+    expect(evalB.decision).toBe('ALLOW');
+    expect(evalB.category).toBe(PolicyCategory.TRANSACTION);
+    expect(evalB.reasonCode).toBe('TRANSACTION_AUTHORIZED');
+
+    // Verify executeVoiceTool execution behavior:
+    // Session A is blocked by safety policy
+    const resA = await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'getAvailableSlots',
+      { date: '2026-09-22' },
+      sessionAContext
+    );
+    expect(resA.policyDecision).toBe('BLOCK');
+    expect(resA.policyCategory).toBe(PolicyCategory.EMERGENCY);
+    expect(resA.policyReason).toBe('SESSION_EMERGENCY_ACTIVE');
+
+    // Session B is allowed to execute without safety block
+    const resB = await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'getAvailableSlots',
+      { date: '2026-09-22' },
+      sessionBContext
+    );
+    expect(resB.policyDecision).toBeUndefined();
+    expect(resB).toBeDefined();
+  });
+
+  // -------------------------------------------------------------------------
+  // Test 18: Test isolation verification
+  // -------------------------------------------------------------------------
+  it('18. Test isolation: Policy testing executes without database mutation or fixture pollution', async () => {
+    const flushSpy = vi.spyOn(db, 'flush');
+
+    await executeVoiceTool(
+      AUTHORITATIVE_CLINIC_ID,
+      'createAppointment',
+      { date: '2026-09-20' },
+      { userUtterance: 'I have severe chest pain' }
+    );
+
+    // db.flush must NEVER be called during unit testing
+    expect(flushSpy).not.toHaveBeenCalled();
   });
 });

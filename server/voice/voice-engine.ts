@@ -4,6 +4,7 @@ import { IVoiceProvider } from './voice-provider.interface';
 import { GeminiLiveVoiceProvider } from './providers/gemini-live.provider';
 import { SarvamVoiceProvider } from './providers/sarvam.provider';
 import { executeVoiceTool } from './tools';
+import { PolicyCategory } from './policy';
 import { db } from '../db';
 import { ClinicService } from '../services/clinic.service';
 import { AppointmentService } from '../services/appointment.service';
@@ -152,6 +153,8 @@ interface ActiveSessionMetadata {
   callId: string;
   createdAt: number;
   lastActivityAt: number;
+  emergencyTriggered?: boolean;
+  escalationId?: string;
 }
 
 const SESSION_TTL_MS = 30 * 60 * 1000; // 30 minutes TTL
@@ -172,6 +175,21 @@ class VoiceEngineManager {
       session.lastActivityAt = Date.now();
     }
     return session;
+  }
+
+  public setSessionEmergency(sessionId: string, escalationId?: string) {
+    const session = this.activeSessions.get(sessionId);
+    if (session) {
+      session.emergencyTriggered = true;
+      if (escalationId) {
+        session.escalationId = escalationId;
+      }
+    }
+  }
+
+  public isSessionEmergency(sessionId: string): boolean {
+    const session = this.activeSessions.get(sessionId);
+    return Boolean(session?.emergencyTriggered);
   }
 
   public removeSession(sessionId: string) {
@@ -249,6 +267,7 @@ class VoiceEngineManager {
       callId: callRecord.id,
       createdAt: Date.now(),
       lastActivityAt: Date.now(),
+      emergencyTriggered: false,
     });
 
     let audioBase64: string | undefined = undefined;
@@ -323,17 +342,37 @@ class VoiceEngineManager {
       // Non-fatal
     }
 
+    const sessionMeta = this.getSession(sessionId);
+
     const result = await provider.processUserMessage(
       sessionId,
       userText,
       formattedHistory,
       async (toolName, args) => {
-        return await executeVoiceTool(clinicId, toolName, args, {
+        const toolResult = await executeVoiceTool(clinicId, toolName, args, {
           userUtterance: userText,
           sessionId,
           callId,
           provider: platformConfig.provider || 'gemini_live',
+          emergencyTriggered: Boolean(sessionMeta?.emergencyTriggered),
+          existingEscalationId: sessionMeta?.escalationId,
         });
+
+        // Latch emergency state for the current authoritative call session
+        if (
+          toolResult?.policyCategory === PolicyCategory.EMERGENCY ||
+          toolResult?.policyDecision === 'ESCALATE' ||
+          (toolName === 'escalateToStaff' && args?.priority === 'urgent')
+        ) {
+          if (sessionMeta) {
+            sessionMeta.emergencyTriggered = true;
+            if (toolResult?.escalation_id) {
+              sessionMeta.escalationId = toolResult.escalation_id;
+            }
+          }
+        }
+
+        return toolResult;
       },
       {
         clinicId,
@@ -380,6 +419,12 @@ class VoiceEngineManager {
         } else if ((tc.name === 'escalateToStaff' || tc.result?.policyDecision === 'ESCALATE') && tc.result?.escalated) {
           outcome = 'ESCALATED';
           escalationId = tc.result.escalation_id;
+          if (sessionMeta) {
+            sessionMeta.emergencyTriggered = true;
+            if (tc.result.escalation_id) {
+              sessionMeta.escalationId = tc.result.escalation_id;
+            }
+          }
         } else if (tc.name === 'getPatientByPhone' && tc.result?.patient_id) {
           patientId = tc.result.patient_id;
         } else if (tc.name === 'createPatient' && tc.result?.patient_id) {

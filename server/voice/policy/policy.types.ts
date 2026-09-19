@@ -20,6 +20,8 @@ export interface PolicyContext {
   callId?: string;
   callerPhone?: string;
   provider?: string;
+  emergencyTriggered?: boolean;
+  existingEscalationId?: string;
 }
 
 export interface EscalationParams {

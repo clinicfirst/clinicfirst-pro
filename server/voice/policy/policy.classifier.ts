@@ -145,9 +145,10 @@ export function classifyIntentAndSafety(
   // -------------------------------------------------------------------------
   // Precedence Tier P0: EMERGENCY
   // -------------------------------------------------------------------------
-  const isEmergency = EMERGENCY_PATTERNS.some((pattern) => pattern.test(combinedText));
+  const isEmergencyCurrentTurn = EMERGENCY_PATTERNS.some((pattern) => pattern.test(combinedText));
+  const isEmergencySession = Boolean(context?.emergencyTriggered);
 
-  if (isEmergency) {
+  if (isEmergencyCurrentTurn || isEmergencySession) {
     // If the tool is already escalateToStaff with urgent priority, allow it directly
     if (toolName === 'escalateToStaff') {
       return {
@@ -161,7 +162,23 @@ export function classifyIntentAndSafety(
       };
     }
 
-    // For any ordinary tool (createAppointment, getAvailableSlots, searchClinicKnowledge, etc.):
+    // If an emergency was already triggered in a prior turn of this session,
+    // or an escalation record already exists for this call, block ordinary booking /
+    // availability / knowledge tools from proceeding under P0 EMERGENCY.
+    // This deterministically keeps emergency protections active without generating duplicate escalations.
+    if ((isEmergencySession && !isEmergencyCurrentTurn) || (isEmergencySession && context?.existingEscalationId)) {
+      return {
+        decision: 'BLOCK',
+        category: PolicyCategory.EMERGENCY,
+        reasonCode: 'SESSION_EMERGENCY_ACTIVE',
+        message:
+          'Emergency state is active for this session. Ordinary appointment booking, schedule checks, and administrative actions are suspended. Immediate clinical triage has been initiated.',
+        sanitizedArgs: {},
+      };
+    }
+
+    // For any ordinary tool (createAppointment, getAvailableSlots, searchClinicKnowledge, etc.)
+    // when emergency symptoms are newly detected in the current turn:
     // EMERGENCY takes absolute precedence over transactions.
     // The policy layer ESCALATES to urgent clinical triage, BLOCKING ordinary booking.
     return {
