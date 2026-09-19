@@ -9,6 +9,7 @@ import {
   cancelAppointment,
   escalateToStaff,
 } from './create-appointment';
+import { VoicePolicyGuard, PolicyContext } from '../policy';
 
 export interface ToolDefinition {
   name: string;
@@ -159,13 +160,13 @@ export const MUTATION_TOOLS = new Set([
 ]);
 
 /**
- * Shared tool execution dispatcher for all voice providers.
+ * Internal tool execution dispatcher.
  * Protected by a deterministic 4000ms bounded timeout so external or DB delays never hang the request.
  * Dispatches explicit timeout semantics:
  * - READ timeout: deterministic temporary lookup failure.
  * - MUTATION timeout: MUTATION_PENDING_VERIFICATION status to prevent false failure reporting or reckless duplicate retries.
  */
-export async function executeVoiceTool(clinicId: string, name: string, args: Record<string, any>) {
+async function dispatchToolExecution(clinicId: string, name: string, args: Record<string, any>) {
   const timeoutMs = 4000;
   const isMutation = MUTATION_TOOLS.has(name);
 
@@ -228,3 +229,26 @@ export async function executeVoiceTool(clinicId: string, name: string, args: Rec
     return { error: err.message || `Failed to execute tool ${name}` };
   }
 }
+
+/**
+ * Phase 2H: Authoritative server-side tool execution dispatcher for all voice providers.
+ * All tool calls from Gemini Live, Sarvam, or Fallback simulators MUST pass through
+ * VoicePolicyGuard before reaching actual tool implementations.
+ */
+export async function executeVoiceTool(
+  clinicId: string,
+  name: string,
+  args: Record<string, any>,
+  context?: PolicyContext
+) {
+  return await VoicePolicyGuard.authorizeAndExecute(
+    clinicId,
+    name,
+    args,
+    context,
+    async (authClinicId, toolName, sanitizedArgs) => {
+      return await dispatchToolExecution(authClinicId, toolName, sanitizedArgs);
+    }
+  );
+}
+

@@ -328,7 +328,12 @@ class VoiceEngineManager {
       userText,
       formattedHistory,
       async (toolName, args) => {
-        return await executeVoiceTool(clinicId, toolName, args);
+        return await executeVoiceTool(clinicId, toolName, args, {
+          userUtterance: userText,
+          sessionId,
+          callId,
+          provider: platformConfig.provider || 'gemini_live',
+        });
       },
       {
         clinicId,
@@ -372,7 +377,7 @@ class VoiceEngineManager {
           outcome = 'APPOINTMENT_RESCHEDULED';
         } else if (tc.name === 'cancelAppointment' && tc.result?.success) {
           outcome = 'APPOINTMENT_CANCELLED';
-        } else if (tc.name === 'escalateToStaff' && tc.result?.escalated) {
+        } else if ((tc.name === 'escalateToStaff' || tc.result?.policyDecision === 'ESCALATE') && tc.result?.escalated) {
           outcome = 'ESCALATED';
           escalationId = tc.result.escalation_id;
         } else if (tc.name === 'getPatientByPhone' && tc.result?.patient_id) {

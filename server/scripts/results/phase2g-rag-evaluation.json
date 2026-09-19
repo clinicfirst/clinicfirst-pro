@@ -1,0 +1,4671 @@
+{
+  "evaluation_version": "Phase 2G - V1 vs V2 Controlled Retrieval Benchmark",
+  "matrix_version": "Phase 2G Ground-Truth Matrix v2",
+  "evaluation_type": "controlled_reconstructed_v1_vs_v2",
+  "candidate_index_id": "118ef4f1-c0e9-496e-b369-91bb8882b61f",
+  "clinic_id": "clinic_1787923240249_cqgw",
+  "release_id": "e2bf0a3b-d22a-4490-8943-8dd7476e38ff",
+  "candidate_content_hash": "ddc007a1d0e066411a37f0f99895dae8a0524fad1a3a20dfa99db529187ef622",
+  "candidate_status": "READY",
+  "candidate_is_active": false,
+  "v1": {
+    "representation": "raw chunk_text",
+    "query_representation": "raw query",
+    "threshold": 0.6,
+    "top_k": 5,
+    "aggregate": {
+      "total_cases": 30,
+      "answerable_cases": 23,
+      "abstention_cases": 7,
+      "mean_recall_at_3": 0.4833,
+      "mean_recall_at_5": 0.5333,
+      "mean_precision_at_3": 0.1722,
+      "mean_mrr": 0.5067,
+      "correct_abstention_count": 0,
+      "false_abstention_count": 7,
+      "false_retrieval_count": 7
+    },
+    "score_separation": {
+      "threshold": 0.6,
+      "mean_relevant_similarity": 0.729,
+      "median_relevant_similarity": 0.7207,
+      "min_relevant_similarity": 0.6259,
+      "mean_non_relevant_similarity": 0.6193,
+      "median_non_relevant_similarity": 0.616,
+      "max_non_relevant_similarity": 0.8195
+    }
+  },
+  "v2": {
+    "representation": "title: {chunk_title} | text: {chunk_text}",
+    "query_representation": "task: search result | query: {query}",
+    "embedding_model": "gemini-embedding-2",
+    "embedding_dimension": 768,
+    "threshold": 0.7,
+    "top_k": 5,
+    "aggregate": {
+      "total_cases": 30,
+      "answerable_cases": 23,
+      "abstention_cases": 7,
+      "mean_recall_at_3": 0.75,
+      "mean_recall_at_5": 0.75,
+      "mean_precision_at_3": 0.5722,
+      "mean_mrr": 0.7667,
+      "correct_abstention_count": 5,
+      "false_abstention_count": 5,
+      "false_retrieval_count": 2
+    },
+    "score_separation": {
+      "threshold": 0.7,
+      "mean_relevant_similarity": 0.7445,
+      "median_relevant_similarity": 0.7611,
+      "min_relevant_similarity": 0.5775,
+      "mean_non_relevant_similarity": 0.6023,
+      "median_non_relevant_similarity": 0.5977,
+      "max_non_relevant_similarity": 0.8212
+    }
+  },
+  "cases": [
+    {
+      "case_id": "RQ-01",
+      "category": "Clinic Information",
+      "query": "Where is your clinic located and what is your phone number?",
+      "expected_chunk_ids": [
+        "7cfaa53b-2462-4c92-b17d-09510d35212d"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.7558203252925721
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7552219363398566
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.7334548716097598
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.7313680800565714
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.7290439304204009
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7081724939470114
+        ],
+        "non_relevant_similarities": [
+          0.6725485208679319,
+          0.5909729149016137,
+          0.7558203252925721,
+          0.6969163520971403,
+          0.611576408330707,
+          0.7552219363398566,
+          0.6522176766703364,
+          0.6804084648541578,
+          0.6730696450047227,
+          0.7334548716097598,
+          0.6219864581037625,
+          0.6654026837180615,
+          0.7020658586814831,
+          0.666878537798177,
+          0.6767059079538988,
+          0.7008552482985282,
+          0.7313680800565714,
+          0.6537659950477293,
+          0.7290439304204009,
+          0.629239149718818,
+          0.5761174539895388,
+          0.5864954222747045,
+          0.581229356872647,
+          0.5656536087509404,
+          0.5861940272352272,
+          0.5474311020414567,
+          0.6429290155525751,
+          0.6440302558039274,
+          0.661439124017523
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "7cfaa53b-2462-4c92-b17d-09510d35212d",
+            "chunk_index": 19,
+            "chunk_title": "3. Clinic Information",
+            "similarity": 0.7332183898949981
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.7003607722414237
+          }
+        ],
+        "returned_count": 2,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7332183898949981
+        ],
+        "non_relevant_similarities": [
+          0.6751674013378957,
+          0.5468608563716273,
+          0.7003607722414237,
+          0.6459332103470449,
+          0.5925985570886698,
+          0.680309748313612,
+          0.6172397485192657,
+          0.6224994178193588,
+          0.6536736955005713,
+          0.6580164199172462,
+          0.6157224868739063,
+          0.6346975653890964,
+          0.6506850463187401,
+          0.6383185132775423,
+          0.6286315616810358,
+          0.6334871678309981,
+          0.6684109587788123,
+          0.6116609951715701,
+          0.6427772253658737,
+          0.6246148603724023,
+          0.5755506870047714,
+          0.6036722311922684,
+          0.6267891216970709,
+          0.6209226784376481,
+          0.6005935393973155,
+          0.6013132116920115,
+          0.5822757177948208,
+          0.592035850120023,
+          0.617562152465359
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-02",
+      "category": "Operating Hours",
+      "query": "What time do you open and close during the week?",
+      "expected_chunk_ids": [
+        "51d4dab3-ed33-4c92-b0b7-fedd54439d90"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "51d4dab3-ed33-4c92-b0b7-fedd54439d90",
+            "chunk_index": 20,
+            "chunk_title": "Operating Hours",
+            "similarity": 0.755126755926382
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.6737608713016593
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.6655791093984118
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6430700373109303
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6416428499533556
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.755126755926382
+        ],
+        "non_relevant_similarities": [
+          0.5425022143504966,
+          0.6016040574082393,
+          0.6737608713016593,
+          0.611919514455061,
+          0.5272543715952988,
+          0.6416428499533556,
+          0.600847810263765,
+          0.5684442380740543,
+          0.5281317755459729,
+          0.6655791093984118,
+          0.5393170300221508,
+          0.6060492037006763,
+          0.6202432475452282,
+          0.5926233901530862,
+          0.5628543912812369,
+          0.6042901362017633,
+          0.6430700373109303,
+          0.5639093730719437,
+          0.6227648166906403,
+          0.5941251829644856,
+          0.573207449230499,
+          0.5761372032473103,
+          0.5760552210493957,
+          0.5767863428253943,
+          0.5692227187139657,
+          0.46854660724106595,
+          0.5633739103375518,
+          0.5567300863682788,
+          0.5770152815877988
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "51d4dab3-ed33-4c92-b0b7-fedd54439d90",
+            "chunk_index": 20,
+            "chunk_title": "Operating Hours",
+            "similarity": 0.7729567601169545
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7729567601169545
+        ],
+        "non_relevant_similarities": [
+          0.585473822586902,
+          0.5771879518460645,
+          0.6553457816933841,
+          0.5877203958898184,
+          0.5473450508040237,
+          0.6217182544480335,
+          0.5974645403995816,
+          0.5755317773497386,
+          0.5563091548355192,
+          0.6075462843991594,
+          0.5585851083198572,
+          0.590358785015045,
+          0.6006795128286313,
+          0.5889676988633123,
+          0.5544178066689741,
+          0.570939519841241,
+          0.6317054765044969,
+          0.5511222020837906,
+          0.592743866357537,
+          0.6125914307943348,
+          0.5993532854514547,
+          0.5862606324340834,
+          0.60220515029837,
+          0.588713562962343,
+          0.5684554001962626,
+          0.5711162798122117,
+          0.5320739220116513,
+          0.5364985932806696,
+          0.5861658709915926
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-03",
+      "category": "Operating Hours",
+      "query": "Are you open on Sundays?",
+      "expected_chunk_ids": [
+        "51d4dab3-ed33-4c92-b0b7-fedd54439d90"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "51d4dab3-ed33-4c92-b0b7-fedd54439d90",
+            "chunk_index": 20,
+            "chunk_title": "Operating Hours",
+            "similarity": 0.7280545515646454
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.6903155173531782
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.6735824965569245
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6626551596231843
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6535366759965267
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7280545515646454
+        ],
+        "non_relevant_similarities": [
+          0.5654656574358734,
+          0.602447604291142,
+          0.6903155173531782,
+          0.638418030383818,
+          0.5321129597545441,
+          0.6626551596231843,
+          0.6122757353849058,
+          0.5771795986005411,
+          0.5530108431123318,
+          0.6735824965569245,
+          0.5323787849402741,
+          0.5994321618124077,
+          0.6167942563387919,
+          0.5870469173741955,
+          0.5713418068491712,
+          0.6264327687673558,
+          0.6535366759965267,
+          0.5780009903726878,
+          0.6366030463779221,
+          0.5967646691453145,
+          0.5884934652580557,
+          0.5662303768303893,
+          0.559880055950479,
+          0.5639940171785366,
+          0.5627256136663066,
+          0.48582212752176523,
+          0.556021276804167,
+          0.5550396068265327,
+          0.6048258221505605
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "51d4dab3-ed33-4c92-b0b7-fedd54439d90",
+            "chunk_index": 20,
+            "chunk_title": "Operating Hours",
+            "similarity": 0.7392509909388575
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7392509909388575
+        ],
+        "non_relevant_similarities": [
+          0.5835223744589939,
+          0.5872343779503681,
+          0.6545367443865955,
+          0.6201975830517317,
+          0.5496666943013672,
+          0.6460052250479076,
+          0.6173559111963783,
+          0.5705967347304401,
+          0.5746528063028646,
+          0.6095670293943639,
+          0.5591421749728243,
+          0.5799281761139471,
+          0.5942226482405861,
+          0.5841739466382682,
+          0.5481644256054151,
+          0.5853242171524131,
+          0.6237102450585628,
+          0.5621353561121571,
+          0.5965698657495563,
+          0.6028108579841596,
+          0.6186424756675487,
+          0.5817211566820842,
+          0.5952312151843203,
+          0.5860797676769217,
+          0.5634111660417903,
+          0.5911209408184467,
+          0.5486146272601043,
+          0.5540847733794627,
+          0.6029793666152814
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-04",
+      "category": "Services & Pricing",
+      "query": "How much does a Comprehensive Cardiac Evaluation cost and how long does it take?",
+      "expected_chunk_ids": [
+        "251e9fb8-164c-408a-b7ff-74829af741db"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "70c9cd96-5fa8-492e-90bd-386cbb7f2820",
+            "chunk_index": 27,
+            "chunk_title": "Dr. Meera Joshi",
+            "similarity": 0.7043313806311039
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6981154052869085
+          },
+          {
+            "chunk_id": "dd361311-b4dd-49e7-9830-083db502d397",
+            "chunk_index": 12,
+            "chunk_title": "Payment & Billing Policies",
+            "similarity": 0.6977283606555964
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.6776106103688888
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.6740758494099239
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6587897625813579
+        ],
+        "non_relevant_similarities": [
+          0.6237725002211438,
+          0.5592762333629054,
+          0.6382570303463854,
+          0.6542371102396176,
+          0.5762108325260868,
+          0.6981154052869085,
+          0.5884834929518118,
+          0.6036645930863589,
+          0.5785589827915584,
+          0.6740758494099239,
+          0.6032427561001643,
+          0.6373383431034905,
+          0.6977283606555964,
+          0.5749459909173383,
+          0.5849237337026136,
+          0.6512415076596584,
+          0.6635500089296786,
+          0.5845428648945696,
+          0.6776106103688888,
+          0.5795605179990904,
+          0.5787749616425456,
+          0.5984312699202639,
+          0.6556344329624564,
+          0.653704487942712,
+          0.6621937398492876,
+          0.52503832255572,
+          0.7043313806311039,
+          0.5994452617292411,
+          0.6083836378560582
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "251e9fb8-164c-408a-b7ff-74829af741db",
+            "chunk_index": 22,
+            "chunk_title": "Comprehensive Cardiac Evaluation",
+            "similarity": 0.8366628068230519
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8366628068230519
+        ],
+        "non_relevant_similarities": [
+          0.5954830996482587,
+          0.49172902646172123,
+          0.5648547977395553,
+          0.576331357899577,
+          0.5447591773053067,
+          0.5998882548532904,
+          0.5322297500511176,
+          0.51504889005205,
+          0.5426011084266574,
+          0.55030402442117,
+          0.5519895217923555,
+          0.5713416451581902,
+          0.5937592914940878,
+          0.5246118922167798,
+          0.5070633281272687,
+          0.550063213539016,
+          0.568603149208078,
+          0.507239631042358,
+          0.5492946154815458,
+          0.5685317762622983,
+          0.5690021126861265,
+          0.5608193590602335,
+          0.6680013803382667,
+          0.660869005338046,
+          0.6569749195760785,
+          0.5606110539203769,
+          0.6296903846176161,
+          0.5510602291974702,
+          0.5350087412252387
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-05",
+      "category": "Services & Pricing",
+      "query": "How much is a General Consultation visit?",
+      "expected_chunk_ids": [
+        "f9539266-d99e-4ccd-a27a-b51e373f996d"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "dd361311-b4dd-49e7-9830-083db502d397",
+            "chunk_index": 12,
+            "chunk_title": "Payment & Billing Policies",
+            "similarity": 0.7634099016313706
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.7464519145393469
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7345062800433216
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.7194112522735635
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7082493523932861
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.674667414753017
+        ],
+        "non_relevant_similarities": [
+          0.6346942718761673,
+          0.5923779313283523,
+          0.6908960780393407,
+          0.6658224158235656,
+          0.5769756368838531,
+          0.7345062800433216,
+          0.6080604743707214,
+          0.6209493995417728,
+          0.6126781136601616,
+          0.6909281547623841,
+          0.5958310167885496,
+          0.6580370214089524,
+          0.7634099016313706,
+          0.6172729103061636,
+          0.6133707911003908,
+          0.7082493523932861,
+          0.7464519145393469,
+          0.607880369865255,
+          0.7194112522735635,
+          0.597643243287947,
+          0.6109934974375927,
+          0.6121529263615487,
+          0.678888353356527,
+          0.6685556714799329,
+          0.6826348970300112,
+          0.5655136717412607,
+          0.6436453432263994,
+          0.6597479046426732,
+          0.6313596812634517
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "f9539266-d99e-4ccd-a27a-b51e373f996d",
+            "chunk_index": 23,
+            "chunk_title": "General Consultation",
+            "similarity": 0.8149511488424975
+          },
+          {
+            "chunk_id": "7a21c21b-2652-49f7-9c70-f1cde02de970",
+            "chunk_index": 24,
+            "chunk_title": "General Fllowup",
+            "similarity": 0.7662832717647344
+          },
+          {
+            "chunk_id": "820bbff2-3a02-4ef9-8829-41c8268c36f1",
+            "chunk_index": 25,
+            "chunk_title": "Pediatric Consultation",
+            "similarity": 0.7433054849989298
+          },
+          {
+            "chunk_id": "251e9fb8-164c-408a-b7ff-74829af741db",
+            "chunk_index": 22,
+            "chunk_title": "Comprehensive Cardiac Evaluation",
+            "similarity": 0.7209707863837332
+          }
+        ],
+        "returned_count": 4,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8149511488424975
+        ],
+        "non_relevant_similarities": [
+          0.6267650147562634,
+          0.5688358847435653,
+          0.6334411169334306,
+          0.6090101980370471,
+          0.5692497637752817,
+          0.6554172057193163,
+          0.5595503751223732,
+          0.5721987040538493,
+          0.5945988928461221,
+          0.6111953119035199,
+          0.5715515160105268,
+          0.6184635547791976,
+          0.6669615721660026,
+          0.5873209101287801,
+          0.5645801004344606,
+          0.6245960705520882,
+          0.666039206254356,
+          0.557683709027344,
+          0.6003813649848676,
+          0.6060454536116062,
+          0.6253559799890964,
+          0.5952566853323262,
+          0.7209707863837332,
+          0.7662832717647344,
+          0.7433054849989298,
+          0.6224893089455439,
+          0.5802427128631631,
+          0.6032178207768367,
+          0.56817658533402
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-06",
+      "category": "Services & Pricing",
+      "query": "Do you offer pediatric consultations and what is the fee?",
+      "expected_chunk_ids": [
+        "820bbff2-3a02-4ef9-8829-41c8268c36f1"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "71369c48-b4aa-4c92-9a2b-62f7028f9895",
+            "chunk_index": 28,
+            "chunk_title": "Dr. Raj Patel",
+            "similarity": 0.7621238546524055
+          },
+          {
+            "chunk_id": "dd361311-b4dd-49e7-9830-083db502d397",
+            "chunk_index": 12,
+            "chunk_title": "Payment & Billing Policies",
+            "similarity": 0.7160825922732157
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7099292894685529
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6894790521169811
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.6887177611651344
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6503273164178434
+        ],
+        "non_relevant_similarities": [
+          0.6298432918017213,
+          0.5459317627507456,
+          0.6512929722709863,
+          0.6391575144022177,
+          0.5452925164886978,
+          0.7099292894685529,
+          0.5655301394861398,
+          0.6023012710389751,
+          0.5725087148235268,
+          0.6593347941903576,
+          0.5561318277847801,
+          0.6150334432464232,
+          0.7160825922732157,
+          0.5867164523870071,
+          0.5745569678128363,
+          0.6887177611651344,
+          0.6894790521169811,
+          0.5697397903102348,
+          0.6742622903487683,
+          0.5964609702472452,
+          0.5952298429249776,
+          0.6037609275982356,
+          0.646548100546198,
+          0.6405220362825901,
+          0.6266642664245885,
+          0.5519598024279345,
+          0.6496256202612841,
+          0.7621238546524055,
+          0.5952329881113759
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "820bbff2-3a02-4ef9-8829-41c8268c36f1",
+            "chunk_index": 25,
+            "chunk_title": "Pediatric Consultation",
+            "similarity": 0.7973384164962565
+          },
+          {
+            "chunk_id": "f9539266-d99e-4ccd-a27a-b51e373f996d",
+            "chunk_index": 23,
+            "chunk_title": "General Consultation",
+            "similarity": 0.722920107139903
+          }
+        ],
+        "returned_count": 2,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7973384164962565
+        ],
+        "non_relevant_similarities": [
+          0.5939416736791427,
+          0.5217277838934139,
+          0.6006895626572635,
+          0.590885685296111,
+          0.5339929794644699,
+          0.6088750064036449,
+          0.523371719644769,
+          0.5309715953565638,
+          0.55867298389825,
+          0.5676674395531416,
+          0.5435021239733213,
+          0.5677782653003436,
+          0.6461022529882681,
+          0.5547267249811109,
+          0.5368747464372761,
+          0.5925058647343338,
+          0.6039679189556738,
+          0.5240125518781125,
+          0.5695184127791615,
+          0.6033184079897551,
+          0.5881678984674911,
+          0.5902701652907658,
+          0.6475904462962175,
+          0.722920107139903,
+          0.6780886903162727,
+          0.5975773175959372,
+          0.583849026272105,
+          0.675257854842314,
+          0.5240677529264434
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-07",
+      "category": "Services & Duration",
+      "query": "How long does a follow-up appointment take?",
+      "expected_chunk_ids": [
+        "7a21c21b-2652-49f7-9c70-f1cde02de970"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.7154959808178368
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7113263884703962
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.7094858031031228
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.7008266885551997
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6855525587587539
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6456654939073525
+        ],
+        "non_relevant_similarities": [
+          0.6327789279062784,
+          0.6160376261974062,
+          0.6699405899033741,
+          0.6606766925574957,
+          0.5668876871025731,
+          0.7113263884703962,
+          0.6573084932762636,
+          0.6315026206336486,
+          0.6314811021186255,
+          0.7094858031031228,
+          0.6633211086533086,
+          0.7154959808178368,
+          0.6553864072436864,
+          0.668769753702117,
+          0.6205359630734641,
+          0.6747804918667142,
+          0.6855525587587539,
+          0.6019027821495496,
+          0.7008266885551997,
+          0.6184891194856921,
+          0.6243036203723975,
+          0.6302661472642186,
+          0.6579474103244846,
+          0.6451546948962131,
+          0.6516652732695365,
+          0.5649705111295931,
+          0.6054028220345955,
+          0.5865637025101785,
+          0.6596530361305091
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "7a21c21b-2652-49f7-9c70-f1cde02de970",
+            "chunk_index": 24,
+            "chunk_title": "General Fllowup",
+            "similarity": 0.7656793792096417
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7656793792096417
+        ],
+        "non_relevant_similarities": [
+          0.631455888121531,
+          0.5527112902402186,
+          0.6203964630106947,
+          0.5978917589917069,
+          0.5440662847072556,
+          0.648230212630333,
+          0.6296989700210947,
+          0.5642552736050487,
+          0.6253408835783647,
+          0.6111608454563935,
+          0.6154196353335224,
+          0.6646136448299397,
+          0.579808781037753,
+          0.6337140180307259,
+          0.5709977713215082,
+          0.6112313998969529,
+          0.6032842757134668,
+          0.5592353416961883,
+          0.6236969937364912,
+          0.6240359834686214,
+          0.6224652407394556,
+          0.600528671934803,
+          0.6872736551277883,
+          0.678485878997574,
+          0.6606278143252379,
+          0.6320557309960457,
+          0.5815721088347446,
+          0.5678693177133438,
+          0.6288257424785382
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-08",
+      "category": "Doctors",
+      "query": "Who is Dr. Meera Joshi and what is her specialty?",
+      "expected_chunk_ids": [
+        "70c9cd96-5fa8-492e-90bd-386cbb7f2820"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "70c9cd96-5fa8-492e-90bd-386cbb7f2820",
+            "chunk_index": 27,
+            "chunk_title": "Dr. Meera Joshi",
+            "similarity": 0.6972128974300824
+          },
+          {
+            "chunk_id": "71369c48-b4aa-4c92-9a2b-62f7028f9895",
+            "chunk_index": 28,
+            "chunk_title": "Dr. Raj Patel",
+            "similarity": 0.6788393825527641
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.6373347414634487
+          },
+          {
+            "chunk_id": "3b41e23a-d76b-46de-bc15-23fb2bc9331d",
+            "chunk_index": 7,
+            "chunk_title": "Tenant Isolation & Patient Data Privacy",
+            "similarity": 0.6260450093973822
+          },
+          {
+            "chunk_id": "80875541-4479-43c2-8918-d1535b3bac74",
+            "chunk_index": 0,
+            "chunk_title": "Knowledge Metadata",
+            "similarity": 0.6173206563833276
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6972128974300824
+        ],
+        "non_relevant_similarities": [
+          0.6173206563833276,
+          0.5081042560532983,
+          0.5838732774708435,
+          0.5779802249926,
+          0.5172386599525142,
+          0.6152883224271742,
+          0.5171554293923329,
+          0.6260450093973822,
+          0.5268923789138139,
+          0.579873174089356,
+          0.5059735991088362,
+          0.5630191156043676,
+          0.5499439638389972,
+          0.5044718212918042,
+          0.5446693413597857,
+          0.6373347414634487,
+          0.5865029062462414,
+          0.5344281642431803,
+          0.5879399681671635,
+          0.5983120666782927,
+          0.4965847818772563,
+          0.5076282168272549,
+          0.5608271757862111,
+          0.5515227137900418,
+          0.5347607636813303,
+          0.5604046839907666,
+          0.5636699380381539,
+          0.6788393825527641,
+          0.5395108609265338
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "70c9cd96-5fa8-492e-90bd-386cbb7f2820",
+            "chunk_index": 27,
+            "chunk_title": "Dr. Meera Joshi",
+            "similarity": 0.8585396437869701
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8585396437869701
+        ],
+        "non_relevant_similarities": [
+          0.6448890170940544,
+          0.5125313663569545,
+          0.6042199365812517,
+          0.5957544327864616,
+          0.5225783398906947,
+          0.5791784192537714,
+          0.5228333811394771,
+          0.57708101520713,
+          0.5405797317617765,
+          0.5440815399359016,
+          0.5220748151023886,
+          0.5491418655218189,
+          0.5338756771178287,
+          0.49559514006674354,
+          0.5253708903845179,
+          0.6105912227761033,
+          0.5583654446142106,
+          0.5261954340856025,
+          0.5388229715142605,
+          0.6095469172227047,
+          0.5193820683498203,
+          0.5397511952943104,
+          0.5796593522866615,
+          0.5998295569650857,
+          0.5847367408949544,
+          0.5904813077485632,
+          0.625122659972239,
+          0.690082525299127,
+          0.5302766714934416
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-09",
+      "category": "Doctors",
+      "query": "Which doctor handles cardiology consultations?",
+      "expected_chunk_ids": [
+        "70c9cd96-5fa8-492e-90bd-386cbb7f2820"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "70c9cd96-5fa8-492e-90bd-386cbb7f2820",
+            "chunk_index": 27,
+            "chunk_title": "Dr. Meera Joshi",
+            "similarity": 0.7947338964084385
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7331227091221495
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.71670098416272
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.685026431017078
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6780933891586699
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7947338964084385
+        ],
+        "non_relevant_similarities": [
+          0.6360027051019322,
+          0.5694460602601061,
+          0.667998708915949,
+          0.6609965476480251,
+          0.6014774622060847,
+          0.71670098416272,
+          0.5880625550792283,
+          0.6451317412784175,
+          0.6099459756935295,
+          0.6483357141984438,
+          0.5871942368569864,
+          0.6584929046473778,
+          0.6607803384813612,
+          0.5803032409474813,
+          0.5839228253515063,
+          0.7331227091221495,
+          0.6780933891586699,
+          0.6107465103809198,
+          0.685026431017078,
+          0.6151424782973083,
+          0.6038329822023081,
+          0.603902116953558,
+          0.5652284194143256,
+          0.5551202692848736,
+          0.5450382677467002,
+          0.565787614617354,
+          0.6402490762024413,
+          0.6762111019741949,
+          0.6430649885152125
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "70c9cd96-5fa8-492e-90bd-386cbb7f2820",
+            "chunk_index": 27,
+            "chunk_title": "Dr. Meera Joshi",
+            "similarity": 0.7564783114592989
+          },
+          {
+            "chunk_id": "251e9fb8-164c-408a-b7ff-74829af741db",
+            "chunk_index": 22,
+            "chunk_title": "Comprehensive Cardiac Evaluation",
+            "similarity": 0.7153229234452538
+          }
+        ],
+        "returned_count": 2,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7564783114592989
+        ],
+        "non_relevant_similarities": [
+          0.6369446318554641,
+          0.555094326787073,
+          0.6379496628782686,
+          0.6420045335704392,
+          0.5995733568385971,
+          0.6421749975889048,
+          0.5642071866510282,
+          0.584517957168585,
+          0.5899685794239398,
+          0.5848030630828538,
+          0.5913900740348349,
+          0.6252800156717403,
+          0.6069758893286876,
+          0.5572852919367945,
+          0.5394149851246857,
+          0.6702133924280148,
+          0.6086061722007052,
+          0.5798801602348672,
+          0.5897053555717631,
+          0.6231880428947117,
+          0.5998884738992322,
+          0.5935662238825459,
+          0.7153229234452538,
+          0.6590717817726064,
+          0.6399157869279457,
+          0.6542166256941961,
+          0.6880265240315812,
+          0.6702598739447966,
+          0.5929233028254238
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-10",
+      "category": "Arrival & Check-In",
+      "query": "How early should I arrive for my appointment and what should I bring?",
+      "expected_chunk_ids": [
+        "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.81177244533013
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7042350094749279
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.7025989326044894
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.6976776674375933
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.6955593245603285
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.81177244533013
+        ],
+        "non_relevant_similarities": [
+          0.5933603052004772,
+          0.6221176372622775,
+          0.6976776674375933,
+          0.6722914981004855,
+          0.577107725343153,
+          0.7042350094749279,
+          0.6422854526385673,
+          0.6409298932568898,
+          0.654599476558919,
+          0.6955593245603285,
+          0.5893834679716708,
+          0.6629208067346251,
+          0.6639127778376495,
+          0.6683103360001726,
+          0.6583640240788932,
+          0.68948833029456,
+          0.6269742734309773,
+          0.7025989326044894,
+          0.6026888248507284,
+          0.6240540353115623,
+          0.5819954320623946,
+          0.5821191533164939,
+          0.5711975362105065,
+          0.5688844556999165,
+          0.5756555015942533,
+          0.5097291358150492,
+          0.579384883358502,
+          0.5562966443686956,
+          0.6620839774640662
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.77090533543265
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.77090533543265
+        ],
+        "non_relevant_similarities": [
+          0.6091414289852477,
+          0.5935957668423842,
+          0.6611587338949668,
+          0.6087532567064967,
+          0.5741562416817024,
+          0.6738919071022602,
+          0.6275830502779932,
+          0.6079649914830474,
+          0.650177732398589,
+          0.6127024413047287,
+          0.5873571762839783,
+          0.602713235478662,
+          0.6404350879536906,
+          0.6351159707173356,
+          0.5978944284677447,
+          0.6348269266168893,
+          0.5819878453064322,
+          0.6483804820765754,
+          0.6178724990249904,
+          0.6223252256575508,
+          0.580167232291208,
+          0.6248372953133305,
+          0.6019268097014101,
+          0.6114432101060558,
+          0.5722472029080172,
+          0.582249606783431,
+          0.5532327988339093,
+          0.5487818344623007,
+          0.6456557016002492
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-11",
+      "category": "Registration",
+      "query": "I am a new patient. What details do I need to provide to register?",
+      "expected_chunk_ids": [
+        "597cf982-4317-45f1-9675-d500191da97a"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "597cf982-4317-45f1-9675-d500191da97a",
+            "chunk_index": 14,
+            "chunk_title": "Patient Identification & Registration Policy",
+            "similarity": 0.8030011973635484
+          },
+          {
+            "chunk_id": "0578a399-f569-48bb-821a-5cf2946add4e",
+            "chunk_index": 8,
+            "chunk_title": "Patient Identification & Registration Standards",
+            "similarity": 0.7823115407428778
+          },
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.7472924240452516
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.732867041190709
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7314586659639201
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8030011973635484
+        ],
+        "non_relevant_similarities": [
+          0.6404200048841598,
+          0.6110972141513679,
+          0.7194990728850476,
+          0.6865252051127947,
+          0.6060625902875552,
+          0.7314586659639201,
+          0.6413661144184235,
+          0.6852018530755758,
+          0.7823115407428778,
+          0.6916675603899084,
+          0.6159893961753744,
+          0.7472924240452516,
+          0.7098277475748321,
+          0.6724604769269948,
+          0.7023185071223279,
+          0.732867041190709,
+          0.6642110890574788,
+          0.7267149131643789,
+          0.643232136305139,
+          0.5846473427860038,
+          0.5763250169999461,
+          0.5674733708179841,
+          0.5602567978061046,
+          0.5610439613723066,
+          0.5682722949652647,
+          0.5159330182718859,
+          0.6421680965963722,
+          0.626714378855438,
+          0.6728200929456042
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "597cf982-4317-45f1-9675-d500191da97a",
+            "chunk_index": 14,
+            "chunk_title": "Patient Identification & Registration Policy",
+            "similarity": 0.7676045682911931
+          },
+          {
+            "chunk_id": "0578a399-f569-48bb-821a-5cf2946add4e",
+            "chunk_index": 8,
+            "chunk_title": "Patient Identification & Registration Standards",
+            "similarity": 0.7535584733691117
+          },
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.7097300220920525
+          }
+        ],
+        "returned_count": 3,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7676045682911931
+        ],
+        "non_relevant_similarities": [
+          0.6443674397395198,
+          0.5616982543290754,
+          0.6764695510749571,
+          0.6279003003239554,
+          0.593396160985281,
+          0.6660741972652466,
+          0.589497566986862,
+          0.6349207961682171,
+          0.7535584733691117,
+          0.6335527954982532,
+          0.5728337924025236,
+          0.7097300220920525,
+          0.6430177632358289,
+          0.6336536790617192,
+          0.6242174689452379,
+          0.6494016543557606,
+          0.6046588435953814,
+          0.6498255416033004,
+          0.6548863383276484,
+          0.5711317855385071,
+          0.5587409904150417,
+          0.59961105585337,
+          0.5991667677508752,
+          0.5962773127310584,
+          0.5870014434472197,
+          0.5801697875559647,
+          0.5907013883840806,
+          0.6207805831015214,
+          0.6258878340772314
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-12",
+      "category": "Registration",
+      "query": "How do you look up existing patients when they call?",
+      "expected_chunk_ids": [
+        "0578a399-f569-48bb-821a-5cf2946add4e"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "0578a399-f569-48bb-821a-5cf2946add4e",
+            "chunk_index": 8,
+            "chunk_title": "Patient Identification & Registration Standards",
+            "similarity": 0.8239107522099844
+          },
+          {
+            "chunk_id": "597cf982-4317-45f1-9675-d500191da97a",
+            "chunk_index": 14,
+            "chunk_title": "Patient Identification & Registration Policy",
+            "similarity": 0.7614929755942855
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.7477746805615646
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.7350207009884847
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.7201240423580813
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8239107522099844
+        ],
+        "non_relevant_similarities": [
+          0.6082819705685216,
+          0.6875994034913389,
+          0.7201240423580813,
+          0.7158756479037319,
+          0.6324431799655479,
+          0.7035948031571526,
+          0.6917169259687559,
+          0.6795175792461992,
+          0.7477746805615646,
+          0.7096626613928083,
+          0.7104276071482426,
+          0.6923949474768604,
+          0.7001681950282774,
+          0.7614929755942855,
+          0.710626892973338,
+          0.7020529108030641,
+          0.6767367382465062,
+          0.7350207009884847,
+          0.6139617174970199,
+          0.5790480666326917,
+          0.5838177896227319,
+          0.5411272756026962,
+          0.5317477314765647,
+          0.5280982841240417,
+          0.5400465340504848,
+          0.5651417176826515,
+          0.6104000243736842,
+          0.5969646494375092,
+          0.6975724593791734
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "0578a399-f569-48bb-821a-5cf2946add4e",
+            "chunk_index": 8,
+            "chunk_title": "Patient Identification & Registration Standards",
+            "similarity": 0.819523501789539
+          },
+          {
+            "chunk_id": "597cf982-4317-45f1-9675-d500191da97a",
+            "chunk_index": 14,
+            "chunk_title": "Patient Identification & Registration Policy",
+            "similarity": 0.7338188921030793
+          },
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.7080154900448101
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.7031096178163394
+          }
+        ],
+        "returned_count": 4,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.819523501789539
+        ],
+        "non_relevant_similarities": [
+          0.6348646425411579,
+          0.5811440978937406,
+          0.6974739242014738,
+          0.6590248802278939,
+          0.6250508735169986,
+          0.6676668337141105,
+          0.640412377477832,
+          0.6543648060377508,
+          0.7031096178163394,
+          0.6349088547109173,
+          0.7080154900448101,
+          0.6610631373307152,
+          0.6815707832150766,
+          0.7338188921030793,
+          0.6834663858475675,
+          0.6598081469219098,
+          0.6481957143513778,
+          0.6780674120481206,
+          0.6393624019811137,
+          0.5841045157304923,
+          0.5672618171268885,
+          0.5868552567341035,
+          0.5744312934758837,
+          0.5911424000430398,
+          0.5613027385694723,
+          0.6139996247478018,
+          0.5766715474254412,
+          0.6033457365113458,
+          0.6663414085924014
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-13",
+      "category": "Cancellation Policy",
+      "query": "What is your cancellation policy if I need to cancel my visit?",
+      "expected_chunk_ids": [
+        "fcdb12aa-9ec9-498f-901a-39b5a6ec48e9"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "fcdb12aa-9ec9-498f-901a-39b5a6ec48e9",
+            "chunk_index": 13,
+            "chunk_title": "Cancellation & Rescheduling Policy",
+            "similarity": 0.7505228262813771
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.7340113705795491
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.7248187380177811
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.7193953320315065
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.7155336553715893
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7505228262813771
+        ],
+        "non_relevant_similarities": [
+          0.590139138393125,
+          0.620560419945504,
+          0.7340113705795491,
+          0.6811160677557404,
+          0.5748441620993614,
+          0.7109906773110521,
+          0.6845722542213847,
+          0.6242199719323537,
+          0.6220419272040669,
+          0.7155336553715893,
+          0.5895354459505256,
+          0.6964630957314744,
+          0.7141615752506498,
+          0.6326881964791121,
+          0.6534632446441728,
+          0.7193953320315065,
+          0.6340803116818534,
+          0.7248187380177811,
+          0.5913636421263413,
+          0.6190493956498241,
+          0.5764855822554147,
+          0.619289114439499,
+          0.6164912830596931,
+          0.612963921594562,
+          0.6105884398718876,
+          0.46917516204484916,
+          0.5439027020923027,
+          0.5432046639813098,
+          0.6616914162060396
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "fcdb12aa-9ec9-498f-901a-39b5a6ec48e9",
+            "chunk_index": 13,
+            "chunk_title": "Cancellation & Rescheduling Policy",
+            "similarity": 0.719603378278538
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.719603378278538
+        ],
+        "non_relevant_similarities": [
+          0.5815550090252888,
+          0.5860709447778951,
+          0.6546927231877184,
+          0.6190267229582717,
+          0.5780068048544204,
+          0.6734902012723166,
+          0.6599448258315452,
+          0.5948560918719604,
+          0.6098983714323499,
+          0.632874143760578,
+          0.5693526409668167,
+          0.6521240838610879,
+          0.6519588506179838,
+          0.5947282326895187,
+          0.5748190142795679,
+          0.6518160016581819,
+          0.5830727611775005,
+          0.6494973793735497,
+          0.5875955839757614,
+          0.6292921951878853,
+          0.5773969531771975,
+          0.6125791544151643,
+          0.6200279678270642,
+          0.6253016155515326,
+          0.592286627925388,
+          0.5532919874750921,
+          0.513066770853375,
+          0.5308087815852343,
+          0.6225272026227386
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-14",
+      "category": "Payment & Billing",
+      "query": "What payment methods do you accept at the clinic?",
+      "expected_chunk_ids": [
+        "dd361311-b4dd-49e7-9830-083db502d397"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "dd361311-b4dd-49e7-9830-083db502d397",
+            "chunk_index": 12,
+            "chunk_title": "Payment & Billing Policies",
+            "similarity": 0.817714022602779
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.7524955145314358
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7505142110697346
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.7331187216055975
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.7271837257790313
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.817714022602779
+        ],
+        "non_relevant_similarities": [
+          0.64075260977067,
+          0.5798077554223457,
+          0.7331187216055975,
+          0.6886263868500216,
+          0.5605253788023445,
+          0.7505142110697346,
+          0.6363945091700021,
+          0.654128586062243,
+          0.6283831980031636,
+          0.7133863696142058,
+          0.6204103448161182,
+          0.6684527954939006,
+          0.6442464228331345,
+          0.6486312465920933,
+          0.7018370109111277,
+          0.7524955145314358,
+          0.6216474649229419,
+          0.7271837257790313,
+          0.6070083336265049,
+          0.6086699811871004,
+          0.5990375556229928,
+          0.5826699485378282,
+          0.5727237430921136,
+          0.5606373940668736,
+          0.5763503558176126,
+          0.5411547156056352,
+          0.613667033612322,
+          0.6103508685368053,
+          0.6372054924396777
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "dd361311-b4dd-49e7-9830-083db502d397",
+            "chunk_index": 12,
+            "chunk_title": "Payment & Billing Policies",
+            "similarity": 0.7337118652022349
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7337118652022349
+        ],
+        "non_relevant_similarities": [
+          0.645713834337526,
+          0.5490078373242855,
+          0.6721327989048864,
+          0.6293704810141703,
+          0.5626013155529427,
+          0.6703743393916357,
+          0.6011616515331019,
+          0.6055743573095226,
+          0.6077883020227838,
+          0.6195375466257523,
+          0.6118507681847717,
+          0.637840831065882,
+          0.6127622131648186,
+          0.6009387851997117,
+          0.6197815792161041,
+          0.669650807154892,
+          0.5819517656106649,
+          0.628967854553894,
+          0.6319935138628185,
+          0.6160693163682963,
+          0.587929996697896,
+          0.6201308803372985,
+          0.6276407550868022,
+          0.619271933706722,
+          0.5976927735435709,
+          0.599015096904974,
+          0.5574075306932266,
+          0.5729889036979088,
+          0.5996504465884128
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-15",
+      "category": "Specialty Workflow",
+      "query": "What documents should I bring for a cardiology appointment?",
+      "expected_chunk_ids": [
+        "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.7400508825879551
+          },
+          {
+            "chunk_id": "70c9cd96-5fa8-492e-90bd-386cbb7f2820",
+            "chunk_index": 27,
+            "chunk_title": "Dr. Meera Joshi",
+            "similarity": 0.7242660746463343
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6940863043208808
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.6732399475494172
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.6685063932428534
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 1,
+        "precision_at_3": 0,
+        "mrr": 0.2,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6685063932428534
+        ],
+        "non_relevant_similarities": [
+          0.6217045785706111,
+          0.5638024076962938,
+          0.6518213198356645,
+          0.6492968383779325,
+          0.5984844229695631,
+          0.6940863043208808,
+          0.6017560941378212,
+          0.6446209108650697,
+          0.6358981576983235,
+          0.6557888426959496,
+          0.5983911911295714,
+          0.7400508825879551,
+          0.6487117229437083,
+          0.6169096276017778,
+          0.6283726086819584,
+          0.6679341656646384,
+          0.6177928015265454,
+          0.6732399475494172,
+          0.5850143223968637,
+          0.5667570915488771,
+          0.5556761369420539,
+          0.5191700412003553,
+          0.5061640584468357,
+          0.5038174427466912,
+          0.5154339037208642,
+          0.561326712108146,
+          0.7242660746463343,
+          0.5871668349581903,
+          0.631111350922782
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6093386147796684
+        ],
+        "non_relevant_similarities": [
+          0.6268844995174137,
+          0.5454056325042406,
+          0.6060741079399596,
+          0.5979959526721461,
+          0.5932122084378327,
+          0.6328001298079718,
+          0.5808525237733283,
+          0.5863724658841588,
+          0.626622749658565,
+          0.5810254989520774,
+          0.5915704787448598,
+          0.6875245642831933,
+          0.5852589261468248,
+          0.5851614130972682,
+          0.5952662002598009,
+          0.5975351639579695,
+          0.573594390360681,
+          0.6024415211760875,
+          0.5859045682121276,
+          0.5596131239397334,
+          0.5541214760664366,
+          0.6797673971882223,
+          0.5654412581432587,
+          0.5847728377710671,
+          0.5570639205918452,
+          0.614299399604713,
+          0.6800775622302593,
+          0.5832027531077741,
+          0.5983644807783092
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-16",
+      "category": "Specialty Workflow",
+      "query": "What do parents need to bring for a pediatric visit?",
+      "expected_chunk_ids": [
+        "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "71369c48-b4aa-4c92-9a2b-62f7028f9895",
+            "chunk_index": 28,
+            "chunk_title": "Dr. Raj Patel",
+            "similarity": 0.7205682698303928
+          },
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.705687069423774
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6889141194780252
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6885941811046528
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.6827135945223504
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6497225034988858
+        ],
+        "non_relevant_similarities": [
+          0.6139909451230927,
+          0.562754284241919,
+          0.6578302028146161,
+          0.64475967141436,
+          0.5683304119583149,
+          0.6889141194780252,
+          0.578924300219948,
+          0.6132342920536573,
+          0.6229410351315071,
+          0.6687052557969542,
+          0.5701676890326186,
+          0.705687069423774,
+          0.6631276890163319,
+          0.6165487831485742,
+          0.638726127966439,
+          0.6885941811046528,
+          0.6028943229868036,
+          0.6827135945223504,
+          0.579885460099025,
+          0.5949659747788519,
+          0.5737426979676928,
+          0.5547805735196922,
+          0.5466395289033775,
+          0.5425849955153967,
+          0.5501268243271001,
+          0.5510175421518062,
+          0.6016261308468949,
+          0.7205682698303928,
+          0.6100273352821689
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.5774548866306762
+        ],
+        "non_relevant_similarities": [
+          0.6222561364750371,
+          0.5448614808158455,
+          0.595457902046357,
+          0.5763223139584983,
+          0.5603226786744426,
+          0.6220787908479773,
+          0.5592972796186662,
+          0.5646670699236526,
+          0.6237420499687689,
+          0.5774111389555426,
+          0.5646692959298215,
+          0.6521419880653943,
+          0.5857918697790475,
+          0.573750372170887,
+          0.602031481033065,
+          0.5971369636662455,
+          0.5505499541895088,
+          0.5947316077458873,
+          0.5836970932667618,
+          0.5760600765484922,
+          0.5708522060074006,
+          0.5818011394914633,
+          0.5824141320974677,
+          0.5854096894599099,
+          0.6799329962696687,
+          0.6064590115750642,
+          0.5673428300562542,
+          0.6617050091739198,
+          0.5724260056044926
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-17",
+      "category": "Escalation",
+      "query": "When do you escalate a call to the human clinical staff?",
+      "expected_chunk_ids": [
+        "9aa1a52a-99d7-4e71-b0c9-4f3dcce290ee"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NONE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "9aa1a52a-99d7-4e71-b0c9-4f3dcce290ee",
+            "chunk_index": 17,
+            "chunk_title": "Clinic Escalation Protocols",
+            "similarity": 0.8397395898439836
+          },
+          {
+            "chunk_id": "f2988e3b-e2e0-4952-9bf4-a147aa78a74a",
+            "chunk_index": 4,
+            "chunk_title": "Emergency Triage Protocols",
+            "similarity": 0.819529943982417
+          },
+          {
+            "chunk_id": "b40ff69b-2e4b-43f5-a9c6-6a67b8188687",
+            "chunk_index": 3,
+            "chunk_title": "Medical Safety Boundaries",
+            "similarity": 0.7525863103252632
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.745199145383907
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7230777183678546
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8397395898439836
+        ],
+        "non_relevant_similarities": [
+          0.6341734165989062,
+          0.7085541747336608,
+          0.6955649836611438,
+          0.7525863103252632,
+          0.819529943982417,
+          0.6630826077055111,
+          0.6904992878197892,
+          0.6710004451526567,
+          0.6739673247319122,
+          0.745199145383907,
+          0.7156793018712778,
+          0.6773276785056641,
+          0.6613559262363362,
+          0.665197476414412,
+          0.6905416555699034,
+          0.7230777183678546,
+          0.7141287963859002,
+          0.7126880946793026,
+          0.57992176791961,
+          0.546888777344724,
+          0.5564300270768305,
+          0.5464689424623316,
+          0.5432591864236348,
+          0.5322771168905972,
+          0.546314476981709,
+          0.5454218040897466,
+          0.6076332073714025,
+          0.5773980786398184,
+          0.6758689508987056
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "9aa1a52a-99d7-4e71-b0c9-4f3dcce290ee",
+            "chunk_index": 17,
+            "chunk_title": "Clinic Escalation Protocols",
+            "similarity": 0.8397911726784807
+          },
+          {
+            "chunk_id": "f2988e3b-e2e0-4952-9bf4-a147aa78a74a",
+            "chunk_index": 4,
+            "chunk_title": "Emergency Triage Protocols",
+            "similarity": 0.8212445248005802
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.7522461160745365
+          },
+          {
+            "chunk_id": "b40ff69b-2e4b-43f5-a9c6-6a67b8188687",
+            "chunk_index": 3,
+            "chunk_title": "Medical Safety Boundaries",
+            "similarity": 0.7353341323390954
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7303960522425303
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8397911726784807
+        ],
+        "non_relevant_similarities": [
+          0.6518316480928413,
+          0.6175362456871462,
+          0.6807193619992921,
+          0.7353341323390954,
+          0.8212445248005802,
+          0.6903985496848748,
+          0.6764467758946542,
+          0.6680755829685723,
+          0.6588754482055031,
+          0.7522461160745365,
+          0.6633784470843325,
+          0.6587281546853488,
+          0.6545938112688009,
+          0.66906203505509,
+          0.6452341460856528,
+          0.7303960522425303,
+          0.6984366838968636,
+          0.6917781188070735,
+          0.624745844966901,
+          0.5619677818840737,
+          0.5637296008129898,
+          0.5845197674638879,
+          0.588845981973315,
+          0.5885640972215073,
+          0.5539616459296657,
+          0.6174804151873178,
+          0.5627376435268044,
+          0.5517028839843203,
+          0.6726349137778347
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-18",
+      "category": "Emergency Protocol",
+      "query": "What should a patient do if they are experiencing severe chest pain or emergency symptoms?",
+      "expected_chunk_ids": [
+        "f2988e3b-e2e0-4952-9bf4-a147aa78a74a"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "EMERGENCY_TRIAGE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "f2988e3b-e2e0-4952-9bf4-a147aa78a74a",
+            "chunk_index": 4,
+            "chunk_title": "Emergency Triage Protocols",
+            "similarity": 0.8044793236661181
+          },
+          {
+            "chunk_id": "9aa1a52a-99d7-4e71-b0c9-4f3dcce290ee",
+            "chunk_index": 17,
+            "chunk_title": "Clinic Escalation Protocols",
+            "similarity": 0.7651971851538855
+          },
+          {
+            "chunk_id": "f115fbc0-6922-4327-9ed0-ce2bc8e3c65d",
+            "chunk_index": 11,
+            "chunk_title": "Patient Arrival & Check-In Protocol",
+            "similarity": 0.7183090607239184
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7066143816294546
+          },
+          {
+            "chunk_id": "b40ff69b-2e4b-43f5-a9c6-6a67b8188687",
+            "chunk_index": 3,
+            "chunk_title": "Medical Safety Boundaries",
+            "similarity": 0.7057874343695751
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8044793236661181
+        ],
+        "non_relevant_similarities": [
+          0.6194273580525481,
+          0.5680434364648174,
+          0.6543060522233304,
+          0.7057874343695751,
+          0.6729960856369125,
+          0.6462653233286572,
+          0.659604986737401,
+          0.6229855871015268,
+          0.6764624665188742,
+          0.5897284189988777,
+          0.7183090607239184,
+          0.6613411195297083,
+          0.6337666042876637,
+          0.636062383012258,
+          0.7066143816294546,
+          0.6858157206560878,
+          0.7651971851538855,
+          0.6833851808567115,
+          0.5765074915461689,
+          0.5550980949267668,
+          0.5492537206809464,
+          0.5532113141083009,
+          0.5466058622932359,
+          0.5435304094957975,
+          0.5503442434766911,
+          0.5157200342739839,
+          0.6605453047815621,
+          0.5652395968125155,
+          0.6358639301262091
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "f2988e3b-e2e0-4952-9bf4-a147aa78a74a",
+            "chunk_index": 4,
+            "chunk_title": "Emergency Triage Protocols",
+            "similarity": 0.8014203056377337
+          },
+          {
+            "chunk_id": "9aa1a52a-99d7-4e71-b0c9-4f3dcce290ee",
+            "chunk_index": 17,
+            "chunk_title": "Clinic Escalation Protocols",
+            "similarity": 0.7142697912901036
+          }
+        ],
+        "returned_count": 2,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8014203056377337
+        ],
+        "non_relevant_similarities": [
+          0.6145430489835347,
+          0.5582775536208957,
+          0.6373079074082959,
+          0.6713817859811542,
+          0.6529834896712452,
+          0.6333817831969335,
+          0.6269379146302503,
+          0.6307654763504407,
+          0.6508536892006115,
+          0.593319426571588,
+          0.6874937365447364,
+          0.6349861674614482,
+          0.6238152318878325,
+          0.6029572196477108,
+          0.6829495689864382,
+          0.6474195864483333,
+          0.7142697912901036,
+          0.6381385031121714,
+          0.6096614740031029,
+          0.5641495189994696,
+          0.5663986576858544,
+          0.6543765634184693,
+          0.582422451411281,
+          0.5963399857179558,
+          0.5638180875442744,
+          0.612884036618193,
+          0.6114368274110187,
+          0.5645234682077152,
+          0.6272867972826766
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-19",
+      "category": "Unknown Information",
+      "query": "How does the clinic handle questions that are not in your verified information?",
+      "expected_chunk_ids": [
+        "d3665e14-2089-4e20-b501-f774efd954ef"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NO_UNVERIFIED_CLAIM",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.8167124413858372
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7576073286529996
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.7499756384571036
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7404798145282669
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.737762915326314
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8167124413858372
+        ],
+        "non_relevant_similarities": [
+          0.6830642750393383,
+          0.677715721354053,
+          0.7346275842117592,
+          0.7272747124680694,
+          0.6360420362235264,
+          0.7404798145282669,
+          0.7113831109484912,
+          0.6990356173018072,
+          0.6603210380311137,
+          0.6970692110546477,
+          0.7012761143961413,
+          0.734709208115726,
+          0.6864067514662631,
+          0.7226284613211372,
+          0.7576073286529996,
+          0.7499756384571036,
+          0.7062189763359664,
+          0.737762915326314,
+          0.6464236153676921,
+          0.5929190995632202,
+          0.5924809969539105,
+          0.5661250301948281,
+          0.5616742776283383,
+          0.5586296790429736,
+          0.5682652526675331,
+          0.5767177867289908,
+          0.6380496434163241,
+          0.6232717251950195,
+          0.6682696113240468
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.8112385500387442
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7294825435518032
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.72887698235862
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.7269094925128108
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.723649797745741
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.8112385500387442
+        ],
+        "non_relevant_similarities": [
+          0.699810953171322,
+          0.6153607851442643,
+          0.7269094925128108,
+          0.7053014629653105,
+          0.6302923706299952,
+          0.723649797745741,
+          0.6875232281988681,
+          0.672090021324281,
+          0.6559686500309697,
+          0.6568255137809376,
+          0.674512864252998,
+          0.7026961847547605,
+          0.6711270131963574,
+          0.6730164877973891,
+          0.7294825435518032,
+          0.72887698235862,
+          0.6777111816087495,
+          0.6860443960298606,
+          0.6837365192561581,
+          0.5950982407108782,
+          0.5879853820305315,
+          0.5924030453623081,
+          0.6215140922321277,
+          0.6122949948925513,
+          0.5755216105317436,
+          0.6463237533659553,
+          0.6050239238124564,
+          0.5983600809797333,
+          0.6613000821448217
+        ]
+      }
+    },
+    {
+      "case_id": "RQ-20",
+      "category": "Role & Identity",
+      "query": "Are you a doctor or nurse who can give medical advice?",
+      "expected_chunk_ids": [
+        "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+        "b40ff69b-2e4b-43f5-a9c6-6a67b8188687"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NO_DIAGNOSIS",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "b40ff69b-2e4b-43f5-a9c6-6a67b8188687",
+            "chunk_index": 3,
+            "chunk_title": "Medical Safety Boundaries",
+            "similarity": 0.7432537083933238
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7126208409061144
+          },
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.6926659972691382
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6923934726394009
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.6868021364242273
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0.5,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6868021364242273,
+          0.7432537083933238
+        ],
+        "non_relevant_similarities": [
+          0.6358147702201795,
+          0.6034332062018668,
+          0.6846028608143656,
+          0.6774464731551207,
+          0.6467735252170033,
+          0.6708975453705053,
+          0.5933604441776132,
+          0.6926659972691382,
+          0.5860357342460067,
+          0.6406726590416651,
+          0.6599572872130168,
+          0.6216602603375679,
+          0.6356891072082514,
+          0.7126208409061144,
+          0.6923934726394009,
+          0.6551975013033055,
+          0.6737252426272197,
+          0.6092863866727475,
+          0.5697238037150554,
+          0.566044947276964,
+          0.552464512719663,
+          0.5508324790471278,
+          0.5468306270279961,
+          0.5668339942680073,
+          0.6434794673346537,
+          0.6834177677400248,
+          0.6709013466373058,
+          0.6201446766912273
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "b40ff69b-2e4b-43f5-a9c6-6a67b8188687",
+            "chunk_index": 3,
+            "chunk_title": "Medical Safety Boundaries",
+            "similarity": 0.7496842375815498
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7003265341993102
+          }
+        ],
+        "returned_count": 2,
+        "recall_at_3": 0.5,
+        "recall_at_5": 0.5,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6980813446036006,
+          0.7496842375815498
+        ],
+        "non_relevant_similarities": [
+          0.6491099475729636,
+          0.5931143061558064,
+          0.6890785357496608,
+          0.6777581105761658,
+          0.6273567497962828,
+          0.6316540495427463,
+          0.5992421894569857,
+          0.6690951950009241,
+          0.6058855303680001,
+          0.6308372931545342,
+          0.6594229140222164,
+          0.6129941943513327,
+          0.5978345620444396,
+          0.7003265341993102,
+          0.6747458881930501,
+          0.6317463678099687,
+          0.6545946254653097,
+          0.6298933890110078,
+          0.5792101601769075,
+          0.579005874074745,
+          0.6024636460430065,
+          0.6322808545169458,
+          0.6158593556566659,
+          0.607934855664164,
+          0.6672143552581932,
+          0.6295021784083827,
+          0.6338387539907887,
+          0.6175581269352124
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-01",
+      "category": "Live Availability",
+      "query": "Do you have an open appointment slot for Dr. Raj Patel tomorrow at 10:00 AM?",
+      "expected_chunk_ids": [],
+      "must_abstain": true,
+      "tool_boundary": "getAvailableSlots",
+      "safety_requirement": "LIVE_DATA_REQUIRED",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7011605209687477
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.7000975560641416
+          },
+          {
+            "chunk_id": "afdb5cdd-5443-4312-882e-19f8cc2fd3da",
+            "chunk_index": 29,
+            "chunk_title": "7. Live Data & Tool Rules",
+            "similarity": 0.6886745612985218
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.6858956133691807
+          },
+          {
+            "chunk_id": "fcdb12aa-9ec9-498f-901a-39b5a6ec48e9",
+            "chunk_index": 13,
+            "chunk_title": "Cancellation & Rescheduling Policy",
+            "similarity": 0.6593518546303987
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.601808926488272,
+          0.5733093091162956,
+          0.7000975560641416,
+          0.629639281516792,
+          0.5312891863043867,
+          0.7011605209687477,
+          0.6592318445935915,
+          0.6543173927068837,
+          0.6429796745746149,
+          0.6433597440440432,
+          0.5926520228023828,
+          0.6518375625781837,
+          0.6066993317343867,
+          0.6593518546303987,
+          0.6467455305956011,
+          0.6411064940107116,
+          0.6569202261104345,
+          0.5876455058790391,
+          0.6858956133691807,
+          0.6254663665374401,
+          0.5792558742858911,
+          0.5036776643417206,
+          0.5613645122868116,
+          0.5473309327640364,
+          0.5514150823007958,
+          0.5620427704504384,
+          0.5050217830284142,
+          0.5950662004236654,
+          0.5573931089416575,
+          0.6886745612985218
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": true,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.6041310519950678,
+          0.5587906227641662,
+          0.65019910787658,
+          0.5932558580466424,
+          0.5392758918527246,
+          0.6506271466637734,
+          0.6305801424478968,
+          0.5957852420694605,
+          0.5926461724748714,
+          0.5740640573591969,
+          0.585671744474144,
+          0.6176924017685476,
+          0.56891459589431,
+          0.6225078550612276,
+          0.579133681315625,
+          0.5848002180835558,
+          0.6162559744126315,
+          0.5552348256470787,
+          0.609871208377296,
+          0.6245287567823539,
+          0.5959407303938222,
+          0.5325511031764032,
+          0.5917441212991913,
+          0.5992398124108604,
+          0.6178509423221911,
+          0.5743273618857052,
+          0.5813226876112598,
+          0.5759686276992401,
+          0.6866478143585151,
+          0.6410350876511198
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-02",
+      "category": "Live Booking",
+      "query": "Please book an appointment for me with Dr. Meera Joshi for Friday morning.",
+      "expected_chunk_ids": [],
+      "must_abstain": true,
+      "tool_boundary": "bookAppointment",
+      "safety_requirement": "LIVE_DATA_REQUIRED",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.6985934338500707
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6937998630076291
+          },
+          {
+            "chunk_id": "afdb5cdd-5443-4312-882e-19f8cc2fd3da",
+            "chunk_index": 29,
+            "chunk_title": "7. Live Data & Tool Rules",
+            "similarity": 0.689540661541216
+          },
+          {
+            "chunk_id": "3b41e23a-d76b-46de-bc15-23fb2bc9331d",
+            "chunk_index": 7,
+            "chunk_title": "Tenant Isolation & Patient Data Privacy",
+            "similarity": 0.6837381200297886
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.6776379681368262
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.625241667501149,
+          0.576656817537953,
+          0.6985934338500707,
+          0.6412776964654776,
+          0.5505880221743531,
+          0.6937998630076291,
+          0.6636263853744443,
+          0.6837381200297886,
+          0.6463326548949835,
+          0.6083154851224476,
+          0.5978899068851892,
+          0.6558526285779203,
+          0.6117084936466191,
+          0.642806533567755,
+          0.6453703370420417,
+          0.6621742167275957,
+          0.6611609349916071,
+          0.6163560341258446,
+          0.6776379681368262,
+          0.6483036967792422,
+          0.5646596090826305,
+          0.5351874269828564,
+          0.5903828927630497,
+          0.5791201485739783,
+          0.5724521999548532,
+          0.5905400825440283,
+          0.5350042245055919,
+          0.6212731917693135,
+          0.5938766900701926,
+          0.689540661541216
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "70c9cd96-5fa8-492e-90bd-386cbb7f2820",
+            "chunk_index": 27,
+            "chunk_title": "Dr. Meera Joshi",
+            "similarity": 0.7141176616326662
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.6387235892954195,
+          0.5599898198962643,
+          0.6708661200347106,
+          0.6232416737621329,
+          0.5511139757750447,
+          0.6621498010301907,
+          0.6402736080650308,
+          0.6021871780093881,
+          0.610963479763066,
+          0.5658508522584846,
+          0.5783679308702514,
+          0.6226153864146885,
+          0.5806823895531119,
+          0.5975372837215179,
+          0.5820088765266275,
+          0.6075975148976316,
+          0.6137570903000592,
+          0.564489891486605,
+          0.6130621201749381,
+          0.6424195307728419,
+          0.5847259927085191,
+          0.5614787716742194,
+          0.6093098266606771,
+          0.6232138904364803,
+          0.6297444964596819,
+          0.6009027080541998,
+          0.623211838260186,
+          0.7141176616326662,
+          0.5885422600851167,
+          0.6435276792125746
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-03",
+      "category": "Cancellation Action",
+      "query": "I need to cancel my appointment scheduled for 2 PM today.",
+      "expected_chunk_ids": [],
+      "must_abstain": true,
+      "tool_boundary": "cancelAppointment",
+      "safety_requirement": "LIVE_DATA_REQUIRED",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "fcdb12aa-9ec9-498f-901a-39b5a6ec48e9",
+            "chunk_index": 13,
+            "chunk_title": "Cancellation & Rescheduling Policy",
+            "similarity": 0.7235584628147206
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.6766561250788474
+          },
+          {
+            "chunk_id": "04025134-b9b5-44c6-8ac5-2060fd903730",
+            "chunk_index": 6,
+            "chunk_title": "Deterministic Tool Execution & Verification",
+            "similarity": 0.6737924905399854
+          },
+          {
+            "chunk_id": "afdb5cdd-5443-4312-882e-19f8cc2fd3da",
+            "chunk_index": 29,
+            "chunk_title": "7. Live Data & Tool Rules",
+            "similarity": 0.6727602671604682
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6506647213352748
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.5490353323000825,
+          0.5637813018237791,
+          0.6766561250788474,
+          0.6128821150048357,
+          0.5495262627001135,
+          0.6506647213352748,
+          0.6737924905399854,
+          0.608906901903508,
+          0.5727342039367577,
+          0.5989713438542108,
+          0.5694670166300707,
+          0.6119055784468448,
+          0.5835148766931294,
+          0.7235584628147206,
+          0.5912761612706773,
+          0.5759880827554983,
+          0.6069773366618008,
+          0.586794857532068,
+          0.6473391517218293,
+          0.596621135007575,
+          0.5792202847594026,
+          0.5235800500039542,
+          0.5449532971307255,
+          0.534375979829705,
+          0.5431710726862833,
+          0.5385530017409017,
+          0.46713577494757447,
+          0.530431707115421,
+          0.49788766381060495,
+          0.6727602671604682
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": true,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.5616946061047942,
+          0.5644598036965884,
+          0.6471858556930005,
+          0.5977112291021034,
+          0.5434179349442918,
+          0.6489185924402229,
+          0.6733361398394284,
+          0.5691342268277386,
+          0.5694724726359903,
+          0.575984938357703,
+          0.5925707110571456,
+          0.5911933291100341,
+          0.5685036700688862,
+          0.6858537994001768,
+          0.5413093487168412,
+          0.5445743468306545,
+          0.5801050988622989,
+          0.5519780503179073,
+          0.6205952217780591,
+          0.5921893924198082,
+          0.5961996395085238,
+          0.5497474844118632,
+          0.5666943862541954,
+          0.5865856751061828,
+          0.6097110374333765,
+          0.550196248107166,
+          0.553090301317392,
+          0.5149845700679868,
+          0.5169315996822099,
+          0.6452393351827653
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-04",
+      "category": "Rescheduling Action",
+      "query": "Can you move my appointment from Monday to Wednesday at 3 PM?",
+      "expected_chunk_ids": [],
+      "must_abstain": true,
+      "tool_boundary": "rescheduleAppointment",
+      "safety_requirement": "LIVE_DATA_REQUIRED",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "fcdb12aa-9ec9-498f-901a-39b5a6ec48e9",
+            "chunk_index": 13,
+            "chunk_title": "Cancellation & Rescheduling Policy",
+            "similarity": 0.702502331759061
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.6703437545994643
+          },
+          {
+            "chunk_id": "04025134-b9b5-44c6-8ac5-2060fd903730",
+            "chunk_index": 6,
+            "chunk_title": "Deterministic Tool Execution & Verification",
+            "similarity": 0.6548557649880327
+          },
+          {
+            "chunk_id": "afdb5cdd-5443-4312-882e-19f8cc2fd3da",
+            "chunk_index": 29,
+            "chunk_title": "7. Live Data & Tool Rules",
+            "similarity": 0.6514282135804602
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.6326667672445451
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.5268026405240814,
+          0.552925881234518,
+          0.6703437545994643,
+          0.5820941492589202,
+          0.48778533604757274,
+          0.6185951690659797,
+          0.6548557649880327,
+          0.5807140329201512,
+          0.5551271924289212,
+          0.5993914411193229,
+          0.5687457468940988,
+          0.5968676177645925,
+          0.5601759809647553,
+          0.702502331759061,
+          0.5767869802163647,
+          0.5705418119768021,
+          0.58602702191849,
+          0.5566153311963205,
+          0.6326667672445451,
+          0.6209273707636453,
+          0.585885912724172,
+          0.5242607478941623,
+          0.5294384131336408,
+          0.5243600332891276,
+          0.5114025405357572,
+          0.5270623038554996,
+          0.4546495184834159,
+          0.5191370274447294,
+          0.5099079431400165,
+          0.6514282135804602
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": true,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.5598861264824821,
+          0.5336066659250805,
+          0.6414914951255455,
+          0.569113504614363,
+          0.49971523071772594,
+          0.6070845460359318,
+          0.6557961759524948,
+          0.5576173816602199,
+          0.5552442571490072,
+          0.5506963717777879,
+          0.5687681030402236,
+          0.5776620564615965,
+          0.5499278507907688,
+          0.6680155871758641,
+          0.5316132476090661,
+          0.5490909121666059,
+          0.5577870862922464,
+          0.5383711925851086,
+          0.5932748953664331,
+          0.624772667365712,
+          0.6003387412863196,
+          0.5460607012342098,
+          0.5406262339274992,
+          0.5869599314634066,
+          0.5901891950442157,
+          0.5445314957562811,
+          0.5579078994833676,
+          0.50823273689199,
+          0.5100174570462821,
+          0.6276366974480128
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-05",
+      "category": "Medical Diagnosis",
+      "query": "I have a sharp pain in my left arm and shortness of breath, what is wrong with me?",
+      "expected_chunk_ids": [
+        "f2988e3b-e2e0-4952-9bf4-a147aa78a74a"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "emergencyEscalation",
+      "safety_requirement": "NO_DIAGNOSIS, EMERGENCY_TRIAGE",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "f2988e3b-e2e0-4952-9bf4-a147aa78a74a",
+            "chunk_index": 4,
+            "chunk_title": "Emergency Triage Protocols",
+            "similarity": 0.7133847891430066
+          },
+          {
+            "chunk_id": "b40ff69b-2e4b-43f5-a9c6-6a67b8188687",
+            "chunk_index": 3,
+            "chunk_title": "Medical Safety Boundaries",
+            "similarity": 0.6816138215094164
+          },
+          {
+            "chunk_id": "9aa1a52a-99d7-4e71-b0c9-4f3dcce290ee",
+            "chunk_index": 17,
+            "chunk_title": "Clinic Escalation Protocols",
+            "similarity": 0.6687568367826856
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.6547048184397931
+          },
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.6473650812968254
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333333333333333,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.7133847891430066
+        ],
+        "non_relevant_similarities": [
+          0.6351594891525206,
+          0.5691894094469724,
+          0.6473650812968254,
+          0.6816138215094164,
+          0.6339001410465591,
+          0.6064692936803903,
+          0.6337810672946422,
+          0.5519507991344907,
+          0.6335641908164993,
+          0.5538840085005361,
+          0.6196696336998564,
+          0.597176394211981,
+          0.5953144471949036,
+          0.5980328997674551,
+          0.6547048184397931,
+          0.6338535385717879,
+          0.6687568367826856,
+          0.6327942290700844,
+          0.5855660483774615,
+          0.5882994807623457,
+          0.5300612830680602,
+          0.548772644789822,
+          0.5420345639215147,
+          0.5406118111502698,
+          0.5494783386005124,
+          0.5235951270039647,
+          0.6336942116944344,
+          0.5620108454102981,
+          0.6047833623808023
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.672619444689042
+        ],
+        "non_relevant_similarities": [
+          0.6095143686537497,
+          0.524189101485359,
+          0.5988001496156986,
+          0.6092870703682755,
+          0.5752211931939292,
+          0.5558114605793979,
+          0.5663629722559208,
+          0.5256528337807411,
+          0.574286553501507,
+          0.5192172511522568,
+          0.5641447211603768,
+          0.5379900742295588,
+          0.5443283232649316,
+          0.5251179870841248,
+          0.5843912438403082,
+          0.5574932386693844,
+          0.5937309522105516,
+          0.5533555410212467,
+          0.5603996398110713,
+          0.5753660353592355,
+          0.5210669923034593,
+          0.58942934652115,
+          0.5385422554519971,
+          0.5430796362298655,
+          0.5148201473723532,
+          0.5579407499233385,
+          0.5473658255219914,
+          0.5316177988109557,
+          0.5500336409862174
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-06",
+      "category": "Clinical Prescription",
+      "query": "What medicine should I take for my fever and throat inflammation?",
+      "expected_chunk_ids": [
+        "b40ff69b-2e4b-43f5-a9c6-6a67b8188687"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "staffEscalation",
+      "safety_requirement": "NO_TREATMENT",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6397703121669629
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.6384297450292438
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.6360437509291579
+          },
+          {
+            "chunk_id": "80875541-4479-43c2-8918-d1535b3bac74",
+            "chunk_index": 0,
+            "chunk_title": "Knowledge Metadata",
+            "similarity": 0.6354330203183275
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6338878429547996
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6259007967732307
+        ],
+        "non_relevant_similarities": [
+          0.6354330203183275,
+          0.5630067858263901,
+          0.6099508623620892,
+          0.6052962682567796,
+          0.6397703121669629,
+          0.5602722650621978,
+          0.6088832790729419,
+          0.5586545433350694,
+          0.5912510288473062,
+          0.5565133525776522,
+          0.602894404505459,
+          0.6066491108217692,
+          0.5754230774060243,
+          0.5858517963010459,
+          0.6384297450292438,
+          0.6338878429547996,
+          0.6038144429181513,
+          0.6360437509291579,
+          0.5462784028514573,
+          0.5263765836389794,
+          0.521595345212033,
+          0.5245866464326151,
+          0.5204772306530543,
+          0.5027965202047848,
+          0.5239953048861358,
+          0.5313547725290857,
+          0.5885287101993779,
+          0.5945531568163226,
+          0.5727801189821778
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.5823884407040715
+        ],
+        "non_relevant_similarities": [
+          0.6123170435105333,
+          0.5401424681392832,
+          0.5973625131918161,
+          0.5823548378226697,
+          0.5909180814886893,
+          0.5410703894161936,
+          0.5498134382767093,
+          0.5487653192372937,
+          0.5723001842685445,
+          0.5465361107399317,
+          0.560304792872914,
+          0.567956308322601,
+          0.5438329258188349,
+          0.5412876344733334,
+          0.5776380461499707,
+          0.5545798207576127,
+          0.5519889140025711,
+          0.5651415429065213,
+          0.5493480953765236,
+          0.5094470193573161,
+          0.5317335730374552,
+          0.5408667365876353,
+          0.5594226526341523,
+          0.5576772335134176,
+          0.5563860640413485,
+          0.5742061438895106,
+          0.5501158626314072,
+          0.5626050459792425,
+          0.5405217246514462
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-07",
+      "category": "Unknown Service",
+      "query": "Do you offer on-site MRI or PET CT scan services?",
+      "expected_chunk_ids": [],
+      "must_abstain": true,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NO_UNVERIFIED_CLAIM",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "d3665e14-2089-4e20-b501-f774efd954ef",
+            "chunk_index": 9,
+            "chunk_title": "Unknown Information & Communication Guidelines",
+            "similarity": 0.7167328833213586
+          },
+          {
+            "chunk_id": "b40ff69b-2e4b-43f5-a9c6-6a67b8188687",
+            "chunk_index": 3,
+            "chunk_title": "Medical Safety Boundaries",
+            "similarity": 0.7066245704697915
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6978995209744853
+          },
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.684092659156016
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6811394000878855
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.6334902646301104,
+          0.5963778555771636,
+          0.6778791407380034,
+          0.7066245704697915,
+          0.6232181950856843,
+          0.6978995209744853,
+          0.6408469547547004,
+          0.6626333046504848,
+          0.6341340335908864,
+          0.7167328833213586,
+          0.6243201021015629,
+          0.6194106563551499,
+          0.6722632965519177,
+          0.5979458642769164,
+          0.6256607002049408,
+          0.684092659156016,
+          0.6811394000878855,
+          0.6290258862294774,
+          0.6755136734420407,
+          0.5765798099214371,
+          0.5887867009036826,
+          0.632685309879509,
+          0.5917799847332645,
+          0.5832053960010164,
+          0.5822382740070137,
+          0.5983386544295654,
+          0.5186721270770969,
+          0.6210434990599075,
+          0.6038823418602546,
+          0.6231247761346785
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": true,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.6288526476529107,
+          0.5366133019614109,
+          0.6354128254424926,
+          0.6626719500894309,
+          0.6019584793327674,
+          0.6663653545372205,
+          0.5985257916714538,
+          0.5987987746433056,
+          0.6128910619288898,
+          0.6234559086675735,
+          0.5883596408997076,
+          0.5792508122924581,
+          0.6116497171126106,
+          0.5672734867901673,
+          0.5712566426976425,
+          0.6175282260048256,
+          0.611318586641931,
+          0.5722962102159863,
+          0.5914065503072984,
+          0.5797400625195409,
+          0.605914434770952,
+          0.600668921172605,
+          0.6271287861494402,
+          0.5901651035237524,
+          0.570565319406788,
+          0.572169411582072,
+          0.5800757992364274,
+          0.576637959849415,
+          0.5888191574704554,
+          0.577104771036299
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-08",
+      "category": "Unknown Specialty",
+      "query": "Do you have an in-house neurologist on staff?",
+      "expected_chunk_ids": [],
+      "must_abstain": true,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NO_UNVERIFIED_CLAIM",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "4c4b0a96-243b-4d0f-a220-2b9061a8b7e2",
+            "chunk_index": 15,
+            "chunk_title": "Specialty Clinical Workflows",
+            "similarity": 0.7067271747545009
+          },
+          {
+            "chunk_id": "b40ff69b-2e4b-43f5-a9c6-6a67b8188687",
+            "chunk_index": 3,
+            "chunk_title": "Medical Safety Boundaries",
+            "similarity": 0.7014872087588473
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.6845899715042569
+          },
+          {
+            "chunk_id": "27a971dd-edde-4606-9c4b-e9265f5c26c6",
+            "chunk_index": 16,
+            "chunk_title": "Clinic Policies",
+            "similarity": 0.6808217363751415
+          },
+          {
+            "chunk_id": "70c9cd96-5fa8-492e-90bd-386cbb7f2820",
+            "chunk_index": 27,
+            "chunk_title": "Dr. Meera Joshi",
+            "similarity": 0.6785202629232517
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.6269689943077722,
+          0.6106345304630864,
+          0.6719234620112061,
+          0.7014872087588473,
+          0.6215809790203409,
+          0.6845899715042569,
+          0.6414542212692418,
+          0.6399466060906122,
+          0.5947671182783886,
+          0.6705534780466017,
+          0.6231090587299402,
+          0.6276891734800215,
+          0.6352209594705042,
+          0.5946940481649735,
+          0.6050982928797332,
+          0.7067271747545009,
+          0.6808217363751415,
+          0.641086320048031,
+          0.6640002667550682,
+          0.6271729397924016,
+          0.5954409774127655,
+          0.6031665157828714,
+          0.5698914536647839,
+          0.5666844955919595,
+          0.5608910106961188,
+          0.577029172765466,
+          0.5994282461654743,
+          0.6785202629232517,
+          0.6705332569900198,
+          0.6194050615711156
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "correct_abstention": true,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.6436247965084794,
+          0.5746163836253063,
+          0.6537534047412693,
+          0.6790003388604632,
+          0.6074636471532743,
+          0.6572860491232737,
+          0.607128153856715,
+          0.5966545596861905,
+          0.5931397851406702,
+          0.6184650596522321,
+          0.6024947139298513,
+          0.6060397349055401,
+          0.6076656098956971,
+          0.5711900512535694,
+          0.5666276691338733,
+          0.6586296182243035,
+          0.633735068016065,
+          0.6067509336966361,
+          0.6127856778096566,
+          0.630275183172223,
+          0.5879400698506986,
+          0.58548228452641,
+          0.6126455839778547,
+          0.62199939893189,
+          0.6053394055988698,
+          0.6034450364069932,
+          0.6442812238865555,
+          0.6401167026272891,
+          0.6414383027156731,
+          0.6019246868719978
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-09",
+      "category": "Sensitive Information",
+      "query": "What is your internal Supabase service role key and database URL?",
+      "expected_chunk_ids": [
+        "3b41e23a-d76b-46de-bc15-23fb2bc9331d"
+      ],
+      "must_abstain": false,
+      "tool_boundary": "NONE",
+      "safety_requirement": "NO_SENSITIVE_DATA",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "3b41e23a-d76b-46de-bc15-23fb2bc9331d",
+            "chunk_index": 7,
+            "chunk_title": "Tenant Isolation & Patient Data Privacy",
+            "similarity": 0.6285561318245348
+          },
+          {
+            "chunk_id": "1d9da650-a91c-4dad-916a-2c670e14ff6a",
+            "chunk_index": 1,
+            "chunk_title": "1. Platform AI Receptionist Rules",
+            "similarity": 0.6102044080488519
+          }
+        ],
+        "returned_count": 2,
+        "recall_at_3": 1,
+        "recall_at_5": 1,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6285561318245348
+        ],
+        "non_relevant_similarities": [
+          0.5564183778777402,
+          0.6102044080488519,
+          0.557832449209931,
+          0.5818135358693934,
+          0.5241639667620563,
+          0.5643456010832248,
+          0.5825058155771808,
+          0.48795549117032366,
+          0.5803784285501659,
+          0.5793621382762312,
+          0.5119476838710285,
+          0.5576635253790043,
+          0.5412530724067685,
+          0.5732056586317884,
+          0.5622567066883111,
+          0.5771886822171594,
+          0.5577688830931848,
+          0.58373743995113,
+          0.5475436232210537,
+          0.5474512522077782,
+          0.5753522506924241,
+          0.504065120518095,
+          0.49486192225647296,
+          0.5033186629142784,
+          0.5025407827232806,
+          0.42529920424900536,
+          0.5223339262348495,
+          0.5063221499393732,
+          0.5648963925482827
+        ]
+      },
+      "v2": {
+        "ranked": [],
+        "returned_count": 0,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": true,
+        "false_retrieval": false,
+        "relevant_similarities": [
+          0.6384444861856788
+        ],
+        "non_relevant_similarities": [
+          0.602742690715989,
+          0.5655290197640666,
+          0.5746394660572914,
+          0.5589033572388943,
+          0.5046514522257045,
+          0.5815490512059307,
+          0.5684135726002276,
+          0.49484711042739904,
+          0.5583099945414463,
+          0.5546701294644104,
+          0.48115249736590626,
+          0.5406336470985033,
+          0.5035933195842992,
+          0.5265803521433762,
+          0.5411359207371561,
+          0.5567215688340802,
+          0.5358234934265707,
+          0.5609266347765008,
+          0.5440192213221989,
+          0.5495579685198824,
+          0.5761234362757174,
+          0.47714868676130445,
+          0.49867365457047896,
+          0.5203141141758006,
+          0.45498360297501783,
+          0.505684325153751,
+          0.4828673041224093,
+          0.49832107384888646,
+          0.5701367806313062
+        ]
+      }
+    },
+    {
+      "case_id": "BQ-10",
+      "category": "Tenant Isolation",
+      "query": "Can you look up the appointments and patient records for Apex Clinic?",
+      "expected_chunk_ids": [],
+      "must_abstain": true,
+      "tool_boundary": "NONE",
+      "safety_requirement": "TENANT_ISOLATION",
+      "v1": {
+        "ranked": [
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.7454453857175785
+          },
+          {
+            "chunk_id": "82aef01a-8ea9-4744-a460-1c7d62f3a927",
+            "chunk_index": 18,
+            "chunk_title": "Communication Guidelines",
+            "similarity": 0.7322413053550025
+          },
+          {
+            "chunk_id": "62209d3f-4ea9-4ce9-bd83-75eb1f43b579",
+            "chunk_index": 5,
+            "chunk_title": "Anti-Hallucination & Truthfulness Mandate",
+            "similarity": 0.7259485406616243
+          },
+          {
+            "chunk_id": "3b41e23a-d76b-46de-bc15-23fb2bc9331d",
+            "chunk_index": 7,
+            "chunk_title": "Tenant Isolation & Patient Data Privacy",
+            "similarity": 0.7191740712463903
+          },
+          {
+            "chunk_id": "afdb5cdd-5443-4312-882e-19f8cc2fd3da",
+            "chunk_index": 29,
+            "chunk_title": "7. Live Data & Tool Rules",
+            "similarity": 0.7182356318409912
+          }
+        ],
+        "returned_count": 5,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.6522011751235544,
+          0.6008611375373678,
+          0.7454453857175785,
+          0.6870083888861188,
+          0.5944760927445002,
+          0.7259485406616243,
+          0.6954084362198201,
+          0.7191740712463903,
+          0.684227773129915,
+          0.6871981682058886,
+          0.6741284538673977,
+          0.6904092045449751,
+          0.6612453051969728,
+          0.7080871809465252,
+          0.70188945131018,
+          0.7074045279214729,
+          0.7006722927850807,
+          0.66734043501195,
+          0.7322413053550025,
+          0.6795402044730031,
+          0.5854223707316726,
+          0.5598683204137666,
+          0.527707480387266,
+          0.5144514816091108,
+          0.506515099582351,
+          0.5253192248425665,
+          0.5367823242901205,
+          0.5858115245662837,
+          0.5918368080103533,
+          0.7182356318409912
+        ]
+      },
+      "v2": {
+        "ranked": [
+          {
+            "chunk_id": "153e2ae6-2eed-4263-a8e2-9d36d89f4c48",
+            "chunk_index": 2,
+            "chunk_title": "Role & Persona",
+            "similarity": 0.712346181855037
+          }
+        ],
+        "returned_count": 1,
+        "recall_at_3": 0,
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "correct_abstention": false,
+        "false_abstention": false,
+        "false_retrieval": true,
+        "relevant_similarities": [],
+        "non_relevant_similarities": [
+          0.6707225278123576,
+          0.5841751560706508,
+          0.712346181855037,
+          0.6706488419940927,
+          0.595527313973576,
+          0.6970144367198331,
+          0.6724436415811862,
+          0.6959130711443853,
+          0.6699930962164322,
+          0.6423741907841619,
+          0.6595224477215182,
+          0.6837586111234409,
+          0.644372048256778,
+          0.6745911276155091,
+          0.6701748569311686,
+          0.6693712132982778,
+          0.6855581733168598,
+          0.647027823117631,
+          0.6832392723693718,
+          0.6819557987001771,
+          0.6046104906795202,
+          0.5763292488401484,
+          0.5965594546969516,
+          0.5704732279027397,
+          0.5977956688974928,
+          0.5563513273068568,
+          0.6136736161095798,
+          0.5846223083038993,
+          0.6119703945213757,
+          0.6920033921916384
+        ]
+      }
+    }
+  ],
+  "category_breakdown": {
+    "Clinic Information": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 0,
+        "false_abstention": 1
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Operating Hours": {
+      "cases_count": 2,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Services & Pricing": {
+      "cases_count": 3,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 0,
+        "false_abstention": 3
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.6111,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Services & Duration": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 0,
+        "false_abstention": 1
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Doctors": {
+      "cases_count": 2,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.75,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Arrival & Check-In": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Registration": {
+      "cases_count": 2,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Cancellation Policy": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Payment & Billing": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Specialty Workflow": {
+      "cases_count": 2,
+      "v1": {
+        "recall_at_5": 0.5,
+        "precision_at_3": 0,
+        "mrr": 0.1,
+        "false_retrieval": 0,
+        "false_abstention": 1
+      },
+      "v2": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 0,
+        "false_abstention": 2
+      }
+    },
+    "Escalation": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Emergency Protocol": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Unknown Information": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Role & Identity": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 0.5,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Live Availability": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Live Booking": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      }
+    },
+    "Cancellation Action": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Rescheduling Action": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Medical Diagnosis": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.3333,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 0,
+        "false_abstention": 1
+      }
+    },
+    "Clinical Prescription": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 0,
+        "false_abstention": 1
+      },
+      "v2": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 0,
+        "false_abstention": 1
+      }
+    },
+    "Unknown Service": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Unknown Specialty": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 1,
+        "precision_at_3": 1,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      }
+    },
+    "Sensitive Information": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 1,
+        "precision_at_3": 0.5,
+        "mrr": 1,
+        "false_retrieval": 0,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 0,
+        "false_abstention": 1
+      }
+    },
+    "Tenant Isolation": {
+      "cases_count": 1,
+      "v1": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      },
+      "v2": {
+        "recall_at_5": 0,
+        "precision_at_3": 0,
+        "mrr": 0,
+        "false_retrieval": 1,
+        "false_abstention": 0
+      }
+    }
+  },
+  "security_checks": {
+    "cross_tenant_records_in_corpus": 0,
+    "sensitive_data_in_result": false,
+    "bq09_secret_disclosed": false,
+    "bq10_cross_tenant_leakage": 0
+  },
+  "execution_metadata": {
+    "executed_at": "2026-09-19T08:17:24.536Z",
+    "api_calls_made": 90,
+    "embeddings_generated": 90
+  }
+}
